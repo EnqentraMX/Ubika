@@ -1,0 +1,4 @@
+# Netlify publica la carpeta "public".
+# La página de inicio es public/index.html; cada asesor vivirá en public/<asesor>/
+[build]
+  publish = "public"

@@ -1,0 +1,16 @@
+# Ubika
+
+Ubika tu casa. Páginas para asesores inmobiliarios, publicadas en Netlify.
+
+- `public/index.html`: página de inicio (se genera, no se edita a mano).
+- `plantilla/inicio.html`: la fuente de la página de inicio.
+- `public/assets/ubika.css`: colores, tipografía, logo y botones. Lo comparten el inicio, las páginas de asesor y las fichas de cada casa.
+- Para regenerar el inicio: `python3 herramientas/armar_inicio.py` (necesita `pip install qrcode`).
+
+Próximo: `public/<asesor>/` con su página y `public/<asesor>/<casa>/` con la ficha de cada propiedad y su código QR.
+
+## Identidad
+- Verde cantera `#3E5A4A` y cantera oscura `#2C4236`: color de marca.
+- Amarillo lona `#FFD21F`: acento, como la lona de "Se vende".
+- Fondo cal `#F1F3EE`, tinta `#18211C`, WhatsApp `#1F8F4E`.
+- Títulos: Big Shoulders Display. Texto: Hanken Grotesk.

@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ubika · Tu página de asesor inmobiliario</title>
+<meta name="description" content="Una página para cada asesor inmobiliario: tus casas, tus fotos y tu WhatsApp en un solo enlace. Cada casa con su ficha y su código QR para la lona.">
+<meta name="theme-color" content="#3E5A4A">
+<meta property="og:title" content="Ubika · Tus casas, con tu nombre">
+<meta property="og:description" content="Tus propiedades en un solo enlace, sin las casas de la competencia al lado.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23FFD21F'/%3E%3Cpath d='M8 15l8-7 8 7v9H8z' fill='none' stroke='%2318211C' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/ubika.css">
+<style>
+/* ---------- Encabezado ---------- */
+.barra{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--cal) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--linea)}
+.barra .contenedor{display:flex;align-items:center;justify-content:space-between;gap:16px;height:72px}
+.barra nav{display:flex;align-items:center;gap:28px}
+.barra nav a:not(.boton){text-decoration:none;font-weight:500;color:var(--gris)}
+.barra nav a:not(.boton):hover{color:var(--tinta)}
+.barra .boton{min-height:44px;padding:0 1.1em}
+@media (max-width:760px){.barra nav a:not(.boton){display:none}}
+
+/* ---------- Portada ---------- */
+.portada{padding:56px 0 72px;overflow:hidden}
+.portada .contenedor{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center}
+.portada h1{font-size:var(--t-5);font-weight:900;text-transform:uppercase;line-height:.88;max-width:9ch}
+.portada .bajada{font-size:var(--t-2);line-height:1.45;color:var(--gris);margin-top:24px;max-width:31ch}
+.acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.nota{margin-top:18px;font-size:var(--t-0);color:var(--gris)}
+
+/* Escena: muro de cantera con la lona y el celular */
+.escena{position:relative;aspect-ratio:1/1.02;max-width:560px;justify-self:end;width:100%}
+.muro{position:absolute;inset:0 0 8% 6%;border-radius:22px;background:var(--cantera);
+  background-image:
+    linear-gradient(var(--cantera-o) 2px,transparent 2px),
+    linear-gradient(90deg,var(--cantera-o) 2px,transparent 2px);
+  background-size:100% 64px,128px 64px;overflow:hidden}
+.muro::before{content:"";position:absolute;inset:0;background:
+    linear-gradient(90deg,transparent 0 64px,var(--cantera-o) 64px 66px,transparent 66px) 0 32px/128px 64px repeat-x;opacity:.9}
+.muro::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 20% 0%,rgba(255,255,255,.12),transparent 60%)}
+.lona{position:absolute;left:10%;top:7%;width:66%;background:var(--lona);color:var(--tinta);border-radius:6px;
+  padding:6% 6% 5%;transform:rotate(-3deg);box-shadow:0 18px 30px -12px rgba(0,0,0,.45);
+  animation:colgar 1s cubic-bezier(.2,.8,.2,1) .15s both}
+.lona::before,.lona::after{content:"";position:absolute;top:-8px;width:12px;height:12px;border-radius:50%;background:var(--tinta);box-shadow:inset 0 0 0 3px #555}
+.lona::before{left:14px}.lona::after{right:14px}
+.lona b{display:block;font:900 clamp(2.6rem,7.4vw,4.6rem)/.82 var(--f-letrero);text-transform:uppercase;letter-spacing:-.01em}
+.lona .lona-pie{display:flex;align-items:flex-end;gap:12px;margin-top:8%;max-width:68%}
+.lona .tel{white-space:nowrap;font:800 clamp(1.1rem,2.6vw,1.6rem)/1 var(--f-letrero)}
+.lona small{display:block;font:700 .78rem/1.25 var(--f-texto);margin-bottom:4px;max-width:14ch}
+.lona .qr{width:42%;flex:none;background:#fff;padding:6px;border-radius:4px}
+@keyframes colgar{from{transform:rotate(-9deg) translateY(-24px);opacity:0}to{transform:rotate(-3deg);opacity:1}}
+
+/* Celular */
+.cel{width:250px;background:var(--tinta);border-radius:34px;padding:9px;box-shadow:0 30px 50px -20px rgba(24,33,28,.55)}
+.cel .pantalla{background:var(--papel);border-radius:26px;overflow:hidden;position:relative}
+.cel .muesca{position:absolute;top:8px;left:50%;translate:-50% 0;width:72px;height:20px;border-radius:12px;background:var(--tinta);z-index:2}
+.escena .cel{position:absolute;right:0;bottom:0;width:min(240px,42%);transform:rotate(4deg)}
+@media (max-width:600px){.escena{aspect-ratio:1/1.12}.escena .cel{width:40%}.escena .ficha-cuerpo .datos,.escena .ficha-cuerpo .asesor{display:none}.lona{width:74%;left:6%}.lona .lona-pie{max-width:62%}}
+.ficha-foto{aspect-ratio:4/3;background:#cfe0ea}
+.ficha-foto svg{width:100%;height:100%}
+.ficha-cuerpo{padding:12px 14px 14px}
+.ficha-cuerpo .precio{font:800 1.5rem/1 var(--f-letrero)}
+.ficha-cuerpo .tit{font-weight:700;font-size:.9rem;margin-top:4px}
+.ficha-cuerpo .datos{font-size:.76rem;color:var(--gris);margin-top:2px}
+.ficha-cuerpo .mini-boton{margin-top:10px;background:var(--wa);color:#fff;border-radius:999px;font-size:.78rem;font-weight:700;text-align:center;padding:8px}
+.ficha-cuerpo .asesor{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:.74rem;color:var(--gris)}
+.avatar{flex:none;display:grid;place-items:center;border-radius:50%;background:var(--cantera);color:#fff;font:800 .9rem/1 var(--f-letrero)}
+.ficha-cuerpo .avatar{width:26px;height:26px;font-size:.72rem}
+
+@media (max-width:900px){
+  .portada .contenedor{grid-template-columns:1fr}
+  .escena{justify-self:center;max-width:470px}
+}
+
+/* ---------- Secciones ---------- */
+section{padding:96px 0}
+.titulo{font-size:var(--t-4);text-transform:uppercase;max-width:16ch}
+.intro{font-size:var(--t-2);line-height:1.45;color:var(--gris);margin-top:18px;max-width:40ch}
+
+/* Tu página (fondo cantera) */
+.oscura{background:var(--cantera-o);color:#fff}
+.oscura .intro{color:var(--musgo)}
+.pagina .contenedor{display:grid;grid-template-columns:1fr auto;gap:64px;align-items:center}
+.lugares{list-style:none;padding:0;margin:36px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 28px;max-width:560px}
+.lugares li{display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start}
+.lugares svg{width:36px;height:36px;color:var(--lona)}
+.lugares b{display:block;font-weight:700}
+.lugares span{color:var(--musgo);font-size:.95rem}
+.pagina .cel{width:290px}
+.perfil{padding:40px 16px 12px;text-align:center;background:var(--cal)}
+.perfil .avatar{width:64px;height:64px;font-size:1.5rem;margin:0 auto}
+.perfil .nombre{font:800 1.45rem/1 var(--f-letrero);margin-top:10px;color:var(--tinta)}
+.perfil .rol{font-size:.78rem;color:var(--gris);margin-top:4px}
+.chips{display:flex;gap:6px;justify-content:center;margin-top:12px}
+.chips span{font-size:.72rem;font-weight:700;padding:5px 11px;border-radius:999px;background:var(--papel);color:var(--tinta);box-shadow:inset 0 0 0 1px var(--linea)}
+.chips span.activo{background:var(--tinta);color:#fff;box-shadow:none}
+.lista{padding:10px;display:grid;gap:10px;color:var(--tinta)}
+.casa{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;border-radius:12px;padding:6px;box-shadow:inset 0 0 0 1px var(--linea)}
+.casa .ficha-foto{border-radius:8px;overflow:hidden;aspect-ratio:1/1}
+.casa b{font:800 1.12rem/1 var(--f-letrero)}
+.casa p{font-size:.74rem;line-height:1.3;color:var(--gris);margin-top:3px}
+.casa .estado{display:inline-block;margin-top:5px;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:4px;background:#E7EFE9;color:var(--cantera)}
+.casa .estado.renta{background:#FFF4C2;color:#6B5600}
+.perfil-wa{margin:4px 10px 14px;background:var(--wa);color:#fff;border-radius:999px;font-size:.8rem;font-weight:700;text-align:center;padding:10px}
+@media (max-width:900px){
+  .pagina .contenedor{grid-template-columns:1fr}
+  .pagina .cel{justify-self:center}
+}
+@media (max-width:520px){.lugares{grid-template-columns:1fr}}
+
+/* Ficha con QR */
+.qrsec .contenedor{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.enlace{margin-top:30px;display:inline-block;max-width:100%;font-weight:700;font-size:1.05rem;padding:14px 18px;border-radius:10px;background:var(--papel);box-shadow:inset 0 0 0 1px var(--linea);overflow-wrap:anywhere}
+.enlace span{color:var(--gris);font-weight:500}
+.camino{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px}
+.camino .flecha{width:40px;height:40px;color:var(--cantera)}
+.minilona{background:var(--lona);border-radius:6px;padding:18px;transform:rotate(-2deg);box-shadow:0 12px 24px -12px rgba(0,0,0,.35)}
+.minilona b{display:block;font:900 2.4rem/.85 var(--f-letrero);text-transform:uppercase}
+.minilona .qr{width:58%;margin-top:14px;background:#fff;padding:6px;border-radius:4px}
+.minilona small{display:block;font-weight:700;font-size:.8rem;margin-top:8px}
+.qrsec .cel{width:100%;max-width:230px;justify-self:center}
+@media (max-width:900px){.qrsec .contenedor{grid-template-columns:1fr}}
+@media (max-width:420px){.minilona b{font-size:1.9rem}.camino .flecha{width:28px}}
+
+/* Pasos */
+.pasos{list-style:none;padding:0;margin:48px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:0;counter-reset:paso;border-top:2px solid var(--tinta)}
+.pasos li{counter-increment:paso;padding:26px 28px 0 0}
+.pasos li+li{padding-left:28px;border-left:1px solid var(--linea)}
+.pasos li::before{content:counter(paso);display:block;font:900 4.2rem/.8 var(--f-letrero);color:var(--cantera);margin-bottom:18px}
+.pasos b{display:block;font-size:var(--t-2);line-height:1.2}
+.pasos p{color:var(--gris);margin-top:8px}
+.oscura .pasos{border-top-color:var(--lona)}
+.oscura .pasos li+li{border-left-color:rgba(255,255,255,.14)}
+.oscura .pasos li::before{color:var(--lona)}
+.oscura .pasos p{color:var(--musgo)}
+@media (max-width:800px){
+  .pasos{grid-template-columns:1fr}
+  .pasos li,.pasos li+li{padding:24px 0;border-left:0}
+  .pasos li+li{border-top:1px solid var(--linea)}
+  .oscura .pasos li+li{border-top-color:rgba(255,255,255,.14)}
+}
+
+/* Portal vs Ubika */
+.versus{display:grid;grid-template-columns:1fr 1fr;margin-top:48px;border-radius:var(--radio);overflow:hidden;box-shadow:inset 0 0 0 1px var(--linea)}
+.versus>div{padding:36px}
+.versus .ellos{background:var(--papel)}
+.versus .nosotros{background:var(--cantera);color:#fff}
+.versus h3{font-size:var(--t-3);text-transform:uppercase}
+.versus ul{margin:20px 0 0;padding:0;list-style:none;display:grid;gap:14px}
+.versus li{display:grid;grid-template-columns:22px 1fr;gap:10px}
+.versus li svg{width:22px;height:22px;margin-top:2px}
+.versus .ellos li{color:var(--gris)}
+.versus .ellos svg{color:#B4442E}
+.versus .nosotros svg{color:var(--lona)}
+@media (max-width:760px){.versus{grid-template-columns:1fr}.versus>div{padding:28px 22px}}
+
+/* Preguntas */
+.preguntas .contenedor{display:grid;grid-template-columns:1fr 1.4fr;gap:64px}
+details{border-bottom:1px solid var(--linea)}
+details:first-child{border-top:1px solid var(--linea)}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:20px 0;font-weight:700;font-size:1.08rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:800 1.6rem/1 var(--f-letrero);color:var(--cantera);transition:transform .2s ease}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 0 22px;color:var(--gris);max-width:60ch}
+@media (max-width:900px){.preguntas .contenedor{grid-template-columns:1fr;gap:28px}}
+
+/* Cierre */
+.cierre{background:var(--lona);padding:88px 0}
+.cierre .contenedor{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:28px}
+.cierre h2{font-size:var(--t-5);text-transform:uppercase;max-width:11ch;line-height:.88}
+.cierre p{font-size:var(--t-2);margin-top:16px;max-width:34ch}
+
+footer{background:var(--tinta);color:var(--musgo);padding:36px 0;font-size:var(--t-0)}
+footer .contenedor{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+footer .logo{font-size:1.2rem}
+
+@media (max-width:600px){
+  section{padding:72px 0}
+  .portada{padding:36px 0 56px}
+  .acciones .boton{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+
+<header class="barra">
+  <div class="contenedor">
+    <a class="logo" href="/" aria-label="Ubika, inicio">Ubika</a>
+    <nav>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#preguntas">Preguntas</a>
+      <a class="boton boton--wa js-wa" href="#">Quiero mi página</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="portada">
+    <div class="contenedor">
+      <div>
+        <h1>Tus casas, con tu nombre.</h1>
+        <p class="bajada">Una página para cada asesor inmobiliario, con tus propiedades, tus fotos y tu WhatsApp, sin las casas de la competencia al lado.</p>
+        <div class="acciones">
+          <a class="boton boton--wa js-wa" href="#"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-3.2-.8-2.7-1.1-4.4-3.9-4.5-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.2 1.4 2.5 1.5.3.1.5.1.7-.1l.9-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4.1.1.1.7-.1 1.3z"/></svg> Quiero mi página</a>
+          <a class="boton boton--claro" href="/mariana-ruiz/">Ver una página de ejemplo</a>
+        </div>
+        <p class="nota">Tú nos mandas las fotos por WhatsApp. Nosotros armamos todo.</p>
+      </div>
+
+      <div class="escena" aria-label="Lona de Se vende con código QR y un celular mostrando la ficha de la casa">
+        <div class="muro"></div>
+        <div class="lona">
+          <b>Se<br>vende</b>
+          <div class="lona-pie">
+            <div class="qr"><svg viewBox="0 0 29 29" shape-rendering="crispEdges" aria-hidden="true"><path fill="#18211C" d="M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM8 0h1v1h-1zM12 0h1v1h-1zM14 0h1v1h-1zM17 0h1v1h-1zM18 0h1v1h-1zM22 0h1v1h-1zM23 0h1v1h-1zM24 0h1v1h-1zM25 0h1v1h-1zM26 0h1v1h-1zM27 0h1v1h-1zM28 0h1v1h-1zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM11 1h1v1h-1zM12 1h1v1h-1zM13 1h1v1h-1zM14 1h1v1h-1zM16 1h1v1h-1zM18 1h1v1h-1zM19 1h1v1h-1zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM8 2h1v1h-1zM10 2h1v1h-1zM13 2h1v1h-1zM14 2h1v1h-1zM15 2h1v1h-1zM20 2h1v1h-1zM22 2h1v1h-1zM24 2h1v1h-1zM25 2h1v1h-1zM26 2h1v1h-1zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM9 3h1v1h-1zM10 3h1v1h-1zM11 3h1v1h-1zM12 3h1v1h-1zM13 3h1v1h-1zM17 3h1v1h-1zM19 3h1v1h-1zM20 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM25 3h1v1h-1zM26 3h1v1h-1zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM10 4h1v1h-1zM13 4h1v1h-1zM16 4h1v1h-1zM17 4h1v1h-1zM19 4h1v1h-1zM20 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM25 4h1v1h-1zM26 4h1v1h-1zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM9 5h1v1h-1zM10 5h1v1h-1zM12 5h1v1h-1zM13 5h1v1h-1zM16 5h1v1h-1zM17 5h1v1h-1zM18 5h1v1h-1zM20 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM23 6h1v1h-1zM24 6h1v1h-1zM25 6h1v1h-1zM26 6h1v1h-1zM27 6h1v1h-1zM28 6h1v1h-1zM10 7h1v1h-1zM12 7h1v1h-1zM13 7h1v1h-1zM14 7h1v1h-1zM15 7h1v1h-1zM18 7h1v1h-1zM19 7h1v1h-1zM20 7h1v1h-1zM0 8h1v1h-1zM3 8h1v1h-1zM4 8h1v1h-1zM5 8h1v1h-1zM6 8h1v1h-1zM7 8h1v1h-1zM8 8h1v1h-1zM9 8h1v1h-1zM10 8h1v1h-1zM11 8h1v1h-1zM15 8h1v1h-1zM17 8h1v1h-1zM20 8h1v1h-1zM21 8h1v1h-1zM24 8h1v1h-1zM26 8h1v1h-1zM27 8h1v1h-1zM28 8h1v1h-1zM1 9h1v1h-1zM3 9h1v1h-1zM4 9h1v1h-1zM9 9h1v1h-1zM10 9h1v1h-1zM13 9h1v1h-1zM14 9h1v1h-1zM15 9h1v1h-1zM19 9h1v1h-1zM23 9h1v1h-1zM24 9h1v1h-1zM26 9h1v1h-1zM27 9h1v1h-1zM1 10h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM10 10h1v1h-1zM13 10h1v1h-1zM15 10h1v1h-1zM16 10h1v1h-1zM17 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM21 10h1v1h-1zM26 10h1v1h-1zM1 11h1v1h-1zM2 11h1v1h-1zM4 11h1v1h-1zM7 11h1v1h-1zM9 11h1v1h-1zM14 11h1v1h-1zM17 11h1v1h-1zM18 11h1v1h-1zM19 11h1v1h-1zM20 11h1v1h-1zM21 11h1v1h-1zM22 11h1v1h-1zM23 11h1v1h-1zM25 11h1v1h-1zM28 11h1v1h-1zM0 12h1v1h-1zM1 12h1v1h-1zM2 12h1v1h-1zM3 12h1v1h-1zM6 12h1v1h-1zM7 12h1v1h-1zM9 12h1v1h-1zM10 12h1v1h-1zM11 12h1v1h-1zM12 12h1v1h-1zM13 12h1v1h-1zM14 12h1v1h-1zM16 12h1v1h-1zM18 12h1v1h-1zM19 12h1v1h-1zM20 12h1v1h-1zM21 12h1v1h-1zM22 12h1v1h-1zM23 12h1v1h-1zM28 12h1v1h-1zM0 13h1v1h-1zM2 13h1v1h-1zM3 13h1v1h-1zM8 13h1v1h-1zM9 13h1v1h-1zM10 13h1v1h-1zM11 13h1v1h-1zM14 13h1v1h-1zM15 13h1v1h-1zM17 13h1v1h-1zM18 13h1v1h-1zM22 13h1v1h-1zM23 13h1v1h-1zM24 13h1v1h-1zM25 13h1v1h-1zM26 13h1v1h-1zM27 13h1v1h-1zM28 13h1v1h-1zM0 14h1v1h-1zM1 14h1v1h-1zM2 14h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM7 14h1v1h-1zM10 14h1v1h-1zM11 14h1v1h-1zM12 14h1v1h-1zM14 14h1v1h-1zM15 14h1v1h-1zM17 14h1v1h-1zM19 14h1v1h-1zM20 14h1v1h-1zM23 14h1v1h-1zM24 14h1v1h-1zM26 14h1v1h-1zM28 14h1v1h-1zM1 15h1v1h-1zM8 15h1v1h-1zM9 15h1v1h-1zM13 15h1v1h-1zM14 15h1v1h-1zM16 15h1v1h-1zM20 15h1v1h-1zM26 15h1v1h-1zM28 15h1v1h-1zM0 16h1v1h-1zM2 16h1v1h-1zM6 16h1v1h-1zM9 16h1v1h-1zM15 16h1v1h-1zM19 16h1v1h-1zM20 16h1v1h-1zM23 16h1v1h-1zM25 16h1v1h-1zM0 17h1v1h-1zM1 17h1v1h-1zM2 17h1v1h-1zM3 17h1v1h-1zM4 17h1v1h-1zM8 17h1v1h-1zM10 17h1v1h-1zM11 17h1v1h-1zM12 17h1v1h-1zM15 17h1v1h-1zM18 17h1v1h-1zM19 17h1v1h-1zM20 17h1v1h-1zM24 17h1v1h-1zM26 17h1v1h-1zM27 17h1v1h-1zM0 18h1v1h-1zM1 18h1v1h-1zM4 18h1v1h-1zM6 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM10 18h1v1h-1zM11 18h1v1h-1zM13 18h1v1h-1zM14 18h1v1h-1zM15 18h1v1h-1zM16 18h1v1h-1zM17 18h1v1h-1zM19 18h1v1h-1zM20 18h1v1h-1zM23 18h1v1h-1zM25 18h1v1h-1zM28 18h1v1h-1zM0 19h1v1h-1zM1 19h1v1h-1zM2 19h1v1h-1zM3 19h1v1h-1zM5 19h1v1h-1zM7 19h1v1h-1zM12 19h1v1h-1zM13 19h1v1h-1zM15 19h1v1h-1zM16 19h1v1h-1zM19 19h1v1h-1zM22 19h1v1h-1zM24 19h1v1h-1zM25 19h1v1h-1zM26 19h1v1h-1zM0 20h1v1h-1zM1 20h1v1h-1zM2 20h1v1h-1zM5 20h1v1h-1zM6 20h1v1h-1zM7 20h1v1h-1zM9 20h1v1h-1zM10 20h1v1h-1zM11 20h1v1h-1zM13 20h1v1h-1zM16 20h1v1h-1zM17 20h1v1h-1zM20 20h1v1h-1zM21 20h1v1h-1zM22 20h1v1h-1zM23 20h1v1h-1zM24 20h1v1h-1zM25 20h1v1h-1zM26 20h1v1h-1zM27 20h1v1h-1zM8 21h1v1h-1zM9 21h1v1h-1zM12 21h1v1h-1zM13 21h1v1h-1zM15 21h1v1h-1zM18 21h1v1h-1zM20 21h1v1h-1zM24 21h1v1h-1zM25 21h1v1h-1zM0 22h1v1h-1zM1 22h1v1h-1zM2 22h1v1h-1zM3 22h1v1h-1zM4 22h1v1h-1zM5 22h1v1h-1zM6 22h1v1h-1zM8 22h1v1h-1zM13 22h1v1h-1zM15 22h1v1h-1zM16 22h1v1h-1zM17 22h1v1h-1zM18 22h1v1h-1zM19 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM25 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM10 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM13 23h1v1h-1zM16 23h1v1h-1zM17 23h1v1h-1zM19 23h1v1h-1zM20 23h1v1h-1zM24 23h1v1h-1zM27 23h1v1h-1zM0 24h1v1h-1zM2 24h1v1h-1zM3 24h1v1h-1zM4 24h1v1h-1zM6 24h1v1h-1zM8 24h1v1h-1zM10 24h1v1h-1zM11 24h1v1h-1zM13 24h1v1h-1zM15 24h1v1h-1zM16 24h1v1h-1zM19 24h1v1h-1zM20 24h1v1h-1zM21 24h1v1h-1zM22 24h1v1h-1zM23 24h1v1h-1zM24 24h1v1h-1zM25 24h1v1h-1zM28 24h1v1h-1zM0 25h1v1h-1zM2 25h1v1h-1zM3 25h1v1h-1zM4 25h1v1h-1zM6 25h1v1h-1zM8 25h1v1h-1zM9 25h1v1h-1zM10 25h1v1h-1zM12 25h1v1h-1zM14 25h1v1h-1zM15 25h1v1h-1zM16 25h1v1h-1zM19 25h1v1h-1zM20 25h1v1h-1zM21 25h1v1h-1zM28 25h1v1h-1zM0 26h1v1h-1zM2 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM6 26h1v1h-1zM10 26h1v1h-1zM11 26h1v1h-1zM12 26h1v1h-1zM13 26h1v1h-1zM14 26h1v1h-1zM15 26h1v1h-1zM17 26h1v1h-1zM18 26h1v1h-1zM21 26h1v1h-1zM23 26h1v1h-1zM24 26h1v1h-1zM26 26h1v1h-1zM27 26h1v1h-1zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM10 27h1v1h-1zM13 27h1v1h-1zM16 27h1v1h-1zM18 27h1v1h-1zM19 27h1v1h-1zM21 27h1v1h-1zM22 27h1v1h-1zM23 27h1v1h-1zM24 27h1v1h-1zM25 27h1v1h-1zM26 27h1v1h-1zM28 27h1v1h-1zM0 28h1v1h-1zM1 28h1v1h-1zM2 28h1v1h-1zM3 28h1v1h-1zM4 28h1v1h-1zM5 28h1v1h-1zM6 28h1v1h-1zM8 28h1v1h-1zM12 28h1v1h-1zM13 28h1v1h-1zM14 28h1v1h-1zM19 28h1v1h-1zM20 28h1v1h-1zM24 28h1v1h-1zM25 28h1v1h-1z"/></svg></div>
+            <div><small>Escanea y ve fotos y precio</small><span class="tel">951 123 4567</span></div>
+          </div>
+        </div>
+        <div class="cel">
+          <div class="pantalla">
+            <div class="muesca"></div>
+            <div class="ficha-foto"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="160" height="120" fill="#BFD8E6"/><rect x="10" y="48" width="140" height="60" fill="#E9A23B"/><rect x="6" y="42" width="148" height="8" fill="#F1F3EE"/><rect x="0" y="108" width="160" height="12" fill="#8C8A80"/><rect x="64" y="66" width="32" height="42" rx="15" ry="15" fill="#6B3B22"/><rect x="64" y="84" width="32" height="24" fill="#6B3B22"/><circle cx="90" cy="90" r="1.6" fill="#E8C66A"/><rect x="24" y="66" width="24" height="26" fill="#2B3A33"/><path d="M24 66h24M24 79h24M32 66v26M40 66v26" stroke="#18211C" stroke-width="1.6"/><rect x="21" y="92" width="30" height="4" fill="#F1F3EE"/><rect x="112" y="66" width="24" height="26" fill="#2B3A33"/><path d="M112 66h24M112 79h24M120 66v26M128 66v26" stroke="#18211C" stroke-width="1.6"/><rect x="109" y="92" width="30" height="4" fill="#F1F3EE"/><g fill="#C2306A"><circle cx="16" cy="58" r="7"/><circle cx="24" cy="54" r="6"/><circle cx="12" cy="66" r="5"/><circle cx="21" cy="62" r="4"/></g><g fill="#2F6B3F"><circle cx="18" cy="52" r="2.5"/><circle cx="10" cy="60" r="2"/></g></svg></div>
+            <div class="ficha-cuerpo">
+              <div class="precio">$3,450,000</div>
+              <div class="tit">Casa en Colonia Reforma</div>
+              <div class="datos">3 recámaras, 2 baños, 180 m²</div>
+              <div class="mini-boton">Preguntar por WhatsApp</div>
+              <div class="asesor"><span class="avatar">MR</span> Mariana Ruiz, asesora</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pagina oscura">
+    <div class="contenedor">
+      <div>
+        <h2 class="titulo">Un enlace para todas tus casas.</h2>
+        <p class="intro">Tu foto, tus propiedades en venta y en renta, y un botón directo a tu WhatsApp. Lo compartes donde ya buscas clientes.</p>
+        <ul class="lugares">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.5 7.5L3 21l1.5-5A8.5 8.5 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg><div><b>En WhatsApp</b><span>Mandas una sola liga en vez de veinte fotos.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5 5.5 4h13L20 9.5"/><path d="M4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0"/><path d="M5.5 12v8h13v-8M10 20v-5h4v5"/></svg><div><b>En Marketplace</b><span>Cada anuncio lleva a tu página, no a la de otros.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M13 9h5M13 12h5M6 9h4v5H6z"/></svg><div><b>En tu tarjeta</b><span>Un código QR que lleva a todo tu inventario.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><div><b>En tu bio</b><span>Instagram, Facebook y TikTok apuntan al mismo lugar.</span></div></li>
+        </ul>
+      </div>
+      <div class="cel" aria-label="Ejemplo de la página de una asesora en el celular">
+        <div class="pantalla">
+          <div class="muesca"></div>
+          <div class="perfil">
+            <div class="avatar">MR</div>
+            <div class="nombre">Mariana Ruiz</div>
+            <div class="rol">Asesora inmobiliaria en Oaxaca</div>
+            <div class="chips"><span class="activo">Todas</span><span>Venta</span><span>Renta</span></div>
+          </div>
+          <div class="lista">
+            <div class="casa"><div class="ficha-foto"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="160" height="120" fill="#BFD8E6"/><rect x="10" y="48" width="140" height="60" fill="#E9A23B"/><rect x="6" y="42" width="148" height="8" fill="#F1F3EE"/><rect x="0" y="108" width="160" height="12" fill="#8C8A80"/><rect x="64" y="66" width="32" height="42" rx="15" ry="15" fill="#6B3B22"/><rect x="64" y="84" width="32" height="24" fill="#6B3B22"/><circle cx="90" cy="90" r="1.6" fill="#E8C66A"/><rect x="24" y="66" width="24" height="26" fill="#2B3A33"/><path d="M24 66h24M24 79h24M32 66v26M40 66v26" stroke="#18211C" stroke-width="1.6"/><rect x="21" y="92" width="30" height="4" fill="#F1F3EE"/><rect x="112" y="66" width="24" height="26" fill="#2B3A33"/><path d="M112 66h24M112 79h24M120 66v26M128 66v26" stroke="#18211C" stroke-width="1.6"/><rect x="109" y="92" width="30" height="4" fill="#F1F3EE"/><g fill="#C2306A"><circle cx="16" cy="58" r="7"/><circle cx="24" cy="54" r="6"/><circle cx="12" cy="66" r="5"/><circle cx="21" cy="62" r="4"/></g><g fill="#2F6B3F"><circle cx="18" cy="52" r="2.5"/><circle cx="10" cy="60" r="2"/></g></svg></div><div><b>$3,450,000</b><p>Casa en Colonia Reforma<br>3 rec, 2 baños</p><span class="estado">Venta</span></div></div>
+            <div class="casa"><div class="ficha-foto"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="160" height="120" fill="#D3E3EC"/><rect x="10" y="28" width="140" height="80" fill="#3C7C8C"/><rect x="6" y="22" width="148" height="8" fill="#F1F3EE"/><rect x="0" y="108" width="160" height="12" fill="#8C8A80"/><rect x="64" y="66" width="32" height="42" rx="15" ry="15" fill="#F1F3EE"/><rect x="64" y="84" width="32" height="24" fill="#F1F3EE"/><circle cx="90" cy="90" r="1.6" fill="#E8C66A"/><rect x="24" y="66" width="24" height="26" fill="#2B3A33"/><path d="M24 66h24M24 79h24M32 66v26M40 66v26" stroke="#18211C" stroke-width="1.6"/><rect x="21" y="92" width="30" height="4" fill="#F1F3EE"/><rect x="112" y="66" width="24" height="26" fill="#2B3A33"/><path d="M112 66h24M112 79h24M120 66v26M128 66v26" stroke="#18211C" stroke-width="1.6"/><rect x="109" y="92" width="30" height="4" fill="#F1F3EE"/><rect x="30" y="38" width="20" height="18" fill="#2B3A33"/><path d="M30 47h20M40 38v18" stroke="#18211C" stroke-width="1.4"/><rect x="70" y="38" width="20" height="18" fill="#2B3A33"/><path d="M70 47h20M80 38v18" stroke="#18211C" stroke-width="1.4"/><rect x="110" y="38" width="20" height="18" fill="#2B3A33"/><path d="M110 47h20M120 38v18" stroke="#18211C" stroke-width="1.4"/></svg></div><div><b>$14,000 al mes</b><p>Departamento en Jalatlaco<br>2 rec, 1 baño</p><span class="estado renta">Renta</span></div></div>
+            <div class="casa"><div class="ficha-foto"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="160" height="120" fill="#C6DDE8"/><rect x="10" y="48" width="140" height="60" fill="#D9677A"/><rect x="6" y="42" width="148" height="8" fill="#F1F3EE"/><rect x="0" y="108" width="160" height="12" fill="#8C8A80"/><rect x="64" y="66" width="32" height="42" rx="15" ry="15" fill="#3E5A4A"/><rect x="64" y="84" width="32" height="24" fill="#3E5A4A"/><circle cx="90" cy="90" r="1.6" fill="#E8C66A"/><rect x="24" y="66" width="24" height="26" fill="#2B3A33"/><path d="M24 66h24M24 79h24M32 66v26M40 66v26" stroke="#18211C" stroke-width="1.6"/><rect x="21" y="92" width="30" height="4" fill="#F1F3EE"/><rect x="112" y="66" width="24" height="26" fill="#2B3A33"/><path d="M112 66h24M112 79h24M120 66v26M128 66v26" stroke="#18211C" stroke-width="1.6"/><rect x="109" y="92" width="30" height="4" fill="#F1F3EE"/><g fill="#C2306A"><circle cx="16" cy="58" r="7"/><circle cx="24" cy="54" r="6"/><circle cx="12" cy="66" r="5"/><circle cx="21" cy="62" r="4"/></g><g fill="#2F6B3F"><circle cx="18" cy="52" r="2.5"/><circle cx="10" cy="60" r="2"/></g></svg></div><div><b>$2,180,000</b><p>Casa en Santa Lucía del Camino<br>2 rec, 2 baños</p><span class="estado">Venta</span></div></div>
+          </div>
+          <div class="perfil-wa">Escribir a Mariana</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="qrsec">
+    <div class="contenedor">
+      <div>
+        <h2 class="titulo">Cada casa, su propia ficha.</h2>
+        <p class="intro">Cada propiedad tiene su página con fotos, precio, ubicación y tu WhatsApp. Imprime su código QR en la lona y quien pase por la calle la ve completa en su celular.</p>
+        <div class="enlace">ubikatucasa.com/<span>mariana-ruiz/casa-reforma</span></div>
+      </div>
+      <div class="camino" aria-hidden="true">
+        <div class="minilona"><b>Se vende</b><div class="qr"><svg viewBox="0 0 29 29" shape-rendering="crispEdges" aria-hidden="true"><path fill="#18211C" d="M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM8 0h1v1h-1zM12 0h1v1h-1zM14 0h1v1h-1zM17 0h1v1h-1zM18 0h1v1h-1zM22 0h1v1h-1zM23 0h1v1h-1zM24 0h1v1h-1zM25 0h1v1h-1zM26 0h1v1h-1zM27 0h1v1h-1zM28 0h1v1h-1zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM11 1h1v1h-1zM12 1h1v1h-1zM13 1h1v1h-1zM14 1h1v1h-1zM16 1h1v1h-1zM18 1h1v1h-1zM19 1h1v1h-1zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM8 2h1v1h-1zM10 2h1v1h-1zM13 2h1v1h-1zM14 2h1v1h-1zM15 2h1v1h-1zM20 2h1v1h-1zM22 2h1v1h-1zM24 2h1v1h-1zM25 2h1v1h-1zM26 2h1v1h-1zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM9 3h1v1h-1zM10 3h1v1h-1zM11 3h1v1h-1zM12 3h1v1h-1zM13 3h1v1h-1zM17 3h1v1h-1zM19 3h1v1h-1zM20 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM25 3h1v1h-1zM26 3h1v1h-1zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM10 4h1v1h-1zM13 4h1v1h-1zM16 4h1v1h-1zM17 4h1v1h-1zM19 4h1v1h-1zM20 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM25 4h1v1h-1zM26 4h1v1h-1zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM9 5h1v1h-1zM10 5h1v1h-1zM12 5h1v1h-1zM13 5h1v1h-1zM16 5h1v1h-1zM17 5h1v1h-1zM18 5h1v1h-1zM20 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM23 6h1v1h-1zM24 6h1v1h-1zM25 6h1v1h-1zM26 6h1v1h-1zM27 6h1v1h-1zM28 6h1v1h-1zM10 7h1v1h-1zM12 7h1v1h-1zM13 7h1v1h-1zM14 7h1v1h-1zM15 7h1v1h-1zM18 7h1v1h-1zM19 7h1v1h-1zM20 7h1v1h-1zM0 8h1v1h-1zM3 8h1v1h-1zM4 8h1v1h-1zM5 8h1v1h-1zM6 8h1v1h-1zM7 8h1v1h-1zM8 8h1v1h-1zM9 8h1v1h-1zM10 8h1v1h-1zM11 8h1v1h-1zM15 8h1v1h-1zM17 8h1v1h-1zM20 8h1v1h-1zM21 8h1v1h-1zM24 8h1v1h-1zM26 8h1v1h-1zM27 8h1v1h-1zM28 8h1v1h-1zM1 9h1v1h-1zM3 9h1v1h-1zM4 9h1v1h-1zM9 9h1v1h-1zM10 9h1v1h-1zM13 9h1v1h-1zM14 9h1v1h-1zM15 9h1v1h-1zM19 9h1v1h-1zM23 9h1v1h-1zM24 9h1v1h-1zM26 9h1v1h-1zM27 9h1v1h-1zM1 10h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM10 10h1v1h-1zM13 10h1v1h-1zM15 10h1v1h-1zM16 10h1v1h-1zM17 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM21 10h1v1h-1zM26 10h1v1h-1zM1 11h1v1h-1zM2 11h1v1h-1zM4 11h1v1h-1zM7 11h1v1h-1zM9 11h1v1h-1zM14 11h1v1h-1zM17 11h1v1h-1zM18 11h1v1h-1zM19 11h1v1h-1zM20 11h1v1h-1zM21 11h1v1h-1zM22 11h1v1h-1zM23 11h1v1h-1zM25 11h1v1h-1zM28 11h1v1h-1zM0 12h1v1h-1zM1 12h1v1h-1zM2 12h1v1h-1zM3 12h1v1h-1zM6 12h1v1h-1zM7 12h1v1h-1zM9 12h1v1h-1zM10 12h1v1h-1zM11 12h1v1h-1zM12 12h1v1h-1zM13 12h1v1h-1zM14 12h1v1h-1zM16 12h1v1h-1zM18 12h1v1h-1zM19 12h1v1h-1zM20 12h1v1h-1zM21 12h1v1h-1zM22 12h1v1h-1zM23 12h1v1h-1zM28 12h1v1h-1zM0 13h1v1h-1zM2 13h1v1h-1zM3 13h1v1h-1zM8 13h1v1h-1zM9 13h1v1h-1zM10 13h1v1h-1zM11 13h1v1h-1zM14 13h1v1h-1zM15 13h1v1h-1zM17 13h1v1h-1zM18 13h1v1h-1zM22 13h1v1h-1zM23 13h1v1h-1zM24 13h1v1h-1zM25 13h1v1h-1zM26 13h1v1h-1zM27 13h1v1h-1zM28 13h1v1h-1zM0 14h1v1h-1zM1 14h1v1h-1zM2 14h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM7 14h1v1h-1zM10 14h1v1h-1zM11 14h1v1h-1zM12 14h1v1h-1zM14 14h1v1h-1zM15 14h1v1h-1zM17 14h1v1h-1zM19 14h1v1h-1zM20 14h1v1h-1zM23 14h1v1h-1zM24 14h1v1h-1zM26 14h1v1h-1zM28 14h1v1h-1zM1 15h1v1h-1zM8 15h1v1h-1zM9 15h1v1h-1zM13 15h1v1h-1zM14 15h1v1h-1zM16 15h1v1h-1zM20 15h1v1h-1zM26 15h1v1h-1zM28 15h1v1h-1zM0 16h1v1h-1zM2 16h1v1h-1zM6 16h1v1h-1zM9 16h1v1h-1zM15 16h1v1h-1zM19 16h1v1h-1zM20 16h1v1h-1zM23 16h1v1h-1zM25 16h1v1h-1zM0 17h1v1h-1zM1 17h1v1h-1zM2 17h1v1h-1zM3 17h1v1h-1zM4 17h1v1h-1zM8 17h1v1h-1zM10 17h1v1h-1zM11 17h1v1h-1zM12 17h1v1h-1zM15 17h1v1h-1zM18 17h1v1h-1zM19 17h1v1h-1zM20 17h1v1h-1zM24 17h1v1h-1zM26 17h1v1h-1zM27 17h1v1h-1zM0 18h1v1h-1zM1 18h1v1h-1zM4 18h1v1h-1zM6 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM10 18h1v1h-1zM11 18h1v1h-1zM13 18h1v1h-1zM14 18h1v1h-1zM15 18h1v1h-1zM16 18h1v1h-1zM17 18h1v1h-1zM19 18h1v1h-1zM20 18h1v1h-1zM23 18h1v1h-1zM25 18h1v1h-1zM28 18h1v1h-1zM0 19h1v1h-1zM1 19h1v1h-1zM2 19h1v1h-1zM3 19h1v1h-1zM5 19h1v1h-1zM7 19h1v1h-1zM12 19h1v1h-1zM13 19h1v1h-1zM15 19h1v1h-1zM16 19h1v1h-1zM19 19h1v1h-1zM22 19h1v1h-1zM24 19h1v1h-1zM25 19h1v1h-1zM26 19h1v1h-1zM0 20h1v1h-1zM1 20h1v1h-1zM2 20h1v1h-1zM5 20h1v1h-1zM6 20h1v1h-1zM7 20h1v1h-1zM9 20h1v1h-1zM10 20h1v1h-1zM11 20h1v1h-1zM13 20h1v1h-1zM16 20h1v1h-1zM17 20h1v1h-1zM20 20h1v1h-1zM21 20h1v1h-1zM22 20h1v1h-1zM23 20h1v1h-1zM24 20h1v1h-1zM25 20h1v1h-1zM26 20h1v1h-1zM27 20h1v1h-1zM8 21h1v1h-1zM9 21h1v1h-1zM12 21h1v1h-1zM13 21h1v1h-1zM15 21h1v1h-1zM18 21h1v1h-1zM20 21h1v1h-1zM24 21h1v1h-1zM25 21h1v1h-1zM0 22h1v1h-1zM1 22h1v1h-1zM2 22h1v1h-1zM3 22h1v1h-1zM4 22h1v1h-1zM5 22h1v1h-1zM6 22h1v1h-1zM8 22h1v1h-1zM13 22h1v1h-1zM15 22h1v1h-1zM16 22h1v1h-1zM17 22h1v1h-1zM18 22h1v1h-1zM19 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM25 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM10 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM13 23h1v1h-1zM16 23h1v1h-1zM17 23h1v1h-1zM19 23h1v1h-1zM20 23h1v1h-1zM24 23h1v1h-1zM27 23h1v1h-1zM0 24h1v1h-1zM2 24h1v1h-1zM3 24h1v1h-1zM4 24h1v1h-1zM6 24h1v1h-1zM8 24h1v1h-1zM10 24h1v1h-1zM11 24h1v1h-1zM13 24h1v1h-1zM15 24h1v1h-1zM16 24h1v1h-1zM19 24h1v1h-1zM20 24h1v1h-1zM21 24h1v1h-1zM22 24h1v1h-1zM23 24h1v1h-1zM24 24h1v1h-1zM25 24h1v1h-1zM28 24h1v1h-1zM0 25h1v1h-1zM2 25h1v1h-1zM3 25h1v1h-1zM4 25h1v1h-1zM6 25h1v1h-1zM8 25h1v1h-1zM9 25h1v1h-1zM10 25h1v1h-1zM12 25h1v1h-1zM14 25h1v1h-1zM15 25h1v1h-1zM16 25h1v1h-1zM19 25h1v1h-1zM20 25h1v1h-1zM21 25h1v1h-1zM28 25h1v1h-1zM0 26h1v1h-1zM2 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM6 26h1v1h-1zM10 26h1v1h-1zM11 26h1v1h-1zM12 26h1v1h-1zM13 26h1v1h-1zM14 26h1v1h-1zM15 26h1v1h-1zM17 26h1v1h-1zM18 26h1v1h-1zM21 26h1v1h-1zM23 26h1v1h-1zM24 26h1v1h-1zM26 26h1v1h-1zM27 26h1v1h-1zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM10 27h1v1h-1zM13 27h1v1h-1zM16 27h1v1h-1zM18 27h1v1h-1zM19 27h1v1h-1zM21 27h1v1h-1zM22 27h1v1h-1zM23 27h1v1h-1zM24 27h1v1h-1zM25 27h1v1h-1zM26 27h1v1h-1zM28 27h1v1h-1zM0 28h1v1h-1zM1 28h1v1h-1zM2 28h1v1h-1zM3 28h1v1h-1zM4 28h1v1h-1zM5 28h1v1h-1zM6 28h1v1h-1zM8 28h1v1h-1zM12 28h1v1h-1zM13 28h1v1h-1zM14 28h1v1h-1zM19 28h1v1h-1zM20 28h1v1h-1zM24 28h1v1h-1zM25 28h1v1h-1z"/></svg></div><small>951 123 4567</small></div>
+        <svg class="flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+        <div class="cel">
+          <div class="pantalla">
+            <div class="muesca"></div>
+            <div class="ficha-foto"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="160" height="120" fill="#BFD8E6"/><rect x="10" y="48" width="140" height="60" fill="#E9A23B"/><rect x="6" y="42" width="148" height="8" fill="#F1F3EE"/><rect x="0" y="108" width="160" height="12" fill="#8C8A80"/><rect x="64" y="66" width="32" height="42" rx="15" ry="15" fill="#6B3B22"/><rect x="64" y="84" width="32" height="24" fill="#6B3B22"/><circle cx="90" cy="90" r="1.6" fill="#E8C66A"/><rect x="24" y="66" width="24" height="26" fill="#2B3A33"/><path d="M24 66h24M24 79h24M32 66v26M40 66v26" stroke="#18211C" stroke-width="1.6"/><rect x="21" y="92" width="30" height="4" fill="#F1F3EE"/><rect x="112" y="66" width="24" height="26" fill="#2B3A33"/><path d="M112 66h24M112 79h24M120 66v26M128 66v26" stroke="#18211C" stroke-width="1.6"/><rect x="109" y="92" width="30" height="4" fill="#F1F3EE"/><g fill="#C2306A"><circle cx="16" cy="58" r="7"/><circle cx="24" cy="54" r="6"/><circle cx="12" cy="66" r="5"/><circle cx="21" cy="62" r="4"/></g><g fill="#2F6B3F"><circle cx="18" cy="52" r="2.5"/><circle cx="10" cy="60" r="2"/></g></svg></div>
+            <div class="ficha-cuerpo">
+              <div class="precio">$3,450,000</div>
+              <div class="tit">Casa en Colonia Reforma</div>
+              <div class="mini-boton">Preguntar por WhatsApp</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="como-funciona" class="oscura">
+    <div class="contenedor">
+      <h2 class="titulo">Así de fácil.</h2>
+      <p class="intro">No necesitas saber de páginas web ni instalar nada.</p>
+      <ol class="pasos">
+        <li><b>Nos mandas tus casas</b><p>Por WhatsApp: fotos, precio, colonia y lo que tenga cada propiedad.</p></li>
+        <li><b>Armamos tu página</b><p>Con tu foto, tus datos y una ficha con código QR para cada casa.</p></li>
+        <li><b>La mantenemos al día</b><p>Cuando entra una casa nueva o vendes una, nos avisas y la actualizamos.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="contenedor">
+      <h2 class="titulo">Tu cliente solo ve tus casas.</h2>
+      <p class="intro">Sigue publicando en los portales si quieres. Ubika es el lugar al que mandas a tus clientes.</p>
+      <div class="versus">
+        <div class="ellos">
+          <h3>En un portal</h3>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Tu casa aparece junto a las de decenas de asesores.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span>El cliente compara y le escribe a otro.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Tu nombre casi no se ve.</span></li>
+          </ul>
+        </div>
+        <div class="nosotros">
+          <h3>En Ubika</h3>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg><span>Solo están tus propiedades.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg><span>Tu foto y tu WhatsApp en cada ficha.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg><span>El enlace lleva tu nombre y es tuyo.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="preguntas" class="preguntas">
+    <div class="contenedor">
+      <h2 class="titulo">Preguntas frecuentes</h2>
+      <div>
+        <details open><summary>¿Necesito saber usar una computadora?</summary><p>No. Todo se hace por WhatsApp: nos mandas fotos y datos desde tu celular y nosotros los subimos.</p></details>
+        <details><summary>¿Qué pasa cuando vendo o rento una casa?</summary><p>Nos avisas y la marcamos como vendida o la quitamos de tu página. Tú decides.</p></details>
+        <details><summary>¿Cuántas casas puedo tener?</summary><p>Las que manejes. Tu página crece contigo, en venta y en renta.</p></details>
+        <details><summary>¿Puedo seguir usando Inmuebles24 o Marketplace?</summary><p>Sí. Ubika no reemplaza los portales: es tu página propia, a la que mandas a los clientes que llegan por ahí.</p></details>
+        <details><summary>¿Cuánto cuesta?</summary><p>Escríbenos por WhatsApp y te damos el precio según cuántas propiedades manejas.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="cierre">
+    <div class="contenedor">
+      <div>
+        <h2>Tu próxima lona ya puede tener QR.</h2>
+        <p>Mándanos tus casas por WhatsApp y empieza a compartir tu propio enlace.</p>
+      </div>
+      <a class="boton boton--wa js-wa" href="#"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-3.2-.8-2.7-1.1-4.4-3.9-4.5-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.2 1.4 2.5 1.5.3.1.5.1.7-.1l.9-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4.1.1.1.7-.1 1.3z"/></svg> Quiero mi página</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="contenedor">
+    <a class="logo" href="/">Ubika</a>
+    <span>Ubika tu casa. Páginas para asesores inmobiliarios.</span>
+    <span>© 2026 Ubika</span>
+  </div>
+</footer>
+
+<script>
+// Número de WhatsApp de Ubika (con 52 y lada, sin espacios). Mientras esté vacío, el botón abre WhatsApp para elegir contacto.
+var UBIKA_WA = "";
+var texto = encodeURIComponent("Hola, soy asesor inmobiliario y quiero mi página en Ubika.");
+document.querySelectorAll(".js-wa").forEach(function(a){
+  a.href = "https://wa.me/" + UBIKA_WA + "?text=" + texto;
+  a.target = "_blank"; a.rel = "noopener";
+});
+</script>
+</body>
+</html>
