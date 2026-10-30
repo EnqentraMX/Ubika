@@ -4,7 +4,7 @@
 import pathlib, qrcode
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
-URL_QR = "https://ubika.netlify.app/mariana-ruiz/"
+URL_QR = "https://ubikatucasa.netlify.app/mariana-ruiz/"
 
 
 def qr(url):
