@@ -208,7 +208,7 @@ footer .logo{font-size:1.2rem}
           <a class="boton boton--wa js-wa" href="#">{{ICONO_WA}} Quiero mi página</a>
           <a class="boton boton--claro" href="/mariana-ruiz/">Ver una página de ejemplo</a>
         </div>
-        <p class="nota">Tú nos mandas las fotos por WhatsApp. Nosotros armamos todo.</p>
+        <p class="nota">Inscripción de $299 y después $99 al mes. Tú nos mandas las fotos por WhatsApp y nosotros armamos todo.</p>
       </div>
 
       <div class="escena" aria-label="Lona de Se vende con código QR y un celular mostrando la ficha de la casa">
@@ -339,7 +339,7 @@ footer .logo{font-size:1.2rem}
         <details><summary>¿Qué pasa cuando vendo o rento una casa?</summary><p>Nos avisas y la marcamos como vendida o la quitamos de tu página. Tú decides.</p></details>
         <details><summary>¿Cuántas casas puedo tener?</summary><p>Las que manejes. Tu página crece contigo, en venta y en renta.</p></details>
         <details><summary>¿Puedo seguir usando Inmuebles24 o Marketplace?</summary><p>Sí. Ubika no reemplaza los portales: es tu página propia, a la que mandas a los clientes que llegan por ahí.</p></details>
-        <details><summary>¿Cuánto cuesta?</summary><p>Escríbenos por WhatsApp y te damos el precio según cuántas propiedades manejas.</p></details>
+        <details><summary>¿Cuánto cuesta?</summary><p>$299 de inscripción, una sola vez, y $99 al mes. Incluye tu página, la ficha con código QR de cada casa y las actualizaciones cuando entra o sale una propiedad.</p></details>
       </div>
     </div>
   </section>
@@ -348,7 +348,7 @@ footer .logo{font-size:1.2rem}
     <div class="contenedor">
       <div>
         <h2>Tu próxima lona ya puede tener QR.</h2>
-        <p>Mándanos tus casas por WhatsApp y empieza a compartir tu propio enlace.</p>
+        <p>Mándanos tus casas por WhatsApp y empieza a compartir tu propio enlace. $299 de inscripción y $99 al mes.</p>
       </div>
       <a class="boton boton--wa js-wa" href="#">{{ICONO_WA}} Quiero mi página</a>
     </div>
@@ -364,8 +364,8 @@ footer .logo{font-size:1.2rem}
 </footer>
 
 <script>
-// Número de WhatsApp de Ubika (con 52 y lada, sin espacios). Mientras esté vacío, el botón abre WhatsApp para elegir contacto.
-var UBIKA_WA = "";
+// Número de WhatsApp de Ubika (con 52 y lada, sin espacios).
+var UBIKA_WA = "529511836468";
 var texto = encodeURIComponent("Hola, soy asesor inmobiliario y quiero mi página en Ubika.");
 document.querySelectorAll(".js-wa").forEach(function(a){
   a.href = "https://wa.me/" + UBIKA_WA + "?text=" + texto;
