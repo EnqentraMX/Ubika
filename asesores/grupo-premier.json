@@ -1,0 +1,166 @@
+{
+  "slug": "grupo-premier",
+  "nombre": "Grupo Premier",
+  "frase": "Líderes en expansión territorial industrial, comercial y habitacional.",
+  "zona": "CDMX y alrededores",
+  "whatsapp": "525560631272",
+  "telefono": "55 6063 1272",
+  "logo": "img/logo.png",
+  "redes": {
+    "facebook": "https://www.facebook.com/share/1A7oHYYfgg/?mibextid=wwXIfr"
+  },
+  "propiedades": [
+    {
+      "slug": "bodega-granjas-san-antonio",
+      "tipo": "Bodega",
+      "operacion": "renta",
+      "precio": 610000,
+      "superficie": "3,630 m²",
+      "colonia": "Granjas San Antonio",
+      "alcaldia": "Iztapalapa, CDMX",
+      "referencia": "Esquina con Calz. Ermita Iztapalapa",
+      "mapa": "Calzada Ermita Iztapalapa, Granjas San Antonio, Iztapalapa, Ciudad de México",
+      "fotos": [
+        "1-fachada.jpg",
+        "2-nave.jpg",
+        "3-pasillo.jpg"
+      ],
+      "destacados": [
+        "Entrada para tráiler",
+        "6 locales nuevos a pie de calle",
+        "Uso de suelo industrial y comercial"
+      ],
+      "ubicacion": [
+        "A 10 minutos de la Central de Abastos",
+        "A 5 minutos de Av. Ermita, Circuito Interior, Calz. de la Viga y Eje 3 Oriente"
+      ],
+      "caracteristicas": [
+        "Entrada para tráiler",
+        "400 m² de oficinas con baños, adaptables a lo que necesite el inquilino",
+        "6 locales comerciales nuevos a pie de calle sobre avenida principal",
+        "Altura mínima de 6 m en muros laterales y máxima de 9 m",
+        "Luz trifásica",
+        "Muros de concreto",
+        "Piso de alta resistencia: 10 toneladas por m²",
+        "Sistema contra incendios",
+        "Uso de suelo industrial y comercial"
+      ],
+      "requisitos": [
+        "1 renta adelantada",
+        "1 depósito de garantía",
+        "Aval en CDMX",
+        "Contrato mínimo por 1 año"
+      ]
+    },
+    {
+      "slug": "local-aeronautica-militar",
+      "tipo": "Local comercial",
+      "operacion": "renta",
+      "precio": 35000,
+      "superficie": "120 m²",
+      "colonia": "Aeronáutica Militar",
+      "alcaldia": "Venustiano Carranza, CDMX",
+      "referencia": "Sobre avenida principal, frente a la Alcaldía",
+      "mapa": "Alcaldía Venustiano Carranza, Ciudad de México",
+      "fotos": [
+        "1-fachada.jpg",
+        "2-interior-fondo.jpg",
+        "3-interior-barra.jpg"
+      ],
+      "destacados": [
+        "Sobre avenida principal",
+        "Se aceptan todos los giros",
+        "5 cortinas"
+      ],
+      "ubicacion": [
+        "Frente a la Alcaldía Venustiano Carranza",
+        "Cerca de Av. Fray Servando Teresa de Mier y Av. Francisco del Paso y Troncoso",
+        "A 2 minutos de Av. Congreso de la Unión",
+        "A 5 minutos del aeropuerto",
+        "A 10 minutos del Centro Histórico"
+      ],
+      "caracteristicas": [
+        "2 baños",
+        "Agua y luz",
+        "2 cortinas sobre avenida principal y 3 sobre la calle lateral",
+        "Uso de suelo comercial",
+        "Se aceptan todos los giros",
+        "Se pueden hacer adecuaciones; se acuerda con el propietario si van a cuenta de renta o con tiempo de gracia"
+      ],
+      "requisitos": [
+        "1 renta adelantada",
+        "1 depósito de garantía",
+        "Aval en CDMX",
+        "Contrato mínimo por 1 año"
+      ]
+    },
+    {
+      "slug": "bodega-granjas-mexico",
+      "tipo": "Bodega",
+      "operacion": "venta",
+      "precio": 32000000,
+      "superficie": "1,250 m²",
+      "colonia": "Granjas México",
+      "alcaldia": "Iztacalco, CDMX",
+      "referencia": "A 2 minutos de Calz. de la Viga",
+      "mapa": "Granjas México, Iztacalco, Ciudad de México",
+      "fotos": [
+        "1-nave.jpg",
+        "2-patio-exterior.jpg",
+        "3-pasillo-oficinas.jpg"
+      ],
+      "destacados": [
+        "300 m² de oficinas",
+        "Entrada para tráiler",
+        "Uso de suelo comercial e industrial"
+      ],
+      "aviso": "Documentación completa y en orden, lista para escriturarse.",
+      "ubicacion": [
+        "A 2 minutos de Calz. de la Viga",
+        "A 10 minutos del aeropuerto",
+        "A 15 minutos del Centro Histórico"
+      ],
+      "caracteristicas": [
+        "Terreno de 25 m de frente por 50 m de fondo",
+        "300 m² de oficinas",
+        "Entrada para tráiler",
+        "Uso de suelo comercial e industrial"
+      ]
+    },
+    {
+      "slug": "bodega-santa-maria-aztahuacan",
+      "tipo": "Bodega",
+      "operacion": "venta",
+      "precio": 15500000,
+      "superficie": "2,240 m²",
+      "colonia": "Santa María Aztahuacán",
+      "alcaldia": "Iztapalapa, CDMX",
+      "referencia": "A una calle de Calz. Ermita Iztapalapa y Av. de las Torres",
+      "mapa": "Calzada Ermita Iztapalapa y Avenida de las Torres, Santa María Aztahuacán, Iztapalapa, Ciudad de México",
+      "fotos": [
+        "1-nave.jpg",
+        "2-oficinas.jpg",
+        "3-patio.jpg",
+        "4-acceso.jpg"
+      ],
+      "destacados": [
+        "Terreno de 1,890 m²",
+        "Entrada para tráiler",
+        "Altura de 7 m"
+      ],
+      "aviso": "Documentación lista para escriturarse.",
+      "ubicacion": [
+        "A una calle de Calz. Ermita Iztapalapa y Av. de las Torres"
+      ],
+      "caracteristicas": [
+        "Terreno de 1,890 m²",
+        "Construcción de 350 m²",
+        "Entrada para tráiler",
+        "Oficinas en dos niveles con baños",
+        "Baños en la bodega",
+        "Altura de 7 m",
+        "Uso de suelo comercial e industrial"
+      ]
+    }
+  ]
+}

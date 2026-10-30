@@ -1,0 +1,104 @@
+/* Ubika — páginas de asesor y fichas de propiedad. Se carga después de ubika.css. */
+
+.cabecera{background:var(--cantera-o);color:#fff}
+.cabecera .contenedor{display:flex;align-items:center;gap:24px;padding:40px 0 44px}
+.marca-asesor{flex:none;width:112px;height:112px;border-radius:20px;background:#fff;display:grid;place-items:center;padding:10px;box-shadow:0 0 0 4px var(--lona)}
+.marca-asesor img{width:100%;height:100%;object-fit:contain}
+.cabecera h1{font-size:clamp(2.6rem,7vw,4.4rem);text-transform:uppercase}
+.cabecera .frase{color:var(--musgo);font-size:1.05rem;margin-top:10px;max-width:48ch}
+.cabecera .zona{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-weight:700;font-size:.92rem;color:var(--lona)}
+.cabecera .zona svg{width:18px;height:18px}
+.cabecera .acciones{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.boton--borde{background:transparent;color:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.45)}
+.boton--borde:hover{box-shadow:inset 0 0 0 2px #fff}
+@media (max-width:640px){
+  .cabecera .contenedor{flex-direction:column;align-items:flex-start;gap:18px;padding:28px 0 32px}
+  .marca-asesor{width:92px;height:92px}
+  .cabecera .acciones .boton{flex:1 1 auto}
+}
+
+/* Filtros */
+.inventario{padding:36px 0 80px}
+.filtros{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+.filtros h2{font-size:var(--t-3);text-transform:uppercase}
+.chips-filtro{display:flex;gap:6px}
+.chips-filtro button{font:700 .9rem/1 var(--f-texto);padding:10px 16px;border-radius:999px;border:0;cursor:pointer;background:var(--papel);color:var(--tinta);box-shadow:inset 0 0 0 1px var(--linea)}
+.chips-filtro button[aria-pressed="true"]{background:var(--tinta);color:#fff;box-shadow:none}
+
+/* Tarjetas de propiedad */
+.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.tarjeta{display:flex;flex-direction:column;background:var(--papel);border-radius:var(--radio);overflow:hidden;text-decoration:none;box-shadow:inset 0 0 0 1px var(--linea);transition:box-shadow .15s ease}
+.tarjeta:hover{box-shadow:inset 0 0 0 2px var(--cantera)}
+.tarjeta[hidden]{display:none}
+.tarjeta .foto{position:relative;aspect-ratio:4/3;background:var(--linea);overflow:hidden}
+.tarjeta .foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.etiqueta-op{position:absolute;top:12px;left:12px;font:800 1.05rem/1 var(--f-letrero);text-transform:uppercase;letter-spacing:.02em;padding:6px 10px 5px;border-radius:5px}
+.etiqueta-op.venta{background:var(--lona);color:var(--tinta)}
+.etiqueta-op.renta{background:var(--tinta);color:#fff}
+.tarjeta .cuerpo{padding:16px 18px 20px}
+.tarjeta .precio{font:800 1.9rem/1 var(--f-letrero)}
+.tarjeta .precio small{font:500 .9rem var(--f-texto);color:var(--gris)}
+.tarjeta .tit{font-weight:700;margin-top:8px}
+.tarjeta .lugar{color:var(--gris);font-size:.94rem;margin-top:2px}
+
+/* Ficha */
+.migas{padding:18px 0 0}
+.migas a{display:inline-flex;align-items:center;gap:6px;font-weight:700;text-decoration:none;color:var(--cantera)}
+.migas svg{width:18px;height:18px}
+.ficha{padding:16px 0 120px}
+.ficha .rejilla-ficha{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:40px;align-items:start}
+@media (max-width:900px){.ficha .rejilla-ficha{grid-template-columns:1fr;gap:24px}}
+
+.galeria{position:relative}
+.carrete{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:var(--radio);background:var(--tinta);scrollbar-width:none}
+.carrete::-webkit-scrollbar{display:none}
+.carrete img{flex:0 0 100%;width:100%;aspect-ratio:4/3;object-fit:contain;scroll-snap-align:center}
+.contador{position:absolute;right:12px;bottom:12px;background:rgba(24,33,28,.78);color:#fff;font-weight:700;font-size:.82rem;padding:5px 10px;border-radius:999px}
+.galeria .etiqueta-op{top:14px;left:14px;font-size:1.2rem}
+.miniaturas{display:flex;gap:8px;margin-top:10px;overflow-x:auto}
+.miniaturas button{flex:none;width:84px;aspect-ratio:4/3;padding:0;border:0;border-radius:8px;overflow:hidden;cursor:pointer;opacity:.6;outline-offset:2px}
+.miniaturas button[aria-current="true"]{opacity:1;box-shadow:0 0 0 3px var(--cantera)}
+.miniaturas img{width:100%;height:100%;object-fit:cover}
+
+.resumen .tipo{font-weight:700;color:var(--cantera)}
+.resumen h1{font-size:clamp(2.6rem,6vw,3.8rem);margin-top:6px}
+.resumen h1 small{display:block;font:500 1rem var(--f-texto);color:var(--gris);margin-top:6px;text-transform:none}
+.resumen .lugar{display:flex;gap:8px;margin-top:14px;font-weight:500}
+.resumen .lugar svg{flex:none;width:20px;height:20px;color:var(--cantera);margin-top:2px}
+.resumen .lugar span{color:var(--gris);display:block;font-weight:400}
+.aviso{margin-top:18px;background:var(--lona);border-radius:10px;padding:12px 14px;font-weight:700;display:flex;gap:10px;align-items:flex-start}
+.aviso svg{flex:none;width:22px;height:22px}
+.destacados{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.destacados li{background:var(--papel);box-shadow:inset 0 0 0 1px var(--linea);border-radius:999px;padding:7px 13px;font-size:.88rem;font-weight:700}
+.resumen .acciones{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+.resumen .acciones .boton{width:100%}
+.asesor-mini{display:flex;align-items:center;gap:12px;margin-top:22px;padding-top:18px;border-top:1px solid var(--linea);text-decoration:none}
+.asesor-mini img{width:48px;height:48px;border-radius:10px;object-fit:contain;background:#fff;box-shadow:inset 0 0 0 1px var(--linea);padding:3px}
+.asesor-mini b{display:block}
+.asesor-mini span{color:var(--gris);font-size:.88rem}
+
+.bloque{margin-top:44px;max-width:68ch}
+.bloque h2{font-size:var(--t-3);text-transform:uppercase;margin-bottom:14px}
+.lista-check{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.lista-check li{display:grid;grid-template-columns:22px 1fr;gap:10px}
+.lista-check svg{width:20px;height:20px;color:var(--cantera);margin-top:3px}
+.mapa{margin-top:4px;border-radius:var(--radio);overflow:hidden;box-shadow:inset 0 0 0 1px var(--linea);background:#DDE3DA}
+.mapa iframe{display:block;width:100%;height:300px;border:0}
+.mapa .boton{border-radius:0;width:100%;background:var(--cantera);color:#fff;min-height:54px}
+.mapa .boton:hover{background:var(--cantera-o)}
+
+/* Barra fija de WhatsApp en celular */
+.barra-wa{display:none}
+@media (max-width:900px){
+  .barra-wa{display:flex;gap:10px;align-items:center;position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--papel);box-shadow:0 -1px 0 var(--linea),0 -10px 24px -16px rgba(0,0,0,.4)}
+  .barra-wa .precio{font:800 1.35rem/1 var(--f-letrero);flex:1}
+  .barra-wa .precio small{display:block;font:500 .75rem var(--f-texto);color:var(--gris)}
+  .barra-wa .boton{min-height:48px}
+  .resumen .acciones .boton--wa{display:none}
+  body:has(.barra-wa) .pie-asesor{padding-bottom:110px}
+}
+
+.pie-asesor{background:var(--tinta);color:var(--musgo);padding:28px 0;font-size:var(--t-0)}
+.pie-asesor .contenedor{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.pie-asesor a{color:#fff}
+.pie-asesor .logo{font-size:1.05rem}
