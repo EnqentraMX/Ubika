@@ -4,7 +4,7 @@
 import pathlib, qrcode
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
-URL_QR = "https://demomx.pages.dev/grupo-premier/"
+URL_QR = "https://ubika.demomx.workers.dev/grupo-premier/"
 
 
 def qr(url):
