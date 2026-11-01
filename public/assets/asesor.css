@@ -35,6 +35,7 @@
 .etiqueta-op{position:absolute;top:12px;left:12px;font:800 1.05rem/1 var(--f-letrero);text-transform:uppercase;letter-spacing:.02em;padding:6px 10px 5px;border-radius:5px}
 .etiqueta-op.venta{background:var(--lona);color:var(--tinta)}
 .etiqueta-op.renta{background:var(--tinta);color:#fff}
+.etiqueta-op.traspaso{background:var(--cantera);color:#fff}
 .tarjeta .cuerpo{padding:16px 18px 20px}
 .tarjeta .precio{font:800 1.9rem/1 var(--f-letrero)}
 .tarjeta .precio small{font:500 .9rem var(--f-texto);color:var(--gris)}

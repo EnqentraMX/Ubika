@@ -38,11 +38,11 @@ I_MAPA = icono('<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6
 
 def precio(p):
     cifra = f"${p['precio']:,.0f}"
-    return cifra, ("al mes" if p["operacion"] == "renta" else "")
+    return cifra, {"renta": "al mes"}.get(p["operacion"], "")
 
 
 def titulo(p):
-    return f"{p['tipo']} de {p['superficie']}"
+    return f"{p['tipo']} de {p['superficie']}" if p.get("superficie") else p["tipo"]
 
 
 def wa(numero, texto):
@@ -102,10 +102,10 @@ def pagina_asesor(a):
       </a>""")
     filtros = ""
     if len(hay) > 1:
+        botones = "".join(f'<button type="button" data-filtro="{op}" aria-pressed="false">{op.capitalize()}</button>'
+                          for op in ("venta", "renta", "traspaso") if op in hay)
         filtros = ('<div class="chips-filtro" role="group" aria-label="Filtrar propiedades">'
-                   '<button type="button" data-filtro="todas" aria-pressed="true">Todas</button>'
-                   '<button type="button" data-filtro="venta" aria-pressed="false">Venta</button>'
-                   '<button type="button" data-filtro="renta" aria-pressed="false">Renta</button></div>')
+                   '<button type="button" data-filtro="todas" aria-pressed="true">Todas</button>' + botones + '</div>')
     redes = ""
     if a["redes"].get("facebook"):
         redes += f'<a class="boton boton--borde" href="{e(a["redes"]["facebook"])}" target="_blank" rel="noopener">{I_FB} Facebook</a>'

@@ -1,0 +1,109 @@
+{
+  "slug": "avc-inmuebles",
+  "nombre": "AVC Inmuebles",
+  "frase": "Soluciones inmobiliarias. Aceptamos crédito Infonavit.",
+  "zona": "León, Guanajuato",
+  "whatsapp": "524773796286",
+  "telefono": "477 379 6286",
+  "logo": "img/logo.png",
+  "redes": {},
+  "propiedades": [
+    {
+      "slug": "depto-brisas-de-la-plata",
+      "tipo": "Departamento",
+      "operacion": "venta",
+      "precio": 480000,
+      "colonia": "Brisas del Campestre",
+      "alcaldia": "León, Gto.",
+      "referencia": "Brisas de la Plata 124 E, tercer piso. Pasando Urbivilla del Roble",
+      "mapa": "Brisas de la Plata 124, Brisas del Campestre, León, Guanajuato",
+      "fotos": [
+        "1-fachada.jpg",
+        "2-sala.jpg",
+        "3-recamara.jpg"
+      ],
+      "destacados": [
+        "2 recámaras",
+        "Tercer piso",
+        "Acepta crédito Infonavit"
+      ],
+      "aviso": "Aceptamos crédito Infonavit.",
+      "ubicacion": [
+        "Calle Brisas de la Plata 124 E, tercer piso",
+        "Colonia Brisas del Campestre, pasando Urbivilla del Roble"
+      ],
+      "caracteristicas": [
+        "2 recámaras",
+        "Sala",
+        "Cocina",
+        "Comedor",
+        "Baño"
+      ]
+    },
+    {
+      "slug": "depto-brisas-del-lujan",
+      "tipo": "Departamento",
+      "operacion": "traspaso",
+      "precio": 65000,
+      "colonia": "Brisas del Campestre",
+      "alcaldia": "León, Gto.",
+      "referencia": "Brisas del Luján 201 D, segundo piso",
+      "mapa": "Brisas del Luján 201, Brisas del Campestre, León, Guanajuato",
+      "fotos": [
+        "1-fachada.jpg"
+      ],
+      "destacados": [
+        "2 recámaras",
+        "Mensualidad de $2,100",
+        "Adeudo Infonavit de $475,000"
+      ],
+      "aviso": "Traspaso ante notario público.",
+      "ubicacion": [
+        "Calle Brisas del Luján 201 D, segundo piso",
+        "Colonia Brisas del Campestre"
+      ],
+      "caracteristicas": [
+        "Precio de traspaso: $65,000",
+        "Adeudo con Infonavit: $475,000",
+        "Mensualidad de $2,100",
+        "2 recámaras",
+        "Sala",
+        "Cocina",
+        "Comedor",
+        "Baño"
+      ]
+    },
+    {
+      "slug": "casa-joyas-de-castilla",
+      "tipo": "Casa",
+      "operacion": "venta",
+      "precio": 930000,
+      "colonia": "Joyas de Castilla",
+      "alcaldia": "León, Gto.",
+      "referencia": "Colonia Joyas de Castilla",
+      "mapa": "Joyas de Castilla, León, Guanajuato",
+      "fotos": [
+        "1-fachada.jpg",
+        "2-ventana.jpg",
+        "3-interior.jpg"
+      ],
+      "destacados": [
+        "2 recámaras",
+        "Cochera para un auto",
+        "Patio techado"
+      ],
+      "aviso": "Aceptamos crédito Infonavit.",
+      "ubicacion": [
+        "Colonia Joyas de Castilla, León"
+      ],
+      "caracteristicas": [
+        "2 recámaras",
+        "Sala",
+        "Cocina",
+        "Comedor",
+        "Cochera para un auto",
+        "Patio de atrás techado"
+      ]
+    }
+  ]
+}
