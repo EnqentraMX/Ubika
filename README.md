@@ -22,4 +22,8 @@ Próximo: `public/<asesor>/` con su página y `public/<asesor>/<casa>/` con la f
 - Lo que llega del cliente se guarda en `_recibido/` (no se sube: puede traer datos internos como comisiones).
 
 ## Espacios hechos a mano
-- `public/rl-industrial/index.html`: RL Industrial (bodegas en renta, CDMX y Edomex). Página de ejemplo hecha a mano, no sale de `armar_asesor.py`. Su número de WhatsApp va en `WA_NUMERO`, dentro del script de la página.
+### RL Industrial (`public/rl-industrial/`)
+Bodegas y naves en renta, CDMX y Edomex. Tiene diseño propio (grafito y verde lima de su logo), buscador, mapa, calculadora y una ficha por inmueble.
+- Datos: `especiales/rl-industrial/datos.json` (WhatsApp, inmuebles, ubicaciones aproximadas). Fotos con `@` se cargan del servidor de su página anterior; las demás están en `public/rl-industrial/img/`.
+- Diseño y lógica: `public/rl-industrial/assets/rl.css` y `rl.js`.
+- Para armar o actualizar: `python3 herramientas/armar_rl_industrial.py` (necesita Pillow para las imágenes de vista previa).
