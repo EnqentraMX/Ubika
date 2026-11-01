@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RL Industrial · Bodegas en renta</title>
+<meta name="description" content="Bodegas industriales en renta en CDMX y Edomex, de 150 a 11,000 m². Filtra por zona, calcula tu renta y pide fichas por WhatsApp.">
+<meta name="theme-color" content="#14202B">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RL Industrial · Bodegas en renta">
+<meta property="og:description" content="Bodegas industriales en renta en CDMX y Edomex, de 150 a 11,000 m². Filtra por zona, calcula tu renta y pide fichas por WhatsApp.">
+<meta property="og:url" content="https://ubika.demomx.workers.dev/rl-industrial/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23FFD21F'/%3E%3Cpath d='M8 15l8-7 8 7v9H8z' fill='none' stroke='%2318211C' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Concepto: catálogo de fichas técnicas de naves. Concreto claro, tinta de plano azul acero, ámbar de defensa de andén. */
+:root{
+  --bg:#E9ECEE; --surface:#F7F8F9; --raise:#FFFFFF; --ink:#14202B; --muted:#56626E; --line:#C7CFD6;
+  --steel:#1E4F7C; --steel-soft:#DCE6EF; --accent:#D9661A; --accent-ink:#FFFFFF; --ok:#2E7D4F;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:6px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11171D; --surface:#182028; --raise:#1E2731; --ink:#E4E9ED; --muted:#97A3AE; --line:#2C3843;
+  --steel:#82B4E2; --steel-soft:#1C2C3B; --accent:#F0873A; --accent-ink:#1A1006; --ok:#5CC28A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11171D; --surface:#182028; --raise:#1E2731; --ink:#E4E9ED; --muted:#97A3AE; --line:#2C3843;
+  --steel:#82B4E2; --steel-soft:#1C2C3B; --accent:#F0873A; --accent-ink:#1A1006; --ok:#5CC28A; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);line-height:.95;margin:0;text-wrap:balance;letter-spacing:.005em}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:var(--r);padding:12px 18px;font-weight:600;cursor:pointer;text-decoration:none;transition:transform .15s,background .15s}
+.btn:active{transform:translateY(1px)}
+.btn-accent{background:var(--accent);color:var(--accent-ink)}
+.btn-accent:hover{filter:brightness(1.06)}
+.btn-ghost{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--bg)}
+.btn svg{width:18px;height:18px;flex:none}
+
+/* Header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-mark{width:34px;height:34px;flex:none}
+.brand b{font-family:var(--display);font-size:24px;font-weight:900;letter-spacing:.02em;line-height:1}
+.brand small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+nav.links{display:flex;gap:22px;margin-left:auto;font-weight:600;font-size:15px}
+nav.links a{text-decoration:none;color:var(--muted)}
+nav.links a:hover{color:var(--ink)}
+.top .btn{padding:9px 14px;font-size:14.5px}
+@media (max-width:820px){nav.links{display:none}.top .btn{margin-left:auto}}
+
+/* Hero */
+.hero{padding-block:44px 30px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(46px,7.4vw,96px);font-weight:900;text-transform:uppercase}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p.lead{font-size:19px;color:var(--muted);max-width:34ch;margin:18px 0 24px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:30px;border-top:2px solid var(--ink)}
+.stat{padding:12px 12px 0 0}
+.stat+.stat{padding-left:14px;border-left:1px solid var(--line)}
+.stat b{display:block;font-family:var(--display);font-size:clamp(30px,4vw,42px);font-weight:800;line-height:1}
+.stat span{font-size:13.5px;color:var(--muted)}
+.dock{width:100%;height:auto;display:block;max-width:100%}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr}.hero{padding-top:28px}}
+
+/* dock animation */
+.door{transform-box:fill-box;transform-origin:top;animation:rise 1.4s cubic-bezier(.6,.05,.25,1) both}
+.door:nth-of-type(2){animation-delay:.18s}.door:nth-of-type(3){animation-delay:.36s}.door:nth-of-type(4){animation-delay:.54s}
+@keyframes rise{from{transform:scaleY(1)}to{transform:scaleY(.16)}}
+.truck{animation:back 2.6s cubic-bezier(.3,.1,.2,1) .4s both}
+@keyframes back{from{transform:translateX(260px)}to{transform:translateX(0)}}
+.beacon{animation:blink 1.1s steps(2,end) infinite}
+@keyframes blink{50%{opacity:.15}}
+
+/* Section heads */
+section.block{padding-block:56px}
+.sec-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:26px}
+.sec-head h2{font-size:clamp(36px,5vw,58px);font-weight:800;text-transform:uppercase}
+.sec-head p{color:var(--muted);max-width:46ch;margin:8px 0 0}
+
+/* Filters */
+.filters{display:grid;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:22px}
+.frow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.frow .lbl{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);width:92px;flex:none}
+.chip{border:1.5px solid var(--line);background:var(--raise);border-radius:99px;padding:6px 13px;font-size:14.5px;font-weight:600;cursor:pointer;transition:all .15s}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip .n{font-family:var(--mono);font-size:12px;opacity:.65;margin-left:4px}
+.switch{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;font-size:14.5px}
+.switch input{appearance:none;width:42px;height:24px;border-radius:99px;background:var(--line);position:relative;cursor:pointer;transition:background .2s;margin:0}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--raise);transition:transform .2s}
+.switch input:checked{background:var(--accent)}
+.switch input:checked::after{transform:translateX(18px)}
+.fmeta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center}
+.count{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.fmeta select{border:1.5px solid var(--line);background:var(--raise);border-radius:var(--r);padding:6px 10px;font-size:14px}
+@media (max-width:560px){.frow .lbl{width:100%}}
+
+/* Cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px}
+.card{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;overflow:hidden;transition:transform .25s,box-shadow .25s;animation:cardIn .45s ease both}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 30px -18px color-mix(in srgb,var(--ink) 55%,transparent)}
+@keyframes cardIn{from{transform:translateY(10px)}to{transform:none}}
+.plan{background:var(--steel-soft);position:relative;border-bottom:1px solid var(--line)}
+.plan svg{display:block;width:100%;height:auto}
+.plan .folio{position:absolute;top:10px;left:12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--steel);font-weight:600}
+.plan .tag{position:absolute;top:9px;right:10px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:var(--raise);color:var(--ink);border:1px solid var(--line)}
+.card:hover .plan .draw{animation:draw 1.2s ease}
+@keyframes draw{from{stroke-dashoffset:900}to{stroke-dashoffset:0}}
+.cbody{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1}
+.zone{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.card h3{font-size:27px;font-weight:800;text-transform:uppercase}
+.card p{margin:0;color:var(--muted);font-size:15px}
+.specs{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0}
+.spec{font-size:12.5px;font-weight:600;padding:3px 8px;border-radius:3px;background:var(--surface);border:1px solid var(--line)}
+.spec.yes{border-color:color-mix(in srgb,var(--ok) 50%,var(--line));color:var(--ok)}
+.spec.no{color:var(--muted);text-decoration:line-through}
+.price{display:flex;align-items:baseline;justify-content:space-between;gap:10px;border-top:1px dashed var(--line);padding-top:12px;margin-top:auto}
+.price b{font-family:var(--display);font-size:32px;font-weight:800;line-height:1}
+.price b small{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--muted);margin-left:3px}
+.price .m2{font-family:var(--mono);font-size:13px;color:var(--muted);text-align:right}
+.cactions{display:grid;grid-template-columns:1fr auto;gap:8px}
+.cactions .btn{justify-content:center;padding:10px 12px;font-size:14.5px}
+.add{border:1.5px solid var(--line);background:var(--surface);border-radius:var(--r);padding:0 12px;cursor:pointer;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px}
+.add[aria-pressed="true"]{border-color:var(--ok);color:var(--ok)}
+.empty{grid-column:1/-1;text-align:center;padding:40px 16px;border:1.5px dashed var(--line);border-radius:var(--r);color:var(--muted)}
+
+/* Tray */
+.tray{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translate(-50%,140%);z-index:30;background:var(--ink);color:var(--bg);border-radius:10px;padding:10px 10px 10px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 18px 40px -12px rgba(0,0,0,.45);transition:transform .35s cubic-bezier(.3,1.3,.5,1);max-width:calc(100% - 32px)}
+.tray.on{transform:translate(-50%,0)}
+.tray span{font-weight:600;font-size:15px}
+.tray .btn{padding:9px 14px;font-size:14px;white-space:nowrap}
+
+/* Calculator */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--raise)}
+.calc-in{padding:24px;display:grid;gap:18px;align-content:start}
+.calc-in label{display:grid;gap:6px;font-weight:600;font-size:15px}
+.calc-in select{border:1.5px solid var(--line);background:var(--surface);border-radius:var(--r);padding:10px 12px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.rangeval{display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.calc-out{background:var(--steel);color:var(--bg);padding:24px;display:grid;gap:14px;align-content:start;position:relative;overflow:hidden}
+.calc-out .eyebrow{color:color-mix(in srgb,var(--bg) 72%,transparent)}
+.big{font-family:var(--display);font-size:clamp(48px,7vw,78px);font-weight:900;line-height:.9}
+.big small{font-size:.35em;font-weight:700;margin-left:6px}
+.calc-lines{display:grid;gap:6px;font-family:var(--mono);font-size:14px;border-top:1px solid color-mix(in srgb,var(--bg) 30%,transparent);padding-top:12px}
+.calc-lines div{display:flex;justify-content:space-between;gap:10px}
+.calc-note{font-size:13.5px;opacity:.82;margin:0}
+.calc-out .btn{background:var(--bg);color:var(--ink);justify-self:start}
+@media (max-width:760px){.calc{grid-template-columns:1fr}}
+
+/* Map */
+.mapgrid{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:center}
+.map{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px}
+.map svg{width:100%;height:auto;display:block}
+.zbtn{cursor:pointer}
+.zbtn circle.dot{fill:var(--accent);transition:r .2s}
+.zbtn:hover circle.dot,.zbtn.sel circle.dot{r:11}
+.zbtn .ping{fill:none;stroke:var(--accent);stroke-width:2;transform-box:fill-box;transform-origin:center;animation:ping 2.4s ease-out infinite}
+@keyframes ping{from{transform:scale(.6);opacity:.9}to{transform:scale(2.6);opacity:0}}
+.zlist{display:grid;gap:0;border-top:2px solid var(--ink)}
+.zlist button{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:baseline;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:12px 2px;cursor:pointer}
+.zlist button:hover b{color:var(--accent)}
+.zlist b{font-family:var(--display);font-size:24px;font-weight:800;text-transform:uppercase;transition:color .15s}
+.zlist span{font-family:var(--mono);font-size:13px;color:var(--muted)}
+@media (max-width:820px){.mapgrid{grid-template-columns:1fr}}
+
+/* Services */
+.svc{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:2px solid var(--ink)}
+.svc article{padding:22px 22px 6px 0}
+.svc article+article{padding-left:22px;border-left:1px solid var(--line)}
+.svc svg{width:40px;height:40px;color:var(--steel);margin-bottom:12px}
+.svc h3{font-size:30px;font-weight:800;text-transform:uppercase;margin-bottom:8px}
+.svc p{color:var(--muted);margin:0 0 10px}
+.svc ul{margin:0;padding-left:18px;color:var(--ink);font-size:15px}
+@media (max-width:860px){.svc{grid-template-columns:1fr}.svc article+article{padding-left:0;border-left:0;border-top:1px solid var(--line)}}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;counter-reset:s}
+.step{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.step .num{font-family:var(--display);font-size:54px;font-weight:900;color:var(--accent);line-height:.9}
+.step h3{font-size:24px;font-weight:800;text-transform:uppercase;margin:8px 0 6px}
+.step p{margin:0;color:var(--muted);font-size:15px}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* Request form */
+.req{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;background:var(--ink);color:var(--bg);border-radius:10px;padding:clamp(20px,4vw,40px)}
+.req h2{font-size:clamp(38px,5vw,60px);font-weight:900;text-transform:uppercase}
+.req p{opacity:.8}
+.req form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.req label{display:grid;gap:5px;font-size:13px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;opacity:.9}
+.req input,.req select{background:color-mix(in srgb,var(--bg) 10%,var(--ink));border:1px solid color-mix(in srgb,var(--bg) 25%,transparent);color:var(--bg);border-radius:var(--r);padding:11px 12px;font-family:var(--body);font-size:16px;text-transform:none;letter-spacing:0}
+.req .full{grid-column:1/-1}
+.req .btn{justify-content:center}
+.addr{display:grid;gap:6px;margin-top:20px;font-size:15px}
+.addr b{font-family:var(--mono);font-size:12px;letter-spacing:.12em;opacity:.7;text-transform:uppercase}
+@media (max-width:820px){.req{grid-template-columns:1fr}}
+@media (max-width:460px){.req form{grid-template-columns:1fr}}
+
+/* FAQ */
+.faq{display:grid;gap:0;border-top:2px solid var(--ink);max-width:820px}
+.faq details{border-bottom:1px solid var(--line);padding:4px 0}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:14px 0;font-weight:700;font-size:18px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--mono);font-size:22px;line-height:1;color:var(--accent);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq p{margin:0 0 16px;color:var(--muted);max-width:65ch}
+
+footer{border-top:1px solid var(--line);padding-block:28px calc(28px + env(safe-area-inset-bottom,0px));color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+/* WhatsApp sheet */
+.sheet-bg{position:fixed;inset:0;z-index:40;background:rgba(10,14,18,.55);display:flex;align-items:flex-end;justify-content:center;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sheet{background:var(--raise);color:var(--ink);border-radius:12px;width:100%;max-width:520px;padding:20px;display:grid;gap:14px;animation:up .3s cubic-bezier(.3,1.2,.5,1)}
+@keyframes up{from{transform:translateY(40px)}to{transform:none}}
+.sheet h3{font-size:30px;font-weight:800;text-transform:uppercase}
+.sheet pre{white-space:pre-wrap;font-family:var(--body);font-size:15px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:0;max-height:42vh;overflow:auto}
+.sheet .row{display:flex;gap:8px;flex-wrap:wrap}
+.sheet .row .btn{flex:1;justify-content:center}
+.toast{font-family:var(--mono);font-size:13px;color:var(--ok);min-height:1em}
+
+.fab{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:25;width:58px;height:58px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;border:0;cursor:pointer;box-shadow:0 10px 24px -8px rgba(0,0,0,.4)}
+.fab svg{width:30px;height:30px}
+body.tray-on .fab{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.door{transform:scaleY(.16)}}
+footer .ubika{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);font-size:13.5px}
+footer .ubika a{color:var(--ink);font-weight:700}
+</style>
+
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="RL Industrial, inicio">
+      <svg class="brand-mark" viewBox="0 0 34 34" aria-hidden="true"><path d="M2 32V13L17 3l15 10v19" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="8" y="17" width="18" height="15" fill="var(--accent)"/><path d="M8 21h18M8 25h18M8 29h18" stroke="var(--raise)" stroke-width="1.4"/></svg>
+      <span><b>RL INDUSTRIAL</b><small>Inmuebles · CDMX y Edomex</small></span>
+    </a>
+    <nav class="links" aria-label="Secciones">
+      <a href="#bodegas">Bodegas</a><a href="#calculadora">Calculadora</a><a href="#zonas">Zonas</a><a href="#servicios">Servicios</a><a href="#contacto">Contacto</a>
+    </nav>
+    <button class="btn btn-accent" data-wa="general" type="button">Cotizar espacio</button>
+  </div>
+</header>
+
+<main id="inicio">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Renta de bodegas, naves y locales · Proyectos 2026</div>
+      <h1>Espacio para tu <em>operación</em>, listo para cargar</h1>
+      <p class="lead">Bodegas industriales desde 150 hasta 11,000 m² en el norte y oriente del Valle de México, con asesoría legal en el contrato.</p>
+      <div class="hero-actions">
+        <a class="btn btn-accent" href="#bodegas">Ver bodegas disponibles</a>
+        <a class="btn btn-ghost" href="#calculadora">Calcular mi renta</a>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <svg class="dock" viewBox="0 0 520 360" role="img" aria-label="Ilustración de un andén de carga con cortinas que se abren y un tráiler en reversa">
+      <rect x="0" y="0" width="520" height="360" fill="var(--steel-soft)" rx="6"/>
+      <path d="M30 120 L260 40 L490 120 V280 H30Z" fill="var(--surface)" stroke="var(--steel)" stroke-width="3"/>
+      <path d="M30 120 L260 40 L490 120" fill="none" stroke="var(--ink)" stroke-width="5"/>
+      <g fill="none" stroke="var(--line)" stroke-width="1.5"><path d="M60 110v170M150 80v200M260 48v232M370 80v200M460 110v170"/></g>
+      <text x="260" y="98" text-anchor="middle" font-family="var(--mono)" font-size="13" fill="var(--steel)" letter-spacing="3">NAVE · ANDENES 1–4</text>
+      <g>
+        <g transform="translate(58 170)"><rect width="84" height="110" fill="var(--ink)"/><rect x="14" y="40" width="34" height="30" fill="var(--accent)" opacity=".8"/><rect x="40" y="62" width="30" height="48" fill="var(--steel)" opacity=".6"/></g>
+        <g transform="translate(160 170)"><rect width="84" height="110" fill="var(--ink)"/><rect x="10" y="70" width="40" height="40" fill="var(--steel)" opacity=".6"/><rect x="46" y="54" width="30" height="56" fill="var(--accent)" opacity=".75"/></g>
+        <g transform="translate(276 170)"><rect width="84" height="110" fill="var(--ink)"/></g>
+        <g transform="translate(378 170)"><rect width="84" height="110" fill="var(--ink)"/><rect x="18" y="64" width="48" height="46" fill="var(--accent)" opacity=".75"/></g>
+      </g>
+      <g fill="var(--muted)" font-family="var(--mono)" font-size="12" text-anchor="middle"><text x="100" y="164">01</text><text x="202" y="164">02</text><text x="318" y="164">03</text><text x="420" y="164">04</text></g>
+      <g>
+        <rect class="door" x="58" y="170" width="84" height="110" fill="var(--line)" stroke="var(--muted)"/>
+        <rect class="door" x="160" y="170" width="84" height="110" fill="var(--line)" stroke="var(--muted)"/>
+        <rect class="door" x="276" y="170" width="84" height="110" fill="var(--line)" stroke="var(--muted)"/>
+        <rect class="door" x="378" y="170" width="84" height="110" fill="var(--line)" stroke="var(--muted)"/>
+      </g>
+      <g fill="var(--accent)"><rect x="66" y="270" width="10" height="14"/><rect x="124" y="270" width="10" height="14"/><rect x="168" y="270" width="10" height="14"/><rect x="226" y="270" width="10" height="14"/><rect x="284" y="270" width="10" height="14"/><rect x="342" y="270" width="10" height="14"/><rect x="386" y="270" width="10" height="14"/><rect x="444" y="270" width="10" height="14"/></g>
+      <rect x="0" y="284" width="520" height="76" fill="var(--muted)" opacity=".35"/>
+      <path d="M0 322h520" stroke="var(--raise)" stroke-width="3" stroke-dasharray="22 16"/>
+      <g class="truck">
+        <rect x="268" y="232" width="200" height="74" fill="var(--raise)" stroke="var(--ink)" stroke-width="3"/>
+        <text x="368" y="276" text-anchor="middle" font-family="var(--display)" font-weight="900" font-size="26" fill="var(--ink)">RL</text>
+        <path d="M468 252h34l16 22v32h-50z" fill="var(--accent)" stroke="var(--ink)" stroke-width="3"/>
+        <rect x="476" y="258" width="22" height="16" fill="var(--steel-soft)" stroke="var(--ink)" stroke-width="2"/>
+        <g fill="var(--ink)"><circle cx="300" cy="312" r="13"/><circle cx="332" cy="312" r="13"/><circle cx="490" cy="312" r="13"/></g>
+        <g fill="var(--raise)"><circle cx="300" cy="312" r="5"/><circle cx="332" cy="312" r="5"/><circle cx="490" cy="312" r="5"/></g>
+        <rect class="beacon" x="264" y="296" width="8" height="8" fill="var(--accent)"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<section class="block" id="bodegas">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow">Catálogo vigente</div><h2>Bodegas disponibles</h2>
+      <p>Filtra por zona, tamaño y acceso. Arma tu lista de visitas y pide todas las fichas en un solo mensaje.</p></div>
+    </div>
+    <div class="filters" role="group" aria-label="Filtros">
+      <div class="frow"><span class="lbl">Zona</span><div class="frow" id="fZona"></div></div>
+      <div class="frow"><span class="lbl">Superficie</span><div class="frow" id="fSize"></div></div>
+      <div class="fmeta">
+        <label class="switch"><input type="checkbox" id="fTrailer"> Solo con acceso de tráiler</label>
+        <div class="frow"><span class="count" id="count"></span>
+          <select id="fSort" aria-label="Ordenar"><option value="m2">Menor precio por m²</option><option value="size-asc">Superficie: menor a mayor</option><option value="size-desc">Superficie: mayor a menor</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="block" id="calculadora" style="background:var(--surface);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow">Herramienta</div><h2>¿Cuánto pagarías de renta?</h2>
+      <p>Elige una bodega, ajusta los metros que necesitas y ve la renta mensual estimada con el precio publicado.</p></div></div>
+    <div class="calc">
+      <div class="calc-in">
+        <label for="cProp">Inmueble<select id="cProp"></select></label>
+        <label for="cM2">Metros cuadrados
+          <input type="range" id="cM2">
+          <span class="rangeval"><span id="cMin"></span><b id="cVal" style="color:var(--ink)"></b><span id="cMax"></span></span>
+        </label>
+        <label for="cMeses">Plazo del contrato<select id="cMeses"><option value="12">12 meses</option><option value="24">24 meses</option><option value="36" selected>36 meses</option></select></label>
+      </div>
+      <div class="calc-out" aria-live="polite">
+        <div class="eyebrow">Renta mensual estimada</div>
+        <div class="big mono" id="cTotal"></div>
+        <div class="calc-lines">
+          <div><span>Precio por m²</span><span id="cPm2"></span></div>
+          <div><span>Superficie</span><span id="cSup"></span></div>
+          <div><span>Total del contrato</span><span id="cContrato"></span></div>
+        </div>
+        <p class="calc-note">Cálculo con el precio publicado. El precio final se negocia directamente con RL Industrial.</p>
+        <button class="btn" type="button" id="cAsk">Pedir esta cotización</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="zonas">
+  <div class="wrap mapgrid">
+    <div class="map">
+      <svg viewBox="0 0 460 380" id="mapSvg" role="img" aria-label="Esquema de zonas del Valle de México con bodegas disponibles">
+        <rect width="460" height="380" fill="var(--steel-soft)" rx="4"/>
+        <g stroke="var(--line)" stroke-width="1">
+          <path d="M0 76h460M0 152h460M0 228h460M0 304h460M92 0v380M184 0v380M276 0v380M368 0v380"/>
+        </g>
+        <path d="M70 40 L300 30 L360 120 L330 210 L200 230 L110 180 Z" fill="var(--surface)" stroke="var(--muted)" stroke-dasharray="5 5" stroke-width="1.5"/>
+        <text x="96" y="60" font-family="var(--mono)" font-size="11" fill="var(--muted)" letter-spacing="2">ESTADO DE MÉXICO · NORTE</text>
+        <path d="M150 190 L300 170 L380 230 L360 330 L230 350 L140 300 Z" fill="var(--raise)" stroke="var(--steel)" stroke-width="2"/>
+        <text x="250" y="342" font-family="var(--mono)" font-size="11" fill="var(--steel)" letter-spacing="2" text-anchor="middle">CIUDAD DE MÉXICO</text>
+        <path d="M60 330 C160 250 250 220 420 110" fill="none" stroke="var(--muted)" stroke-width="2" opacity=".5"/>
+        <text x="408" y="104" font-family="var(--mono)" font-size="10" fill="var(--muted)" text-anchor="end">ANILLO PERIFÉRICO</text>
+        <g id="mapPins"></g>
+        <g transform="translate(238 206)"><rect x="-5" y="-5" width="10" height="10" fill="var(--ink)" transform="rotate(45)"/><text x="12" y="4" font-family="var(--mono)" font-size="11" fill="var(--ink)">Oficina Lindavista</text></g>
+        <text x="452" y="372" text-anchor="end" font-family="var(--mono)" font-size="9.5" fill="var(--muted)">Esquema sin escala</text>
+      </svg>
+    </div>
+    <div>
+      <div class="eyebrow">Cobertura</div>
+      <h2 style="font-size:clamp(36px,5vw,58px);font-weight:800;text-transform:uppercase;margin:6px 0 10px">Zonas industriales</h2>
+      <p style="color:var(--muted);margin:0 0 18px">Toca una zona para ver solo sus bodegas.</p>
+      <div class="zlist" id="zlist"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="servicios">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow">Lo que hacemos</div><h2>Tres áreas, un solo equipo</h2></div></div>
+    <div class="svc">
+      <article>
+        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 36V16l16-11 16 11v20"/><path d="M12 36V22h16v14M12 27h16M12 32h16"/></svg>
+        <h3>Bienes raíces</h3>
+        <p>Compra, venta y renta de inmuebles industriales, comerciales y residenciales con visión de inversión.</p>
+        <ul><li>Bodegas y naves en renta</li><li>Locales comerciales</li><li>Terrenos para desarrollo</li></ul>
+      </article>
+      <article>
+        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 5v30M8 35h24M6 12h28M6 12l-4 12h8zM34 12l-4 12h8z"/></svg>
+        <h3>Abogacía civil</h3>
+        <p>Asesoría legal para que el inmueble y el contrato estén en regla antes de firmar.</p>
+        <ul><li>Contratos de arrendamiento y compraventa</li><li>Litigios civiles</li><li>Regularización de propiedades</li></ul>
+      </article>
+      <article>
+        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="4" y="10" width="32" height="24"/><path d="M4 18h32M14 10v24M26 10v24"/><path d="M10 6h20"/></svg>
+        <h3>Gestión industrial</h3>
+        <p>Especialistas en terrenos y naves. Te ayudamos a elegir el espacio por acceso, altura y operación.</p>
+        <ul><li>Análisis de maniobras y andenes</li><li>Búsqueda a la medida</li><li>Comercialización para propietarios</li></ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="background:var(--surface);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow">Proceso</div><h2>Cómo se renta con RL</h2></div></div>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><h3>Nos dices qué necesitas</h3><p>Metros, zona, giro y si entra tráiler o torton.</p></div>
+      <div class="step"><div class="num">2</div><h3>Visitas</h3><p>Agendamos recorridos a las opciones que encajan, el mismo día si se puede.</p></div>
+      <div class="step"><div class="num">3</div><h3>Contrato revisado</h3><p>Nuestra área de abogacía civil revisa el contrato y los requisitos.</p></div>
+      <div class="step"><div class="num">4</div><h3>Entrega</h3><p>Recibes llaves e inventario de la bodega para empezar a operar.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="contacto">
+  <div class="wrap">
+    <div class="req">
+      <div>
+        <div class="eyebrow" style="color:inherit;opacity:.7">¿No viste la indicada?</div>
+        <h2>Te buscamos la bodega</h2>
+        <p>Llena estos datos y te llega un mensaje listo para mandar por WhatsApp. Te respondemos con opciones que sí cumplen.</p>
+        <div class="addr"><b>Oficina</b><span>Lindavista, 07340<br>Ciudad de México, CDMX</span></div>
+      </div>
+      <form id="reqForm" novalidate>
+        <label for="rNombre">Nombre o empresa<input id="rNombre" autocomplete="organization" placeholder="Logística del Norte"></label>
+        <label for="rGiro">Giro<input id="rGiro" placeholder="Almacén de abarrotes"></label>
+        <label for="rM2">Metros que necesitas<select id="rM2"><option>Menos de 500 m²</option><option selected>500 a 2,000 m²</option><option>2,000 a 5,000 m²</option><option>Más de 5,000 m²</option></select></label>
+        <label for="rZona">Zona preferida<select id="rZona"></select></label>
+        <label for="rAcceso">Acceso<select id="rAcceso"><option>Tráiler</option><option>Torton</option><option>Camioneta</option></select></label>
+        <label for="rCuando">¿Para cuándo?<select id="rCuando"><option>Inmediato</option><option>1 a 3 meses</option><option>Más de 3 meses</option></select></label>
+        <button class="btn btn-accent full" type="submit">Armar mensaje de búsqueda</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow">Dudas comunes</div><h2>Preguntas frecuentes</h2></div></div>
+    <div class="faq">
+      <details><summary>¿Los precios son negociables?</summary><p>Sí. Varias bodegas se publican con precio negociable; se ajusta según plazo, superficie y garantías.</p></details>
+      <details><summary>¿El precio es por m² o total?</summary><p>Cada ficha lo indica. En conjuntos y parques industriales se cotiza por m² al mes; en bodegas individuales se publica la renta mensual total.</p></details>
+      <details><summary>¿Qué piden para rentar?</summary><p>Normalmente identificación, comprobante de domicilio, acta constitutiva si es empresa y una garantía (fiador o póliza jurídica). Te decimos los requisitos exactos de cada inmueble.</p></details>
+      <details><summary>¿Ustedes revisan el contrato?</summary><p>Sí. Contamos con área de abogacía civil para contratos, litigios y regularización de inmuebles.</p></details>
+      <details><summary>Tengo una bodega, ¿la pueden rentar?</summary><p>Sí. Comercializamos bodegas, naves y terrenos de propietarios. Escríbenos con ubicación y metros.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>© 2026 RL Industrial Inmuebles · Lindavista, CDMX</span><span>Bienes raíces · Abogacía civil · Gestión industrial</span></div>
+<div class="wrap ubika"><span>Página hecha con <a href="../">Ubika</a>. ¿Eres asesor inmobiliario? Ten la tuya.</span></div></footer>
+
+<div class="tray" id="tray" aria-live="polite"><span id="trayTxt"></span><button class="btn btn-accent" type="button" id="trayBtn">Pedir fichas</button></div>
+<button class="fab" type="button" data-wa="general" aria-label="Escribir por WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg></button>
+
+<div class="sheet-bg" id="sheetBg" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <h3 id="sheetTitle">Mensaje listo</h3>
+    <pre id="sheetMsg"></pre>
+    <div class="toast" id="sheetToast"></div>
+    <div class="row">
+      <a class="btn btn-accent" id="sheetWa" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
+      <button class="btn btn-ghost" type="button" id="sheetCopy">Copiar texto</button>
+    </div>
+    <button class="btn" type="button" id="sheetClose" style="background:none;color:var(--muted);justify-content:center">Cerrar</button>
+  </div>
+</div>
+
+<script>
+/* Número de WhatsApp de RL Industrial (52 + 10 dígitos). Vacío: WhatsApp pide elegir el contacto. */
+const WA_NUMERO = "";
+
+const P = [
+ {id:"RL-01",n:"Alce Blanco",zona:"Naucalpan",tipo:"Bodega",min:150,max:300,pm2:130,trailer:true,andenes:true,ofic:false,
+  d:"Bodegas para uso industrial ligero. Módulos de 150 a 300 m² con elevador industrial y estacionamiento.",x:["Andenes","Elevador industrial","Vigilancia 24 h","Estacionamiento"],mod:true},
+ {id:"RL-02",n:"Patio con bodega",zona:"Tlalnepantla",tipo:"Patio + bodega",min:4500,max:4500,pm2:150,trailer:true,andenes:false,ofic:false,patio:950,
+  d:"4,500 m² de terreno con 950 m² de bodega techada. Ideal para resguardo vehicular. Muy negociable.",x:["Resguardo vehicular","950 m² techados","Negociable"]},
+ {id:"RL-03",n:"Conjunto industrial",zona:"Tlalnepantla",tipo:"Conjunto",min:1600,max:11000,pm2:175,trailer:null,andenes:false,ofic:false,sizes:[1600,1800,2000,2500,5000,11000],
+  d:"Bodegas de 1,600, 1,800, 2,000, 2,500, 5,000 y 11,000 m². Aceptan negociación.",x:["6 tamaños","Negociable"],mod:true},
+ {id:"RL-04",n:"Iztacalco 2,600",zona:"Iztacalco",tipo:"Bodega",min:2600,max:2600,renta:300000,trailer:false,torton:true,andenes:false,ofic:true,
+  d:"Dos accesos de torton, oficinas en dos niveles, 10 baños y estacionamiento. Precio negociable.",x:["2 accesos torton","Oficinas 2 niveles","10 baños","Estacionamiento"]},
+ {id:"RL-05",n:"Xhala Park",zona:"Cuautitlán Izcalli",tipo:"Parque industrial",min:3000,max:10000,pm2:200,trailer:true,andenes:true,ofic:true,sizes:[3000,10000],
+  d:"Bodegas remodeladas de 3,000 y 10,000 m² dentro del parque industrial Xhala. Requisitos confiables.",x:["Andenes","Oficinas","Patio","Estacionamiento","Remodeladas"],mod:true},
+ {id:"RL-06",n:"Local en esquina",zona:"Benito Juárez",tipo:"Local comercial",min:150,max:150,renta:85000,trailer:false,andenes:false,ofic:false,local:true,
+  d:"Local comercial en esquina de alto paso, en el corazón de la Benito Juárez.",x:["Esquina","Zona comercial"]},
+ {id:"RL-07",n:"Santa Martha 350",zona:"Iztapalapa",tipo:"Bodega",min:350,max:350,renta:49900,trailer:true,andenes:false,ofic:true,
+  d:"Bodega en Santa Martha Acatitla para uso industrial, con doble altura y oficinas.",x:["Doble altura","Oficinas"]},
+ {id:"RL-08",n:"Iztapalapa 350 AAA",zona:"Iztapalapa",tipo:"Bodega",min:350,max:350,renta:49900,trailer:true,andenes:false,ofic:true,
+  d:"Oficinas AAA y excelente mantenimiento. Adecuada para giros delicados.",x:["Oficinas AAA","Giros delicados"]},
+ {id:"RL-09",n:"Iztapalapa 800",zona:"Iztapalapa",tipo:"Bodega",min:800,max:800,renta:100000,trailer:true,andenes:false,ofic:true,
+  d:"En zona industrial, doble altura, oficinas con mármol y 4 baños. Disponibilidad inmediata.",x:["Doble altura","4 baños","Inmediata"]},
+ {id:"RL-10",n:"Lote comercial",zona:"Sobre avenida",tipo:"Terreno · venta",min:1000,max:1000,trailer:null,andenes:false,ofic:false,lote:true,
+  d:"Terreno para proyectos comerciales o plazas, sobre avenida principal. Precio especial a desarrolladores.",x:["Uso comercial","Desarrolladores"]}
+];
+const ZONAS = {"Naucalpan":[118,150],"Tlalnepantla":[190,108],"Cuautitlán Izcalli":[150,66],"Iztacalco":[286,248],"Iztapalapa":[318,290],"Benito Juárez":[236,268]};
+const SIZES = [["Todas",0,1e9],["Hasta 500 m²",0,500],["500 – 2,000",500,2000],["2,000 – 5,000",2000,5000],["Más de 5,000",5000,1e9]];
+
+const $ = s=>document.querySelector(s);
+const fmt = n=>"$"+Math.round(n).toLocaleString("es-MX");
+const m2s = n=>n.toLocaleString("es-MX")+" m²";
+const pm2 = p=>p.pm2 || (p.renta? p.renta/p.min : null);
+const state = {zona:"Todas",size:0,trailer:false,sort:"m2",lista:new Set()};
+
+/* Stats */
+const totalM2 = P.filter(p=>!p.lote).reduce((a,p)=>a+(p.sizes?p.sizes.reduce((x,y)=>x+y,0):p.max),0);
+$("#stats").innerHTML = `
+ <div class="stat"><b class="mono" data-count="${P.length}">${P.length}</b><span>inmuebles en catálogo</span></div>
+ <div class="stat"><b class="mono" data-count="${totalM2}">${totalM2.toLocaleString("es-MX")}</b><span>m² disponibles</span></div>
+ <div class="stat"><b class="mono" data-count="${Object.keys(ZONAS).length}">${Object.keys(ZONAS).length}</b><span>zonas de CDMX y Edomex</span></div>`;
+if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
+  document.querySelectorAll("[data-count]").forEach(el=>{
+    const end=+el.dataset.count, t0=performance.now();
+    const tick=t=>{const k=Math.min(1,(t-t0)/1400),e=1-Math.pow(1-k,3);el.textContent=Math.round(end*e).toLocaleString("es-MX");if(k<1)requestAnimationFrame(tick)};
+    requestAnimationFrame(tick);
+  });
+}
+
+/* Floor plan generator */
+function plan(p){
+  const W=360,H=190,pad=26;
+  const area = p.lote? p.max : (p.patio? p.max : p.max);
+  const ratio = p.local?1.25:1.7;
+  const L=Math.sqrt(area*ratio), A=area/L;
+  const s=Math.min((W-2*pad)/L,(H-2*pad-14)/A);
+  const w=L*s,h=A*s,x=(W-w)/2,y=(H-h)/2-4;
+  const st='stroke="var(--steel)"';
+  let g=`<rect class="draw" x="${x}" y="${y}" width="${w}" height="${h}" fill="var(--raise)" ${st} stroke-width="2.2" stroke-dasharray="900"/>`;
+  if(p.lote){
+    g=`<rect class="draw" x="${x}" y="${y}" width="${w}" height="${h}" fill="none" ${st} stroke-width="2" stroke-dasharray="8 5"/>`+
+      `<path d="M${x} ${y+h+8}h${w}" stroke="var(--muted)" stroke-width="5"/><text x="${x+w/2}" y="${y+h+22}" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--muted)">AVENIDA PRINCIPAL</text>`;
+  }
+  if(p.patio){
+    const bw=w*(p.patio/area)*1.9, bh=h*0.52;
+    g+=`<defs><pattern id="h${p.id}" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0v8" stroke="var(--line)" stroke-width="2"/></pattern></defs>`;
+    g+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#h${p.id})"/>`;
+    g+=`<rect x="${x+8}" y="${y+8}" width="${bw}" height="${bh}" fill="var(--raise)" ${st} stroke-width="1.8"/><text x="${x+8+bw/2}" y="${y+8+bh/2+4}" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--steel)">BODEGA 950</text>`;
+    g+=`<text x="${x+w-8}" y="${y+h-10}" text-anchor="end" font-family="var(--mono)" font-size="10" fill="var(--muted)">PATIO</text>`;
+  }
+  if(!p.lote && !p.patio && !p.local){
+    const cols=Math.max(2,Math.min(7,Math.round(L/12))), rows=Math.max(1,Math.min(4,Math.round(A/12)));
+    for(let i=1;i<cols;i++)for(let j=1;j<=rows;j++){const cx=x+w*i/cols, cy=y+h*j/(rows+1);g+=`<rect x="${cx-2}" y="${cy-2}" width="4" height="4" fill="var(--steel)" opacity=".55"/>`}
+  }
+  if(p.mod && p.sizes){
+    const tot=p.sizes.reduce((a,b)=>a+b,0); let acc=0;
+    p.sizes.slice(0,-1).forEach(v=>{acc+=v;const xx=x+w*acc/tot;g+=`<path d="M${xx} ${y}v${h}" stroke="var(--steel)" stroke-width="1.2" stroke-dasharray="4 3"/>`});
+  } else if(p.mod){
+    for(let i=1;i<4;i++){const xx=x+w*i/4;g+=`<path d="M${xx} ${y}v${h}" stroke="var(--steel)" stroke-width="1.2" stroke-dasharray="4 3"/>`}
+  }
+  if(p.ofic){const ow=Math.min(w*.26,70),oh=Math.min(h*.34,40);g+=`<rect x="${x+w-ow}" y="${y}" width="${ow}" height="${oh}" fill="var(--steel-soft)" ${st} stroke-width="1.4"/><text x="${x+w-ow/2}" y="${y+oh/2+3}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--steel)">OFIC.</text>`}
+  if(p.andenes||p.trailer===true){
+    const n=p.andenes?Math.max(2,Math.min(6,Math.round(w/34))):1, dw=Math.min(18,w/(n*2));
+    for(let i=0;i<n;i++){const dx=x+(w/(n+1))*(i+1)-dw/2;g+=`<rect x="${dx}" y="${y+h-3}" width="${dw}" height="6" fill="var(--accent)"/>`}
+  }
+  if(p.torton){[.3,.65].forEach(k=>{g+=`<rect x="${x+w*k-8}" y="${y+h-3}" width="16" height="6" fill="var(--muted)"/>`})}
+  if(p.local){g+=`<path d="M${x} ${y+h} h${w*.7} M${x} ${y+h} v-${h*.7}" stroke="var(--accent)" stroke-width="5"/><text x="${x+w/2}" y="${y+h/2}" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--steel)">ESQUINA</text>`}
+  const dim=`≈ ${Math.round(L)} × ${Math.round(A)} m`;
+  g+=`<path d="M${x} ${y+h+12}h${w}M${x} ${y+h+8}v8M${x+w} ${y+h+8}v8" stroke="var(--muted)" stroke-width="1"/>`;
+  if(!p.lote) g+=`<text x="${x+w/2}" y="${y+h+25}" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--muted)">${dim}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Plano esquemático, ${dim}">${g}</svg>`;
+}
+
+function priceHTML(p){
+  if(p.lote) return `<b>Consultar</b><span class="m2">Venta</span>`;
+  if(p.pm2) return `<b class="mono">${fmt(p.pm2)}<small>/m² mes</small></b><span class="m2">desde ${fmt(p.pm2*p.min)}/mes</span>`;
+  return `<b class="mono">${fmt(p.renta)}<small>/mes</small></b><span class="m2">≈ ${fmt(p.renta/p.min)}/m²</span>`;
+}
+const sizeTxt=p=>p.sizes?`${m2s(p.min)} a ${m2s(p.max)}`:p.min===p.max?m2s(p.max):`${m2s(p.min)} a ${m2s(p.max)}`;
+
+function filtered(){
+  const [,lo,hi]=SIZES[state.size];
+  let r=P.filter(p=>(state.zona==="Todas"||p.zona===state.zona)&&(!state.trailer||p.trailer===true)&&p.max>lo&&p.min<=hi);
+  const k={ "m2":(a,b)=>(pm2(a)??1e9)-(pm2(b)??1e9),"size-asc":(a,b)=>a.min-b.min,"size-desc":(a,b)=>b.max-a.max}[state.sort];
+  return r.sort(k);
+}
+function render(){
+  const r=filtered();
+  $("#count").textContent=`${r.length} de ${P.length} inmuebles`;
+  $("#grid").innerHTML = r.length? r.map((p,i)=>`
+   <article class="card" style="animation-delay:${i*45}ms">
+     <div class="plan"><span class="folio">${p.id}</span><span class="tag">${p.tipo}</span>${plan(p)}</div>
+     <div class="cbody">
+       <div class="zone">${p.zona} · ${sizeTxt(p)}</div>
+       <h3>${p.n}</h3>
+       <p>${p.d}</p>
+       <div class="specs">
+         ${p.trailer===true?'<span class="spec yes">Acceso tráiler</span>':p.trailer===false?'<span class="spec no">Tráiler</span>':''}
+         ${p.x.map(t=>`<span class="spec">${t}</span>`).join("")}
+       </div>
+       <div class="price">${priceHTML(p)}</div>
+       <div class="cactions">
+         <button class="btn btn-accent" type="button" data-info="${p.id}">Pedir información</button>
+         <button class="add" type="button" data-add="${p.id}" aria-pressed="${state.lista.has(p.id)}">${state.lista.has(p.id)?"✓ En lista":"+ Visita"}</button>
+       </div>
+     </div>
+   </article>`).join("") : `<div class="empty">No hay inmuebles con esos filtros. Prueba otra zona o <a href="#contacto">pídenos que te busquemos uno</a>.</div>`;
+}
+
+function chips(){
+  const counts={};P.forEach(p=>{if(ZONAS[p.zona])counts[p.zona]=(counts[p.zona]||0)+1});
+  $("#fZona").innerHTML=["Todas",...Object.keys(ZONAS)].map(z=>`<button class="chip" type="button" data-zona="${z}" aria-pressed="${state.zona===z}">${z}${z!=="Todas"?`<span class="n">${counts[z]}</span>`:""}</button>`).join("");
+  $("#fSize").innerHTML=SIZES.map((s,i)=>`<button class="chip" type="button" data-size="${i}" aria-pressed="${state.size===i}">${s[0]}</button>`).join("");
+  $("#zlist").innerHTML=Object.keys(ZONAS).map(z=>{const ps=P.filter(p=>p.zona===z);const ent=z==="Naucalpan"||z==="Tlalnepantla"||z==="Cuautitlán Izcalli"?"Edomex":"CDMX";
+    return `<button type="button" data-goto="${z}"><b>${z}</b><span>${ent} · ${ps.length} ${ps.length>1?"inmuebles":"inmueble"}</span></button>`}).join("");
+  $("#mapPins").innerHTML=Object.entries(ZONAS).map(([z,[cx,cy]],i)=>`<g class="zbtn${state.zona===z?" sel":""}" data-goto="${z}" tabindex="0" role="button" aria-label="${z}">
+    <circle class="ping" cx="${cx}" cy="${cy}" r="8" style="animation-delay:${i*.35}s"/><circle class="dot" cx="${cx}" cy="${cy}" r="8"/>
+    <text x="${cx}" y="${cy-15}" text-anchor="middle" font-family="var(--body)" font-weight="700" font-size="12.5" fill="var(--ink)">${z}</text></g>`).join("");
+  $("#rZona").innerHTML=["Cualquiera",...Object.keys(ZONAS)].map(z=>`<option>${z}</option>`).join("");
+}
+
+function setZona(z){state.zona=z;chips();render()}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-zona],[data-size],[data-add],[data-info],[data-goto],[data-wa]");
+  if(!t)return;
+  if(t.dataset.zona){setZona(t.dataset.zona)}
+  else if(t.dataset.size){state.size=+t.dataset.size;chips();render()}
+  else if(t.dataset.goto){setZona(t.dataset.goto);document.getElementById("bodegas").scrollIntoView({behavior:"smooth"})}
+  else if(t.dataset.add){const id=t.dataset.add;state.lista.has(id)?state.lista.delete(id):state.lista.add(id);
+    t.setAttribute("aria-pressed",state.lista.has(id));t.textContent=state.lista.has(id)?"✓ En lista":"+ Visita";tray()}
+  else if(t.dataset.info){const p=P.find(x=>x.id===t.dataset.info);
+    openSheet("Pedir información",`Hola RL Industrial, me interesa el inmueble ${p.id} · ${p.n} (${p.zona}, ${sizeTxt(p)}).\n¿Sigue disponible? Quisiera la ficha completa, requisitos y una fecha para visitarlo.`)}
+  else if(t.dataset.wa){openSheet("Escríbenos","Hola RL Industrial, busco un espacio industrial en renta. ¿Me pueden ayudar?")}
+});
+document.addEventListener("keydown",e=>{const t=e.target.closest&&e.target.closest("g[data-goto]");if(t&&(e.key==="Enter"||e.key===" ")){e.preventDefault();t.dispatchEvent(new MouseEvent("click",{bubbles:true}))} if(e.key==="Escape")closeSheet()});
+$("#fTrailer").addEventListener("change",e=>{state.trailer=e.target.checked;render()});
+$("#fSort").addEventListener("change",e=>{state.sort=e.target.value;render()});
+
+function tray(){
+  const n=state.lista.size;
+  $("#tray").classList.toggle("on",n>0);document.body.classList.toggle("tray-on",n>0);
+  $("#trayTxt").textContent=`${n} ${n===1?"inmueble":"inmuebles"} en tu lista de visitas`;
+}
+$("#trayBtn").addEventListener("click",()=>{
+  const ls=[...state.lista].map(id=>{const p=P.find(x=>x.id===id);return `• ${p.id} · ${p.n} (${p.zona}, ${sizeTxt(p)})`});
+  openSheet("Lista de visitas",`Hola RL Industrial, quiero visitar estos inmuebles:\n${ls.join("\n")}\n\n¿Me comparten fichas, requisitos y horarios para agendar los recorridos?`);
+});
+
+/* Calculator */
+const calcP=P.filter(p=>!p.lote);
+$("#cProp").innerHTML=calcP.map(p=>`<option value="${p.id}">${p.id} · ${p.n} — ${p.zona}</option>`).join("");
+$("#cProp").value="RL-05";
+function calc(reset){
+  const p=P.find(x=>x.id===$("#cProp").value), r=$("#cM2");
+  if(reset){r.min=p.min;r.max=p.max;r.step=p.max-p.min>2000?100:p.max-p.min>0?10:1;r.value=p.sizes?p.sizes[0]:p.min;r.disabled=p.min===p.max}
+  const m=+r.value, price=pm2(p), total=p.pm2?m*p.pm2:p.renta, meses=+$("#cMeses").value;
+  $("#cMin").textContent=m2s(p.min);$("#cMax").textContent=m2s(p.max);$("#cVal").textContent=m2s(m);
+  $("#cTotal").innerHTML=`${fmt(total)}<small>/mes</small>`;
+  $("#cPm2").textContent=fmt(price)+(p.pm2?"":" (equivalente)");$("#cSup").textContent=m2s(m);$("#cContrato").textContent=fmt(total*meses)+` · ${meses} meses`;
+}
+$("#cProp").addEventListener("change",()=>calc(true));$("#cM2").addEventListener("input",()=>calc());$("#cMeses").addEventListener("change",()=>calc());
+$("#cAsk").addEventListener("click",()=>{const p=P.find(x=>x.id===$("#cProp").value);
+  openSheet("Pedir cotización",`Hola RL Industrial, quiero cotizar ${p.id} · ${p.n} (${p.zona}).\nSuperficie: ${m2s(+$("#cM2").value)}\nPlazo: ${$("#cMeses").value} meses\nRenta estimada en su página: ${$("#cTotal").textContent.replace("/mes"," al mes")}.\n¿Podemos negociar y agendar visita?`)});
+
+/* Request form */
+$("#reqForm").addEventListener("submit",e=>{e.preventDefault();
+  const v=id=>$(id).value.trim();
+  openSheet("Búsqueda a la medida",`Hola RL Industrial, busco bodega:\n• Nombre/empresa: ${v("#rNombre")||"—"}\n• Giro: ${v("#rGiro")||"—"}\n• Superficie: ${v("#rM2")}\n• Zona: ${v("#rZona")}\n• Acceso: ${v("#rAcceso")}\n• Para: ${v("#rCuando")}\n¿Qué opciones tienen?`)});
+
+/* Sheet */
+let lastFocus=null;
+function openSheet(title,msg){
+  lastFocus=document.activeElement;
+  $("#sheetTitle").textContent=title;$("#sheetMsg").textContent=msg;$("#sheetToast").textContent="";
+  $("#sheetWa").href=`https://wa.me/${WA_NUMERO}?text=${encodeURIComponent(msg)}`;
+  $("#sheetBg").hidden=false;$("#sheetWa").focus();
+}
+function closeSheet(){if($("#sheetBg").hidden)return;$("#sheetBg").hidden=true;lastFocus&&lastFocus.focus&&lastFocus.focus()}
+$("#sheetClose").addEventListener("click",closeSheet);
+$("#sheetBg").addEventListener("click",e=>{if(e.target.id==="sheetBg")closeSheet()});
+$("#sheetCopy").addEventListener("click",()=>{
+  const txt=$("#sheetMsg").textContent;
+  const sel=()=>{const r=document.createRange();r.selectNodeContents($("#sheetMsg"));const s=getSelection();s.removeAllRanges();s.addRange(r);$("#sheetToast").textContent="Texto seleccionado, cópialo con tu teclado."};
+  try{navigator.clipboard.writeText(txt).then(()=>$("#sheetToast").textContent="Copiado.",sel)}catch(_){sel()}
+});
+
+chips();render();calc(true);
+</script>
+
+</body>
+</html>

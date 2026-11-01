@@ -20,3 +20,6 @@ Próximo: `public/<asesor>/` con su página y `public/<asesor>/<casa>/` con la f
 - Para armar o actualizar: `python3 herramientas/armar_asesor.py <asesor>`.
 - Genera `public/<asesor>/index.html` (perfil), una ficha por propiedad y los QR para imprimir en `qr/<asesor>/`.
 - Lo que llega del cliente se guarda en `_recibido/` (no se sube: puede traer datos internos como comisiones).
+
+## Espacios hechos a mano
+- `public/rl-industrial/index.html`: RL Industrial (bodegas en renta, CDMX y Edomex). Página de ejemplo hecha a mano, no sale de `armar_asesor.py`. Su número de WhatsApp va en `WA_NUMERO`, dentro del script de la página.
