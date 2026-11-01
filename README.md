@@ -1,6 +1,6 @@
 # Ubika
 
-Ubika tu casa. Páginas para asesores inmobiliarios, publicadas en Netlify.
+Ubika tu casa. Páginas para asesores inmobiliarios, publicadas en Cloudflare Pages (demomx.pages.dev). Carpeta de salida: public.
 
 - `public/index.html`: página de inicio (se genera, no se edita a mano).
 - `plantilla/inicio.html`: la fuente de la página de inicio.

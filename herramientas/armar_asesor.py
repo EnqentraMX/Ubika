@@ -7,7 +7,7 @@ import html, json, pathlib, sys, urllib.parse
 import qrcode
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
-BASE = "https://ubikatucasa.netlify.app"
+BASE = "https://demomx.pages.dev"
 FUENTES = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
            '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
            '<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900'
