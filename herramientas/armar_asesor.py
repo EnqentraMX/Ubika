@@ -130,7 +130,7 @@ def pagina_asesor(a):
 <main class="inventario">
   <div class="contenedor">
     <div class="filtros">
-      <h2>{len(props)} propiedades</h2>
+      <h2>{len(props)} {'propiedad' if len(props) == 1 else 'propiedades'}</h2>
       {filtros}
     </div>
     <div class="rejilla">{''.join(tarjetas)}
@@ -171,7 +171,7 @@ def pagina_ficha(a, p):
     requisitos = f'<div class="bloque"><h2>Requisitos</h2>{lista(p["requisitos"])}</div>' if p.get("requisitos") else ""
     desc = f"{titulo(p)} en {p['operacion']}: {cifra}{' ' + sufijo if sufijo else ''}. {p['colonia']}, {p['alcaldia']}. {p['referencia']}."
     return cabeza(f"{nombre_prop} · {a['nombre']}", desc, url, f"{url}img/{p['fotos'][0]}", 2) + f"""
-<nav class="migas"><div class="contenedor"><a href="../">{I_ATRAS} Todas las propiedades de {e(a['nombre'])}</a></div></nav>
+<nav class="migas"><div class="contenedor"><a href="../">{I_ATRAS} {'Perfil' if len(a['propiedades']) == 1 else 'Todas las propiedades'} de {e(a['nombre'])}</a></div></nav>
 
 <main class="ficha">
   <div class="contenedor">
@@ -195,7 +195,7 @@ def pagina_ficha(a, p):
           <a class="boton boton--wa" href="{enlace_wa}" target="_blank" rel="noopener">{I_WA} Preguntar por WhatsApp</a>
           <button class="boton boton--claro js-compartir" type="button">{I_COMPARTIR} Compartir esta propiedad</button>
         </div>
-        <a class="asesor-mini" href="../"><img src="../{a['logo']}" alt=""><div><b>{e(a['nombre'])}</b><span>Ver sus {len(a['propiedades'])} propiedades</span></div></a>
+        <a class="asesor-mini" href="../"><img src="../{a['logo']}" alt=""><div><b>{e(a['nombre'])}</b><span>{'Ver su perfil' if len(a['propiedades']) == 1 else 'Ver sus ' + str(len(a['propiedades'])) + ' propiedades'}</span></div></a>
       </div>
     </div>
 

@@ -1,0 +1,38 @@
+{
+  "slug": "inmobiliaria-alanis",
+  "nombre": "Inmobiliaria Alanis",
+  "frase": "Tu proyecto, nuestra prioridad.",
+  "zona": "Nuevo León",
+  "whatsapp": "528131394503",
+  "telefono": "81 3139 4503",
+  "logo": "img/logo.png",
+  "redes": {
+    "facebook": "https://www.facebook.com/profile.php?id=61578619354014"
+  },
+  "propiedades": [
+    {
+      "slug": "bodega-parque-industrial-cete",
+      "tipo": "Bodega",
+      "operacion": "venta",
+      "precio": 3500000,
+      "superficie": "450 m²",
+      "colonia": "Parque Industrial Distrito CETE",
+      "alcaldia": "Salinas Victoria, N.L.",
+      "referencia": "Dentro del Parque Industrial Distrito CETE",
+      "mapa": "Parque Industrial Distrito CETE, Salinas Victoria, Nuevo León",
+      "fotos": ["1-fachada.jpg", "2-acceso.jpg", "3-patio.jpg"],
+      "destacados": ["Acceso para tráiler", "Luz, agua y drenaje", "Uso industrial o comercial"],
+      "ubicacion": [
+        "Dentro del Parque Industrial Distrito CETE, Salinas Victoria, N.L.",
+        "Ubicación estratégica en zona industrial",
+        "Excelente conectividad y acceso a las principales vialidades"
+      ],
+      "caracteristicas": [
+        "450 m² de construcción",
+        "Amplio acceso para tráiler",
+        "Servicios a pie de lote: luz, agua y drenaje",
+        "Ideal para almacén, centro de distribución, taller industrial o uso comercial"
+      ]
+    }
+  ]
+}
