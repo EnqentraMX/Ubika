@@ -38,7 +38,7 @@ I_MAPA = icono('<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6
 
 def precio(p):
     cifra = f"${p['precio']:,.0f}"
-    return cifra, {"renta": "al mes"}.get(p["operacion"], "")
+    return cifra, p.get("precio_sufijo") or {"renta": "al mes"}.get(p["operacion"], "")
 
 
 def titulo(p):

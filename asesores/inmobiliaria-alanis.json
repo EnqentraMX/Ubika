@@ -20,8 +20,16 @@
       "alcaldia": "Salinas Victoria, N.L.",
       "referencia": "Dentro del Parque Industrial Distrito CETE",
       "mapa": "Parque Industrial Distrito CETE, Salinas Victoria, Nuevo León",
-      "fotos": ["1-fachada.jpg", "2-acceso.jpg", "3-patio.jpg"],
-      "destacados": ["Acceso para tráiler", "Luz, agua y drenaje", "Uso industrial o comercial"],
+      "fotos": [
+        "1-fachada.jpg",
+        "2-acceso.jpg",
+        "3-patio.jpg"
+      ],
+      "destacados": [
+        "Acceso para tráiler",
+        "Luz, agua y drenaje",
+        "Uso industrial o comercial"
+      ],
       "ubicacion": [
         "Dentro del Parque Industrial Distrito CETE, Salinas Victoria, N.L.",
         "Ubicación estratégica en zona industrial",
@@ -32,6 +40,73 @@
         "Amplio acceso para tráiler",
         "Servicios a pie de lote: luz, agua y drenaje",
         "Ideal para almacén, centro de distribución, taller industrial o uso comercial"
+      ]
+    },
+    {
+      "slug": "terreno-campestre-la-fortuna",
+      "tipo": "Terreno campestre",
+      "operacion": "venta",
+      "precio": 1150000,
+      "precio_sufijo": "negociable",
+      "superficie": "5,000 m²",
+      "colonia": "Fraccionamiento Campestre La Fortuna",
+      "alcaldia": "Salinas Victoria, N.L.",
+      "referencia": "A 5 minutos del centro de Salinas Victoria",
+      "mapa": "Fraccionamiento Campestre La Fortuna, Salinas Victoria, Nuevo León",
+      "fotos": [
+        "1-vista-aerea.jpg",
+        "2-ficha.jpg"
+      ],
+      "destacados": [
+        "Acceso privado",
+        "Cerca de la autopista",
+        "Precio negociable"
+      ],
+      "aviso": "Listo para escriturar.",
+      "ubicacion": [
+        "Fraccionamiento Campestre La Fortuna, Salinas Victoria, N.L.",
+        "A solo 5 minutos del centro de Salinas Victoria",
+        "Cerca de la autopista"
+      ],
+      "caracteristicas": [
+        "Terreno de 5,000 m²",
+        "Acceso privado",
+        "Listo para escriturar",
+        "Precio negociable"
+      ]
+    },
+    {
+      "slug": "terreno-10-hectareas-carretera-colombia",
+      "tipo": "Terreno",
+      "operacion": "venta",
+      "precio": 1700,
+      "precio_sufijo": "por m²",
+      "superficie": "10 hectáreas",
+      "colonia": "Carretera Colombia, por Jofusán",
+      "alcaldia": "Salinas Victoria, N.L.",
+      "referencia": "Frente a la Carretera Colombia, por Jofusán",
+      "mapa": "Jofusán, Carretera Colombia, Salinas Victoria, Nuevo León",
+      "fotos": [
+        "1-frente-carretera.jpg",
+        "2-poligono.jpg",
+        "3-ficha.jpg"
+      ],
+      "destacados": [
+        "Frente a carretera",
+        "10 hectáreas",
+        "Uso industrial, comercial o agrícola"
+      ],
+      "aviso": "Listo para escriturar.",
+      "ubicacion": [
+        "Sobre la Carretera Colombia, por Jofusán, Salinas Victoria, N.L.",
+        "Frente a carretera",
+        "Excelente ubicación"
+      ],
+      "caracteristicas": [
+        "Superficie de 10 hectáreas",
+        "Precio de $1,700 por m²",
+        "Listo para escriturar",
+        "Ideal para proyectos industriales, comerciales o agrícolas"
       ]
     }
   ]
