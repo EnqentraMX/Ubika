@@ -304,7 +304,7 @@ h1,h2,h3{font-family:var(--disp);line-height:1.02;margin:0;letter-spacing:-.01em
 @keyframes cae{from{opacity:0;transform:translate(-50%,-160%)}to{opacity:1;transform:translate(-50%,-100%)}}
 
 .hero-fotos img.on{animation:kenburns 18s ease-out both}
-.hero-fotos{will-change:transform}
+.hero-fotos{position:absolute;inset:0;will-change:transform}
 .titular{display:block}
 .titular .pal{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.06em;margin-bottom:-.06em}
 .titular .pal>span{display:inline-block;animation:subePal .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(.15s + var(--i) * .09s)}

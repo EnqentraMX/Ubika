@@ -39,7 +39,7 @@ ${url ? `<meta property="og:url" content="${e(url)}"><link rel="canonical" href=
 <link rel="icon" href="data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#0E1216"/><text x="5" y="23" font-family="Arial Black,Arial" font-weight="900" font-size="15" fill="#F4F3EF">R</text><text x="17" y="23" font-family="Arial Black,Arial" font-weight="900" font-size="15" fill="#8CC63F">L</text></svg>')}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${base}sitio.css?v=4">
+<link rel="stylesheet" href="${base}sitio.css?v=5">
 </head><body>`;
 }
 
@@ -207,7 +207,7 @@ ${c.fotoAsesora ? `<img src="${e(c.fotoAsesora)}" alt="${e(c.asesora)}" loading=
 }
 
 function scripts(c, base) {
-  return `<script>window.RLC=${JSON.stringify({ whatsapp: c.whatsapp, nombre: c.nombre }).replace(/</g, "\\u003c")}</script><script src="${base}sitio.js?v=4" defer></script></body></html>`;
+  return `<script>window.RLC=${JSON.stringify({ whatsapp: c.whatsapp, nombre: c.nombre }).replace(/</g, "\\u003c")}</script><script src="${base}sitio.js?v=5" defer></script></body></html>`;
 }
 
 export function paginaBodega(d, slug, { base = "/", L = (x) => base + x, url = "" } = {}) {
