@@ -144,7 +144,7 @@
       var m = L.map(mg, { scrollWheelZoom: false }); capa(m);
       var b = [];
       pts.forEach(function (p) {
-        var ic = L.divIcon({ className: "", html: '<div class="pin-precio">' + esc(p.p) + "</div>", iconSize: null });
+        var ic = L.divIcon({ className: "", html: '<div class="pin-precio" style="--d:' + (b.length * 0.07).toFixed(2) + 's">' + esc(p.p) + "</div>", iconSize: null });
         L.marker([p.la, p.ln], { icon: ic }).addTo(m).bindPopup('<div class="pop">' + (p.f ? '<img src="' + esc(p.f) + '" alt="">' : "") + "<b>" + esc(p.n) + "</b>" + esc(p.z) + '<br><a href="' + esc(p.h) + '">Ver ficha →</a></div>');
         b.push([p.la, p.ln]);
       });
@@ -227,10 +227,59 @@
     });
   });
 
-  // Aparición suave
-  if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    var els = $$(".card,.pasos li,.titulo-sec,.asesora>*,.zona");
-    var io2 = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add("si"); io2.unobserve(x.target); } }); }, { rootMargin: "0px 0px -40px" });
-    els.forEach(function (el) { el.classList.add("aparece"); io2.observe(el); });
+  // ---------- Animaciones ----------
+  var quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!quieto && "IntersectionObserver" in window) {
+    // Revelado en cascada
+    var grupos = [".card", ".pasos li", ".zona", ".carac li", ".tecnica div", ".faq details", ".lista-check li"];
+    var obs = new IntersectionObserver(function (es) {
+      es.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add("si"); obs.unobserve(x.target); } });
+    }, { rootMargin: "0px 0px -60px" });
+    grupos.forEach(function (sel) {
+      $$(sel).forEach(function (el) {
+        var padre = el.parentNode, k = $$(sel, padre).indexOf(el);
+        el.style.setProperty("--d", Math.min(k % 6, 5) * 0.08 + "s");
+        el.classList.add("aparece"); obs.observe(el);
+      });
+    });
+    $$(".titulo-sec,.asesora>*,.contacto>*,.desc,.calc,.otras>h2").forEach(function (el, i) { el.classList.add("aparece"); obs.observe(el); });
+
+    // Contadores
+    var obsN = new IntersectionObserver(function (es) {
+      es.forEach(function (x) {
+        if (!x.isIntersecting) return; obsN.unobserve(x.target);
+        var el = x.target, fin = +el.dataset.cuenta, t0 = null, dur = 1400;
+        var paso = function (t) { if (!t0) t0 = t; var p = Math.min(1, (t - t0) / dur), v = Math.round(fin * (1 - Math.pow(1 - p, 3))); el.textContent = v.toLocaleString("en-US"); if (p < 1) requestAnimationFrame(paso); };
+        el.textContent = "0"; requestAnimationFrame(paso);
+      });
+    }, { threshold: 0.6 });
+    $$("[data-cuenta]").forEach(function (el) { obsN.observe(el); });
+
+    // Paralaje suave de la portada
+    var hfo = $(".hero-fotos"), hin = $(".hero-in");
+    if (hfo) {
+      var tic = false;
+      addEventListener("scroll", function () {
+        if (tic) return; tic = true;
+        requestAnimationFrame(function () {
+          var y = Math.min(scrollY, innerHeight);
+          hfo.style.transform = "translate3d(0," + y * 0.35 + "px,0)";
+          if (hin) { hin.style.transform = "translate3d(0," + y * 0.12 + "px,0)"; hin.style.opacity = String(Math.max(0, 1 - y / (innerHeight * 0.85))); }
+          tic = false;
+        });
+      }, { passive: true });
+    }
+
+    // Inclinación ligera de tarjetas con el mouse (solo escritorio)
+    if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      document.addEventListener("mousemove", function (ev) {
+        var c = ev.target.closest && ev.target.closest(".card");
+        $$(".card.inclina").forEach(function (o) { if (o !== c) { o.classList.remove("inclina"); o.style.transform = ""; } });
+        if (!c) return;
+        var r = c.getBoundingClientRect(), x = (ev.clientX - r.left) / r.width - 0.5, y = (ev.clientY - r.top) / r.height - 0.5;
+        c.classList.add("inclina");
+        c.style.transform = "perspective(900px) rotateX(" + (-y * 4).toFixed(2) + "deg) rotateY(" + (x * 5).toFixed(2) + "deg) translateY(-4px)";
+      });
+    }
   }
 })();

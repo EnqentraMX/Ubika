@@ -65,6 +65,14 @@ function foto(b, i = 0) {
   return b.fotos && b.fotos[i] ? b.fotos[i] : null;
 }
 
+function palabras(t) {
+  let n = 0;
+  return String(t).split(/\s+/).filter(Boolean).map((w) => {
+    const verde = /^industrial/i.test(w);
+    return `<span class="pal" aria-hidden="true"><span style="--i:${n++}"${verde ? ' class="verde"' : ""}>${e(w)}</span></span>`;
+  }).join(" ");
+}
+
 export function tarjeta(b, c, L) {
   const p = precio(b), f = foto(b);
   const pm = precioM2(b);
@@ -115,7 +123,7 @@ export function paginaInicio(d, { base = "/", L = (x) => base + x, url = "" } = 
 <div class="hero-velo"></div>
 <div class="wrap hero-in">
 <p class="eyebrow"><span></span>${e(c.frase || "")}</p>
-<h1>${e(c.titular || "Bodegas industriales en renta").replace(/(industrial\w*)/i, "<em>$1</em>")}</h1>
+<h1 class="titular" aria-label="${e(c.titular || "Bodegas industriales en renta")}">${palabras(c.titular || "Bodegas industriales en renta")}</h1>
 <p class="hero-sub">${e(c.subtitular || "")}</p>
 <form class="buscador" id="buscador" role="search">
 <label><span>¿Cuántos m² necesitas?</span><input type="number" inputmode="numeric" name="m2" placeholder="Ej. 800" min="0"></label>
@@ -129,9 +137,11 @@ export function paginaInicio(d, { base = "/", L = (x) => base + x, url = "" } = 
 <section class="cifras" aria-label="Resumen"><div class="wrap cifras-in">
 <div><b data-cuenta="${disp.length}">${disp.length}</b><span>inmuebles disponibles</span></div>
 <div><b data-cuenta="${totalM2}">${totalM2.toLocaleString("en-US")}</b><span>m² en catálogo</span></div>
-<div><b>${zonasOrd.length}</b><span>zonas de CDMX y Edomex</span></div>
+<div><b data-cuenta="${zonasOrd.length}">${zonasOrd.length}</b><span>zonas de CDMX y Edomex</span></div>
 <div><b>${Number.isFinite(minM2) ? minM2.toLocaleString("en-US") + "–" + maxM2.toLocaleString("en-US") : "—"}</b><span>m² por espacio</span></div>
 </div></section>
+
+<div class="cinta" aria-hidden="true"><div class="cinta-in">${[0, 1].map(() => `<span>${["Acceso de tráiler", "Andenes", "Parques industriales", "De " + (Number.isFinite(minM2) ? minM2.toLocaleString("en-US") : "150") + " a " + maxM2.toLocaleString("en-US") + " m²", "Asesoría legal en tu contrato", "CDMX y Estado de México", "Respuesta por WhatsApp"].map((t) => `<i>${e(t)}</i>`).join("")}</span>`).join("")}</div></div>
 
 <section class="seccion" id="bodegas"><div class="wrap">
 <div class="titulo-sec"><p class="eyebrow oscuro"><span></span>Catálogo</p><h2>Encuentra tu bodega</h2><p class="muted">Filtra por zona y tamaño. Precio, superficie y acceso a la vista, sin letras chiquitas.</p></div>
