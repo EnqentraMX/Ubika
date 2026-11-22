@@ -238,6 +238,7 @@ var TIPOS=["Bodega industrial","Nave industrial","Parque industrial","Bodega","B
 var SUGERIDAS=["Acceso de tráiler","Andenes","Patio de maniobras","Oficinas","Baños","Luz trifásica","Vigilancia 24 horas","Estacionamiento","Uso de suelo industrial","Disponibilidad inmediata","Precio negociable","Doble altura","Mezzanine","Cisterna","Subestación eléctrica","Rampa"];
 var FAQ_BASE=[["¿Qué necesito para rentar una bodega?","Depende de cada inmueble. En general se pide identificación, comprobante de domicilio, datos de la empresa y depósito en garantía. Te decimos los requisitos exactos de la bodega que te interese antes de la visita."],["¿Cuánto cuesta el mantenimiento?","Cambia por inmueble y parque industrial. Si la ficha no lo indica, pregúntalo con el botón de WhatsApp y te lo confirmamos por escrito."],["¿Me ayudan con el contrato?","Sí. Revisamos el contrato contigo para que sepas qué firmas: plazos, incrementos, depósito y responsabilidades de cada parte."],["¿Puedo visitar varias bodegas el mismo día?","Sí. Dinos cuáles te interesan y armamos un recorrido para que las veas en una sola salida."]];
 var MAX=5;
+var PORTADA_BASE="https://images.pexels.com/photos/1267325/pexels-photo-1267325.jpeg?auto=compress&cs=tinysrgb";
 var D=null, vista="inicio", filtroLead="activos", textoB="", textoL="";
 
 function api(metodo,ruta,cuerpo,tipo){
@@ -339,10 +340,10 @@ function vBodegas(){
   enlazar(v);
 }
 
-function comprimir(file){
+function comprimir(file,maxLado){
   return new Promise(function(res,rej){
     var url=URL.createObjectURL(file),img=new Image();
-    img.onload=function(){var max=1600,w=img.naturalWidth,h=img.naturalHeight,k=Math.min(1,max/Math.max(w,h));
+    img.onload=function(){var max=maxLado||1600,w=img.naturalWidth,h=img.naturalHeight,k=Math.min(1,max/Math.max(w,h));
       var cv=document.createElement("canvas");cv.width=Math.round(w*k);cv.height=Math.round(h*k);cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);URL.revokeObjectURL(url);
       cv.toBlob(function(b){if(b&&b.type==="image/webp")res(b);else cv.toBlob(function(j){j?res(j):rej(new Error("No se pudo leer la foto"))},"image/jpeg",.84)},"image/webp",.82)};
     img.onerror=function(){URL.revokeObjectURL(url);rej(new Error("Ese archivo no es una foto válida."))};
@@ -550,7 +551,8 @@ function vAjustes(){
   function campo(k,t,ph,tipo){return'<label class="c">'+t+'<input name="'+k+'" '+(tipo?'type="'+tipo+'" ':"")+'value="'+esc(c[k]||"")+'" placeholder="'+esc(ph||"")+'"></label>'}
   v.innerHTML='<div class="cab"><div><h1>Ajustes</h1><p>Datos que aparecen en tu página.</p></div></div><form id="fC" class="hoja-cuerpo" style="padding:0">'+
   '<section class="bloque"><h3>Tu negocio</h3><div class="campos">'+campo("nombre","Nombre del negocio")+campo("asesora","Quién atiende","Lic. Rosy Luna")+campo("telefono","Teléfono que se muestra","55 6201 6449","tel")+campo("whatsapp","WhatsApp (10 dígitos)","5562016449","tel")+campo("correo","Correo","","email")+campo("horario","Horario","Lunes a sábado, 9:00 a 19:00")+'<label class="c todo">Dirección de oficina<input name="oficina" value="'+esc(c.oficina||"")+'"></label></div></section>'+
-  '<section class="bloque"><h3>Imágenes</h3><div class="campos"><div class="foto-conf"><img id="imLogo" src="'+esc(c.logo||"")+'" alt=""><div><b>Logo</b><br><button type="button" class="b chico" data-img="logo">Cambiar logo</button></div></div><div class="foto-conf"><img id="imAse" src="'+esc(c.fotoAsesora||"")+'" alt=""><div><b>Tu foto</b><br><button type="button" class="b chico" data-img="fotoAsesora">Cambiar foto</button></div></div></div></section>'+
+  '<section class="bloque"><h3>Imágenes</h3><div class="campos"><div class="foto-conf"><img id="imLogo" src="'+esc(c.logo||"")+'" alt=""><div><b>Logo</b><br><button type="button" class="b chico" data-img="logo">Cambiar logo</button></div></div><div class="foto-conf"><img id="imAse" src="'+esc(c.fotoAsesora||"")+'" alt=""><div><b>Tu foto</b><br><button type="button" class="b chico" data-img="fotoAsesora">Cambiar foto</button></div></div>'+
+  '<div class="foto-conf todo"><img id="imPortada" style="width:150px" src="'+esc(c.portada||PORTADA_BASE+"&w=400")+'" alt=""><div><b>Foto grande de la portada</b><br><small style="color:var(--gris)">Usa una foto horizontal y nítida (mínimo 1600 px de ancho).</small><br><button type="button" class="b chico" data-img="portada" style="margin-top:6px">Cambiar portada</button> '+(c.portada?'<button type="button" class="b chico" id="portadaBase" style="margin-top:6px">Volver a la original</button>':"")+'</div></div></div></section>'+
   '<section class="bloque"><h3>Portada de la página</h3><div class="campos">'+campo("frase","Frase pequeña de arriba")+'<label class="c todo">Título grande<input name="titular" value="'+esc(c.titular||"")+'" maxlength="70"></label><label class="c todo">Texto debajo del título<textarea name="subtitular" rows="3" maxlength="400">'+esc(c.subtitular||"")+'</textarea></label></div></section>'+
   '<section class="bloque"><h3>Preguntas frecuentes</h3><div class="faq-ed" id="faq"></div><button type="button" class="b chico" id="addFaq" style="margin-top:12px">'+I.mas+'Agregar pregunta</button></section>'+
   '<button type="button" class="b lima" id="guardarC" style="min-height:54px">Guardar ajustes</button>'+
@@ -563,8 +565,9 @@ function vAjustes(){
   $("#faq").addEventListener("click",function(e){var x=e.target.closest("[data-fx]");if(x){faq.splice(+x.dataset.fx,1);pintaFaq()}});
   $("#addFaq").onclick=function(){faq.push(["",""]);pintaFaq();var q=$$("#faq [data-fq]");q[q.length-1].focus()};
   $$("[data-img]",v).forEach(function(bt){bt.onclick=function(){var a=$("#archivo");a.value="";a.removeAttribute("multiple");a.onchange=function(){a.setAttribute("multiple","");var file=a.files[0];if(!file)return;bt.disabled=true;
-    comprimir(file).then(function(bl){return api("POST","/api/admin/foto",bl,bl.type)}).then(function(j){c[bt.dataset.img]=j.url;(bt.dataset.img==="logo"?$("#imLogo"):$("#imAse")).src=j.url;aviso("Imagen lista. Toca “Guardar ajustes”.")}).catch(function(e){aviso(e.message,true)}).then(function(){bt.disabled=false})};a.click()}});
-  $("#guardarC").onclick=function(){var d={faq:faq.filter(function(x){return x[0].trim()&&x[1].trim()}),logo:c.logo,fotoAsesora:c.fotoAsesora};["nombre","asesora","telefono","whatsapp","correo","horario","oficina","frase","titular","subtitular"].forEach(function(k){d[k]=f[k].value});
+    comprimir(file,bt.dataset.img==="portada"?2400:800).then(function(bl){return api("POST","/api/admin/foto",bl,bl.type)}).then(function(j){c[bt.dataset.img]=j.url;$({logo:"#imLogo",fotoAsesora:"#imAse",portada:"#imPortada"}[bt.dataset.img]).src=j.url;aviso("Imagen lista. Toca “Guardar ajustes”.")}).catch(function(e){aviso(e.message,true)}).then(function(){bt.disabled=false})};a.click()}});
+  var pb=$("#portadaBase");if(pb)pb.onclick=function(){c.portada="";$("#imPortada").src=PORTADA_BASE+"&w=400";aviso("Listo. Toca “Guardar ajustes”.")};
+  $("#guardarC").onclick=function(){var d={faq:faq.filter(function(x){return x[0].trim()&&x[1].trim()}),logo:c.logo,fotoAsesora:c.fotoAsesora,portada:c.portada||""};["nombre","asesora","telefono","whatsapp","correo","horario","oficina","frase","titular","subtitular"].forEach(function(k){d[k]=f[k].value});
     if(String(d.whatsapp).replace(/\D/g,"").length<10){aviso("El WhatsApp debe tener 10 dígitos.",true);return}
     var bt=this;bt.disabled=true;api("PUT","/api/admin/config",d).then(function(j){D.config=j.config;aviso("Ajustes guardados");pinta()}).catch(function(e){aviso(e.message,true);bt.disabled=false})};
   $("#cambiaP").onclick=function(){api("POST","/api/admin/password",{actual:$("#pA").value,nueva:$("#pN").value}).then(function(){$("#pA").value=$("#pN").value="";aviso("Contraseña cambiada")}).catch(function(e){aviso(e.message,true)})};

@@ -82,6 +82,9 @@ ${p.nota ? `<p class="card-nota">${e(p.nota)}</p>` : ""}
 </article>`;
 }
 
+// Foto de portada por defecto (Pexels, uso libre): tráileres en andenes de carga.
+export const PORTADA_BASE = "https://images.pexels.com/photos/1267325/pexels-photo-1267325.jpeg?auto=compress&cs=tinysrgb";
+
 const FAQ_BASE = [
   ["¿Qué necesito para rentar una bodega?", "Depende de cada inmueble. En general se pide identificación, comprobante de domicilio, datos de la empresa y depósito en garantía. Te decimos los requisitos exactos de la bodega que te interese antes de la visita."],
   ["¿Cuánto cuesta el mantenimiento?", "Cambia por inmueble y parque industrial. Si la ficha no lo indica, pregúntalo con el botón de WhatsApp y te lo confirmamos por escrito."],
@@ -98,17 +101,17 @@ export function paginaInicio(d, { base = "/", L = (x) => base + x, url = "" } = 
   bs.forEach((b) => { if (b.zona) zonas[b.zona] = (zonas[b.zona] || 0) + 1; });
   const zonasOrd = Object.entries(zonas).sort((a, z) => z[1] - a[1]);
   const dest = bs.filter((b) => b.destacada && foto(b));
-  const heroFotos = (dest.length ? dest : bs.filter((b) => foto(b))).slice(0, 4);
+  const portada = c.portada || PORTADA_BASE;
   const minM2 = Math.min(...bs.map((b) => b.m2min || Infinity));
   const maxM2 = Math.max(...bs.map((b) => b.m2max || 0));
   const faq = (c.faq && c.faq.length ? c.faq : FAQ_BASE);
   const mapa = bs.filter((b) => b.lat && b.lng).map((b) => ({ s: b.slug, n: b.nombre, z: b.zona, la: b.lat, ln: b.lng, p: precio(b).grande, f: foto(b) ? foto(b).url : "", h: L("bodega/" + b.slug) }));
 
-  return cabeza(c, { titulo: `${c.nombre} · ${c.titular || "Bodegas industriales en renta"}`, desc: c.subtitular || "", url, imagen: heroFotos[0] && foto(heroFotos[0]).url, base }) +
+  return cabeza(c, { titulo: `${c.nombre} · ${c.titular || "Bodegas industriales en renta"}`, desc: c.subtitular || "", url, imagen: portada.includes("images.pexels.com") ? portada + "&w=1200" : portada, base }) +
     encabezado(c, L) + `
 <main>
 <section class="hero">
-<div class="hero-fotos" aria-hidden="true">${heroFotos.map((b, i) => `<img src="${e(foto(b).url)}" alt="" ${i ? 'loading="lazy"' : 'fetchpriority="high"'} class="${i ? "" : "on"}">`).join("")}</div>
+<div class="hero-fotos" aria-hidden="true">${portada.includes("images.pexels.com") ? `<img src="${e(portada)}&w=1920" srcset="${e(portada)}&w=960 960w, ${e(portada)}&w=1600 1600w, ${e(portada)}&w=2400 2400w" sizes="100vw" alt="" fetchpriority="high" class="on">` : `<img src="${e(portada)}" alt="" fetchpriority="high" class="on">`}</div>
 <div class="hero-velo"></div>
 <div class="wrap hero-in">
 <p class="eyebrow"><span></span>${e(c.frase || "")}</p>
@@ -120,7 +123,7 @@ export function paginaInicio(d, { base = "/", L = (x) => base + x, url = "" } = 
 <label class="sw"><input type="checkbox" name="trailer"><i></i><span>Entra tráiler</span></label>
 <button class="btn btn-lima" type="submit">Buscar bodega ${ICON.flecha}</button>
 </form>
-${heroFotos[0] ? `<a class="hero-ficha" id="heroFicha" href="${L("bodega/" + heroFotos[0].slug)}">${heroFotos.map((b, i) => `<span data-i="${i}" data-h="${e(L("bodega/" + b.slug))}" ${i ? "hidden" : ""}><b>${e(b.nombre)}</b> · ${e(b.zona)} · ${e(superficie(b))}</span>`).join("")}${ICON.flecha}</a>` : ""}
+<a class="hero-ficha" href="${L("#bodegas")}"><b>${disp.length} inmuebles disponibles</b> · ${zonasOrd.slice(0, 4).map(([z]) => e(z)).join(" · ")}${ICON.flecha}</a>
 </div></section>
 
 <section class="cifras" aria-label="Resumen"><div class="wrap cifras-in">

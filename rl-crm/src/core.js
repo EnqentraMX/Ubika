@@ -196,7 +196,7 @@ export async function api(req, store, env, semilla) {
       const e = await body();
       const d = await leer(store, semilla);
       const c = { ...d.config };
-      ["nombre", "frase", "asesora", "telefono", "correo", "oficina", "titular", "subtitular", "horario", "logo", "fotoAsesora", "anios"].forEach((k) => { if (k in e) c[k] = str(e[k], k === "subtitular" ? 400 : 2000000); });
+      ["nombre", "frase", "asesora", "telefono", "correo", "oficina", "titular", "subtitular", "horario", "logo", "fotoAsesora", "portada", "anios"].forEach((k) => { if (k in e) c[k] = str(e[k], k === "subtitular" ? 400 : 2000000); });
       if (Array.isArray(e.faq)) c.faq = e.faq.slice(0, 20).map((x) => [str(x && x[0], 200), str(x && x[1], 1200)]).filter((x) => x[0] && x[1]);
       if ("whatsapp" in e) { let w = String(e.whatsapp).replace(/\D/g, ""); if (w.length === 10) w = "52" + w; c.whatsapp = w; }
       d.config = c;
