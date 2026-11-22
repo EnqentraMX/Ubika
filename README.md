@@ -27,3 +27,7 @@ Bodegas y naves en renta, CDMX y Edomex. Tiene diseño propio (grafito y verde l
 - Datos: `especiales/rl-industrial/datos.json` (WhatsApp, inmuebles, ubicaciones aproximadas). Fotos con `@` se cargan del servidor de su página anterior; las demás están en `public/rl-industrial/img/`.
 - Diseño y lógica: `public/rl-industrial/assets/rl.css` y `rl.js`.
 - Para armar o actualizar: `python3 herramientas/armar_rl_industrial.py` (necesita Pillow para las imágenes de vista previa).
+
+## RL Industrial con CRM (`rl-crm/`)
+Sitio nuevo de RL Industrial con panel oculto para que Rosy administre bodegas (máx. 5 fotos), prospectos y agenda. Es un Worker aparte con su propio espacio de datos (KV); no cambia nada de lo que se publica desde `public/`.
+- Se publica en Cloudflare importando este repo con **Root directory = `rl-crm`**. Instrucciones en `rl-crm/LEEME.md`.

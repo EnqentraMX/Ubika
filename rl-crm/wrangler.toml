@@ -1,0 +1,22 @@
+name = "rl-industrial"
+main = "src/worker.js"
+compatibility_date = "2024-11-01"
+
+# Archivos públicos: sitio.css y sitio.js
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = true
+
+# Base de datos (bodegas, prospectos, fotos). Sin id: Cloudflare la crea sola al publicar.
+[[kv_namespaces]]
+binding = "DATOS"
+
+[vars]
+# Dirección secreta del panel: https://tu-dominio/<PANEL_RUTA>
+PANEL_RUTA = "panel-rl"
+
+[[rules]]
+type = "Text"
+globs = ["**/*.html"]
+fallthrough = true

@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0E1216">
+<title>Panel · RL Industrial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--tinta:#0E1216;--acero:#171D23;--papel:#F4F3EF;--blanco:#fff;--linea:#E2E0DA;--lima:#8CC63F;--lima-osc:#4F7A1A;--lima-suave:#EEF6E2;--ambar:#E8A317;--ambar-suave:#FDF3DC;--rojo:#C8442F;--rojo-suave:#FBE9E6;--azul:#2F6FD6;--azul-suave:#E8F0FC;--gris:#5F666D;--wa:#1FAF55;--f:"Archivo",system-ui,sans-serif;--m:"JetBrains Mono",ui-monospace,monospace}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--papel);color:var(--tinta);font-family:var(--f);font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+img{display:block;max-width:100%}
+svg{width:20px;height:20px;flex:none}
+[hidden]{display:none!important}
+h1,h2,h3{margin:0;line-height:1.1}
+a{color:inherit}
+
+/* Botones */
+.b{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border:0;border-radius:12px;font-weight:700;font-size:15.5px;cursor:pointer;text-decoration:none;background:var(--blanco);box-shadow:inset 0 0 0 1.5px var(--linea);white-space:nowrap}
+.b:active{transform:scale(.97)}
+.b.lima{background:var(--lima);box-shadow:none;color:var(--tinta)}
+.b.negro{background:var(--tinta);color:#fff;box-shadow:none}
+.b.wa{background:var(--wa);color:#fff;box-shadow:none}
+.b.rojo{color:var(--rojo);box-shadow:inset 0 0 0 1.5px #F1C9C1}
+.b.chico{min-height:38px;padding:0 12px;font-size:14px;border-radius:10px}
+.b.icono{width:46px;padding:0}
+.b.chico.icono{width:38px}
+.b:disabled{opacity:.55;cursor:default}
+
+/* Entrar */
+.entrar{min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--tinta)}
+.entrar form{width:min(400px,100%);background:var(--blanco);border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:16px}
+.entrar img{width:64px;height:64px;border-radius:14px;object-fit:cover}
+.entrar h1{font-size:26px;font-weight:900;text-transform:uppercase;font-variation-settings:"wdth" 115}
+.entrar p{margin:0;color:var(--gris)}
+
+/* Estructura */
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.lado{background:var(--tinta);color:#fff;padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px}
+.lado .marca{display:flex;gap:10px;align-items:center;padding:0 8px 18px;border-bottom:1px solid #263039;margin-bottom:10px}
+.lado .marca img{width:38px;height:38px;border-radius:9px;object-fit:cover;background:#fff}
+.lado .marca b{display:block;font-size:14px;text-transform:uppercase;font-variation-settings:"wdth" 115}
+.lado .marca small{font-size:12px;color:#9AA3AB}
+.tab{display:flex;align-items:center;gap:12px;padding:12px 12px;border-radius:12px;border:0;background:none;color:#C9D0D6;font-weight:600;font-size:15.5px;cursor:pointer;text-align:left;width:100%;position:relative}
+.tab:hover{background:#1A2128;color:#fff}
+.tab.on{background:var(--lima);color:var(--tinta)}
+.tab .n{margin-left:auto;background:var(--rojo);color:#fff;font:700 12px var(--m);padding:2px 7px;border-radius:99px}
+.tab.on .n{background:var(--tinta)}
+.lado .abajo{margin-top:auto;display:flex;flex-direction:column;gap:6px}
+main{padding:28px clamp(16px,3vw,40px) 120px;max-width:1200px;width:100%;min-width:0}
+.cab{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.cab h1{font-size:clamp(26px,4vw,36px);font-weight:900;text-transform:uppercase;font-variation-settings:"wdth" 115}
+.cab p{margin:4px 0 0;color:var(--gris)}
+.abajo-movil{display:none}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .lado{display:none}
+  .abajo-movil{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;inset:auto 0 0;z-index:40;background:var(--tinta);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  .abajo-movil .tab{flex-direction:column;gap:3px;font-size:11.5px;padding:8px 2px;justify-content:center;text-align:center}
+  .abajo-movil .tab .n{position:absolute;top:2px;right:12%;margin:0;font-size:10px;padding:1px 5px}
+  main{padding:18px 14px 110px}
+}
+
+/* Tarjetas resumen */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+.kpi{background:var(--blanco);border-radius:18px;padding:18px;border:0;text-align:left;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.kpi b{display:block;font:700 34px var(--m);letter-spacing:-.03em}
+.kpi span{color:var(--gris);font-size:14px;font-weight:600}
+.kpi.verde b{color:var(--lima-osc)}.kpi.rojo b{color:var(--rojo)}
+@media (max-width:860px){.kpis{grid-template-columns:1fr 1fr}}
+.panel{background:var(--blanco);border-radius:18px;padding:20px;margin-bottom:18px}
+.panel h2{font-size:15px;text-transform:uppercase;letter-spacing:.1em;color:var(--gris);margin-bottom:14px;font-weight:800}
+.atajos{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.dos-col{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}
+@media (max-width:960px){.dos-col{grid-template-columns:1fr}}
+.vacio{color:var(--gris);padding:18px 0;text-align:center}
+
+/* Listas */
+.buscar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.buscar input{flex:1;min-width:200px;height:46px;border:1.5px solid var(--linea);border-radius:12px;padding:0 14px;background:var(--blanco);font-size:16px}
+.filas{display:flex;flex-direction:column;gap:10px}
+.fila{display:flex;gap:14px;align-items:center;background:var(--blanco);border-radius:16px;padding:12px;cursor:pointer;border:1.5px solid transparent}
+.fila:hover{border-color:var(--linea)}
+.fila .mini{width:92px;height:72px;border-radius:12px;object-fit:cover;background:#D8D6CF;flex:none}
+.fila .mini.vacia{display:grid;place-items:center;color:var(--gris);font-size:12px;font-weight:700}
+.fila .info{flex:1;min-width:0}
+.fila .info b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:17px;overflow:hidden;line-height:1.2}
+.fila .info span{display:block;color:var(--gris);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fila .der{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
+.precio{font:700 15px var(--m)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:99px;white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.p-disponible,.p-ganado{background:var(--lima-suave);color:var(--lima-osc)}
+.p-apartada,.p-visita,.p-negociacion{background:var(--ambar-suave);color:#8A5A00}
+.p-rentada,.p-perdido{background:var(--rojo-suave);color:var(--rojo)}
+.p-oculta{background:#ECEBE7;color:var(--gris)}
+.p-nuevo{background:var(--azul-suave);color:var(--azul)}
+.p-contactado{background:#EFE9FB;color:#6B45C2}
+.fila .info .estrella{display:inline;color:var(--ambar);font-size:15px}
+.clics{font:600 12px var(--m);color:var(--gris)}
+@media (max-width:560px){.fila .mini{width:70px;height:60px}.fila .der .precio{display:none}}
+
+/* Embudo */
+.embudo{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
+.embudo button{flex:none;border:1.5px solid var(--linea);background:var(--blanco);border-radius:12px;padding:8px 14px;font-weight:700;font-size:14px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.embudo button i{font:700 13px var(--m);font-style:normal;color:var(--gris)}
+.embudo button.on{background:var(--tinta);color:#fff;border-color:var(--tinta)}
+.embudo button.on i{color:var(--lima)}
+.lead .acciones{display:flex;gap:6px}
+
+/* Hoja (editor) */
+.hoja{position:fixed;inset:0;z-index:80;background:rgba(14,18,22,.45);display:flex;justify-content:flex-end}
+.hoja-in{background:var(--papel);width:min(760px,100%);height:100%;overflow-y:auto;display:flex;flex-direction:column;animation:entra .22s ease}
+@keyframes entra{from{transform:translateX(40px);opacity:.5}to{transform:none;opacity:1}}
+.hoja-cab{position:sticky;top:0;z-index:5;background:var(--tinta);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px}
+.hoja-cab h2{font-size:18px;text-transform:uppercase;font-variation-settings:"wdth" 112;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hoja-cab .b{background:#222A32;color:#fff;box-shadow:none}
+.hoja-cuerpo{padding:18px;display:flex;flex-direction:column;gap:16px;flex:1}
+.hoja-pie{position:sticky;bottom:0;background:var(--blanco);border-top:1px solid var(--linea);padding:12px 18px calc(12px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center}
+.hoja-pie .b.lima{flex:1;min-height:54px;font-size:17px}
+.sin-guardar{font-size:13px;color:#8A5A00;font-weight:700}
+.bloque{background:var(--blanco);border-radius:18px;padding:18px}
+.bloque>h3{display:flex;align-items:center;gap:10px;font-size:14px;text-transform:uppercase;letter-spacing:.1em;color:var(--gris);font-weight:800;margin-bottom:14px}
+.bloque>h3 i{font:700 13px var(--m);font-style:normal;background:var(--lima-suave);color:var(--lima-osc);width:26px;height:26px;border-radius:8px;display:grid;place-items:center}
+.ayuda{font-size:13.5px;color:var(--gris);margin:-6px 0 12px}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.campos .todo{grid-column:1/-1}
+@media (max-width:560px){.campos{grid-template-columns:1fr}}
+label.c{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px}
+label.c small{font-weight:500;color:var(--gris);margin-top:-4px}
+.in,label.c input,label.c select,label.c textarea{width:100%;border:1.5px solid var(--linea);border-radius:12px;padding:12px 13px;font-size:16px;background:#FCFCFA;font-weight:500;outline:0}
+label.c input:focus,label.c select:focus,label.c textarea:focus,.in:focus{border-color:var(--lima-osc);box-shadow:0 0 0 3px var(--lima-suave);background:#fff}
+textarea{resize:vertical}
+.pesos{position:relative}.pesos input{padding-left:26px}.pesos::before{content:"$";position:absolute;left:13px;bottom:13px;font-weight:700;color:var(--gris)}
+.seg{display:flex;background:#ECEBE6;border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;padding:10px 8px;border-radius:9px;font-weight:700;font-size:14.5px;cursor:pointer;min-width:max-content;color:var(--gris)}
+.seg button.on{background:var(--blanco);color:var(--tinta);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.seg.estado button.on[data-v=disponible]{background:var(--lima);color:var(--tinta)}
+.seg.estado button.on[data-v=apartada]{background:var(--ambar)}
+.seg.estado button.on[data-v=rentada]{background:var(--rojo);color:#fff}
+.seg-et{font-weight:700;font-size:14px;margin-bottom:6px;display:block}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1.5px solid var(--linea);border-radius:12px;cursor:pointer;font-weight:700;font-size:15px;background:#FCFCFA}
+.sw small{display:block;font-weight:500;color:var(--gris);font-size:13px}
+.sw input{position:absolute;opacity:0;width:1px;height:1px}
+.sw i{width:46px;height:28px;border-radius:99px;background:#C3C7CB;position:relative;transition:.2s;flex:none}
+.sw i::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.sw input:checked+i{background:var(--lima)}
+.sw input:checked+i::after{transform:translateX(18px)}
+
+/* Fotos */
+.fotos{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media (max-width:620px){.fotos{grid-template-columns:repeat(3,1fr)}}
+.foto{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;background:#DDD}
+.foto img{width:100%;height:100%;object-fit:cover}
+.foto .portada{position:absolute;left:6px;top:6px;background:var(--lima);color:var(--tinta);font-size:11px;font-weight:800;padding:3px 7px;border-radius:6px;text-transform:uppercase}
+.foto .ctl{position:absolute;inset:auto 0 0;display:flex;justify-content:space-between;padding:6px;background:linear-gradient(transparent,rgba(0,0,0,.65))}
+.foto .ctl button{width:32px;height:32px;border-radius:9px;border:0;background:rgba(255,255,255,.92);font-weight:800;cursor:pointer;display:grid;place-items:center;font-size:15px}
+.foto .ctl button.x{background:var(--rojo);color:#fff}
+.foto.subiendo::after{content:"Subiendo…";position:absolute;inset:0;display:grid;place-items:center;background:rgba(255,255,255,.75);font-weight:700;font-size:13px}
+.agregar{aspect-ratio:1;border-radius:14px;border:2px dashed #BFC4B5;background:var(--lima-suave);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;font-weight:700;font-size:13.5px;color:var(--lima-osc);text-align:center;padding:6px}
+.agregar svg{width:30px;height:30px}
+.agregar.arrastre{background:#DDEFC6;border-color:var(--lima-osc)}
+.cuenta-fotos{font:700 13px var(--m);color:var(--gris)}
+/* Chips de características */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chips span{display:inline-flex;align-items:center;gap:6px;background:var(--lima-suave);border-radius:99px;padding:6px 6px 6px 12px;font-weight:600;font-size:14px}
+.chips button{width:24px;height:24px;border-radius:50%;border:0;background:#fff;cursor:pointer;font-weight:800;line-height:1}
+.agrega-fila{display:flex;gap:8px}
+.agrega-fila input{flex:1}
+.sugeridas{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.sugeridas button{border:1.5px dashed var(--linea);background:none;border-radius:99px;padding:5px 11px;font-size:13px;font-weight:600;cursor:pointer;color:var(--gris)}
+.sugeridas button:hover{border-color:var(--lima-osc);color:var(--lima-osc)}
+.coord-ok{font:600 13px var(--m);color:var(--lima-osc)}
+.peligro{border:1.5px solid #F1C9C1;background:#FFF9F8}
+
+/* Notas */
+.notas{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.nota{background:#F7F6F2;border-radius:12px;padding:10px 12px;font-size:15px}
+.nota time{display:block;font:600 12px var(--m);color:var(--gris);margin-bottom:2px}
+.contacto-r{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Avisos */
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:200;background:var(--tinta);color:#fff;padding:13px 18px;border-radius:14px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3);max-width:calc(100% - 32px);display:flex;gap:10px;align-items:center;animation:sube .2s}
+.toast.mal{background:var(--rojo)}
+@keyframes sube{from{transform:translate(-50%,10px);opacity:0}}
+.modal{position:fixed;inset:0;z-index:150;background:rgba(14,18,22,.5);display:grid;place-items:center;padding:20px}
+.modal div{background:#fff;border-radius:20px;padding:24px;width:min(420px,100%)}
+.modal h3{font-size:20px;margin-bottom:8px}
+.modal p{color:var(--gris);margin:0 0 18px}
+.modal .acc{display:flex;gap:10px;justify-content:flex-end}
+.carga{min-height:60vh;display:grid;place-items:center;color:var(--gris)}
+.agenda h3{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--gris);margin:18px 0 10px}
+.agenda h3.venc{color:var(--rojo)}
+.fecha{font:700 13px var(--m);background:var(--azul-suave);color:var(--azul);padding:4px 8px;border-radius:8px}
+.fecha.venc{background:var(--rojo-suave);color:var(--rojo)}
+.fecha.hoy{background:var(--lima);color:var(--tinta)}
+.faq-ed{display:flex;flex-direction:column;gap:12px}
+.faq-ed .item{border:1.5px solid var(--linea);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.foto-conf{display:flex;gap:14px;align-items:center}
+.foto-conf img{width:84px;height:84px;border-radius:14px;object-fit:cover;background:#ddd}
+</style>
+</head>
+<body>
+<div id="raiz"><div class="carga">Cargando…</div></div>
+<input type="file" id="archivo" accept="image/*" multiple hidden>
+
+<script>
+(function(){
+"use strict";
+var demo=null;try{if(window.parent!==window&&window.parent.RLdemo)demo=window.parent.RLdemo}catch(e){}
+var pedir=demo?demo.fetch:function(u,o){return fetch(u,Object.assign({credentials:"same-origin"},o||{}))};
+var $=function(s,r){return(r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var raiz=$("#raiz");
+var esc=function(t){return String(t==null?"":t).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
+var fmt=function(n){return"$"+Math.round(n).toLocaleString("en-US")};
+var num=function(n){return Math.round(n).toLocaleString("en-US")};
+var I={
+ casa:'<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M3 11 12 4l9 7v9h-6v-6H9v6H3Z"/></svg>',
+ bodega:'<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M3 20V9l9-5 9 5v11M7 20v-7h10v7M7 16h10"/></svg>',
+ gente:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2" d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></svg>',
+ agenda:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" d="M3 10h18M8 3v4M16 3v4"/></svg>',
+ ajustes:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2" d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>',
+ mas:'<svg viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2.4" d="M12 5v14M5 12h14"/></svg>',
+ foto:'<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M4 7h3l2-2.5h6L17 7h3v12H4Z"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
+ wa:'<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>',
+ tel:'<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z"/></svg>',
+ ojo:'<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
+ salir:'<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>'
+};
+var ETQ={nuevo:"Nuevo",contactado:"Contactado",visita:"Visita agendada",negociacion:"Negociando",ganado:"Cerrado ✓",perdido:"No se dio"};
+var EST={disponible:"Disponible",apartada:"Apartada",rentada:"Rentada",oculta:"Oculta"};
+var TIPOS=["Bodega industrial","Nave industrial","Parque industrial","Bodega","Bodegas","Conjunto industrial","Patio + bodega","Local comercial","Oficina","Terreno"];
+var SUGERIDAS=["Acceso de tráiler","Andenes","Patio de maniobras","Oficinas","Baños","Luz trifásica","Vigilancia 24 horas","Estacionamiento","Uso de suelo industrial","Disponibilidad inmediata","Precio negociable","Doble altura","Mezzanine","Cisterna","Subestación eléctrica","Rampa"];
+var FAQ_BASE=[["¿Qué necesito para rentar una bodega?","Depende de cada inmueble. En general se pide identificación, comprobante de domicilio, datos de la empresa y depósito en garantía. Te decimos los requisitos exactos de la bodega que te interese antes de la visita."],["¿Cuánto cuesta el mantenimiento?","Cambia por inmueble y parque industrial. Si la ficha no lo indica, pregúntalo con el botón de WhatsApp y te lo confirmamos por escrito."],["¿Me ayudan con el contrato?","Sí. Revisamos el contrato contigo para que sepas qué firmas: plazos, incrementos, depósito y responsabilidades de cada parte."],["¿Puedo visitar varias bodegas el mismo día?","Sí. Dinos cuáles te interesan y armamos un recorrido para que las veas en una sola salida."]];
+var MAX=5;
+var D=null, vista="inicio", filtroLead="activos", textoB="", textoL="";
+
+function api(metodo,ruta,cuerpo,tipo){
+  var o={method:metodo,headers:{}};
+  if(cuerpo instanceof Blob){o.body=cuerpo;o.headers["content-type"]=tipo||cuerpo.type}
+  else if(cuerpo!==undefined){o.body=JSON.stringify(cuerpo);o.headers["content-type"]="application/json"}
+  return pedir(ruta,o).then(function(r){return r.json().catch(function(){return{}}).then(function(j){
+    if(r.status===401&&ruta!=="/api/admin/entrar"&&ruta!=="/api/admin/todo"){pantallaEntrar();throw new Error("Tu sesión terminó. Vuelve a entrar.")}
+    if(!r.ok)throw new Error(j.error||"No se pudo guardar. Revisa tu conexión.");return j})});
+}
+function aviso(t,mal){var v=$(".toast");if(v)v.remove();var d=document.createElement("div");d.className="toast"+(mal?" mal":"");d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},mal?4500:2600)}
+function confirma(tit,txt,si){return new Promise(function(res){var m=document.createElement("div");m.className="modal";m.innerHTML='<div role="dialog" aria-modal="true"><h3>'+esc(tit)+'</h3><p>'+esc(txt)+'</p><div class="acc"><button class="b" data-r="0">Cancelar</button><button class="b negro" data-r="1">'+esc(si||"Sí")+'</button></div></div>';document.body.appendChild(m);m.addEventListener("click",function(e){var b=e.target.closest("[data-r]");if(b||e.target===m){m.remove();res(b&&b.dataset.r==="1")}});$("[data-r='1']",m).focus()})}
+var hace=function(t){if(!t)return"";var s=(Date.now()-new Date(t))/1000;if(s<60)return"hace un momento";if(s<3600)return"hace "+Math.floor(s/60)+" min";if(s<86400)return"hace "+Math.floor(s/3600)+" h";var d=Math.floor(s/86400);return d===1?"ayer":"hace "+d+" días"};
+var hoyISO=function(){var d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)};
+var fechaBonita=function(f){if(!f)return"";var d=new Date(f+"T12:00:00");return d.toLocaleDateString("es-MX",{weekday:"short",day:"numeric",month:"short"})};
+function precioTxt(b){if(b.precioTipo==="m2"&&b.precio)return fmt(b.precio)+"/m²";if(b.precioTipo==="mes"&&b.precio)return fmt(b.precio)+(b.operacion==="venta"?"":"/mes");return"Consultar"}
+function bodegaDe(slug){return D.bodegas.find(function(b){return b.slug===slug})}
+function clicsDe(b){var e=D.eventos||{};return(e[b.slug+":wa"]||0)+(e[b.slug+":tel"]||0)}
+function telLimpio(t){var x=String(t||"").replace(/\D/g,"");if(x.length===10)x="52"+x;return x}
+
+/* ---------- Entrar ---------- */
+function pantallaEntrar(){
+  raiz.innerHTML='<div class="entrar"><form id="fEntrar"><img src="'+esc((D&&D.config.logo)||"")+'" alt="" onerror="this.remove()"><h1>Panel de RL Industrial</h1><p>Escribe tu contraseña para administrar bodegas y prospectos.</p>'+(demo?'<p style="background:#EEF6E2;padding:10px 12px;border-radius:10px;color:#4F7A1A;font-weight:600">Demo: la contraseña es <b>rosy2026</b></p>':'')+'<label class="c">Contraseña<input type="password" name="p" autocomplete="current-password" required autofocus></label><button class="b lima" style="min-height:54px">Entrar</button><p class="err" style="color:#C8442F;font-weight:600"></p></form></div>';
+  $("#fEntrar").addEventListener("submit",function(e){e.preventDefault();var b=$("button",this),er=$(".err",this);b.disabled=true;er.textContent="";
+    api("POST","/api/admin/entrar",{password:this.p.value}).then(function(){cargar()}).catch(function(x){er.textContent=x.message;b.disabled=false})});
+}
+function pantallaCrear(){
+  raiz.innerHTML='<div class="entrar"><form id="fCrear"><h1>Bienvenida a tu panel</h1><p>Es la primera vez que entras. Crea tu contraseña: con ella vas a administrar tus bodegas y prospectos.</p><label class="c">Nueva contraseña<input type="password" name="p" autocomplete="new-password" minlength="6" required autofocus placeholder="Mínimo 6 caracteres"></label><label class="c">Repítela<input type="password" name="p2" autocomplete="new-password" required></label><button class="b lima" style="min-height:54px">Crear contraseña y entrar</button><p class="err" style="color:#C8442F;font-weight:600"></p></form></div>';
+  $("#fCrear").addEventListener("submit",function(e){e.preventDefault();var er=$(".err",this),b=$("button",this);er.textContent="";
+    if(this.p.value.length<6){er.textContent="Usa al menos 6 caracteres.";return}
+    if(this.p.value!==this.p2.value){er.textContent="Las contraseñas no coinciden.";return}
+    b.disabled=true;api("POST","/api/admin/crear",{password:this.p.value}).then(function(){aviso("Contraseña creada. ¡Bienvenida!");cargar()}).catch(function(x){er.textContent=x.message;b.disabled=false})});
+}
+function cargar(){return api("GET","/api/admin/todo").then(function(j){D=j;pinta()}).catch(function(e){if($("#fEntrar")||$("#fCrear"))return;
+  pedir("/api/admin/acceso").then(function(r){return r.json()}).then(function(a){a.configurada?pantallaEntrar():pantallaCrear()}).catch(pantallaEntrar)})}
+
+/* ---------- Estructura ---------- */
+function nuevos(){return D.leads.filter(function(l){return l.etapa==="nuevo"}).length}
+function pendientes(){var h=hoyISO();return D.leads.filter(function(l){return l.proxima&&l.proxima<=h&&l.etapa!=="ganado"&&l.etapa!=="perdido"}).length}
+function menu(cls){
+  var t=[["inicio","Inicio",I.casa],["bodegas","Bodegas",I.bodega],["prospectos","Prospectos",I.gente,nuevos()],["agenda","Agenda",I.agenda,pendientes()],["ajustes","Ajustes",I.ajustes]];
+  return t.map(function(x){return'<button class="tab'+(vista===x[0]?" on":"")+'" data-ir="'+x[0]+'">'+x[2]+'<span>'+x[1]+'</span>'+(x[3]?'<span class="n">'+x[3]+'</span>':"")+'</button>'}).join("");
+}
+function pinta(){
+  var c=D.config;
+  raiz.innerHTML='<div class="app"><aside class="lado"><div class="marca">'+(c.logo?'<img src="'+esc(c.logo)+'" alt="">':"")+'<div><b>'+esc(c.nombre)+'</b><small>Panel de administración</small></div></div>'+menu()+'<div class="abajo"><a class="tab" href="'+(demo?"#":"/")+'" data-publico target="_blank" rel="noopener">'+I.ojo+'<span>Ver mi página</span></a><button class="tab" data-salir>'+I.salir+'<span>Salir</span></button></div></aside><main id="vista"></main></div><nav class="abajo-movil">'+menu()+'</nav>';
+  $$("[data-ir]").forEach(function(b){b.onclick=function(){vista=b.dataset.ir;pinta();scrollTo(0,0)}});
+  $$("[data-publico]").forEach(function(a){a.onclick=function(e){if(demo){e.preventDefault();demo.ir("/")}}});
+  $$("[data-salir]").forEach(function(b){b.onclick=salir});
+  ({inicio:vInicio,bodegas:vBodegas,prospectos:vProspectos,agenda:vAgenda,ajustes:vAjustes})[vista]();
+}
+function salir(){api("POST","/api/admin/salir").catch(function(){}).then(function(){D=null;pantallaEntrar()})}
+
+/* ---------- Inicio ---------- */
+function vInicio(){
+  var v=$("#vista"),c=D.config;
+  var disp=D.bodegas.filter(function(b){return b.estado==="disponible"}).length;
+  var apart=D.bodegas.filter(function(b){return b.estado==="apartada"}).length;
+  var act=D.leads.filter(function(l){return l.etapa!=="ganado"&&l.etapa!=="perdido"}).length;
+  var clics=Object.keys(D.eventos||{}).reduce(function(s,k){return s+(/:(wa|tel)$/.test(k)?D.eventos[k]:0)},0);
+  var hoy=hoyISO();
+  var pend=D.leads.filter(function(l){return l.proxima&&l.proxima<=hoy&&l.etapa!=="ganado"&&l.etapa!=="perdido"});
+  var recientes=D.leads.slice(0,5);
+  var top=D.bodegas.slice().sort(function(a,b){return clicsDe(b)-clicsDe(a)}).filter(function(b){return clicsDe(b)>0}).slice(0,5);
+  var nombre=(c.asesora||"").replace(/^(Lic\.?|Ing\.?|Arq\.?)\s*/i,"").split(" ")[0];
+  v.innerHTML='<div class="cab"><div><h1>Hola'+(nombre?", "+esc(nombre):"")+'</h1><p>'+new Date().toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"})+'</p></div></div>'+
+  '<div class="atajos"><button class="b lima" data-nueva>'+I.mas+'Agregar bodega</button><button class="b" data-nuevo-lead>'+I.mas+'Anotar prospecto</button></div>'+
+  '<div class="kpis"><button class="kpi '+(nuevos()?"rojo":"")+'" data-ir2="prospectos" data-f="nuevo"><b>'+nuevos()+'</b><span>Prospectos nuevos</span></button><button class="kpi" data-ir2="agenda"><b>'+pend.length+'</b><span>Seguimientos para hoy</span></button><button class="kpi verde" data-ir2="bodegas"><b>'+disp+'</b><span>Bodegas disponibles'+(apart?" · "+apart+" apartadas":"")+'</span></button><button class="kpi" data-ir2="prospectos"><b>'+clics+'</b><span>Clics a WhatsApp y llamada</span></button></div>'+
+  '<div class="dos-col"><section class="panel"><h2>Últimos prospectos</h2>'+(recientes.length?'<div class="filas">'+recientes.map(filaLead).join("")+'</div>':'<p class="vacio">Aún no llegan prospectos. Cuando alguien llene un formulario de tu página aparecerá aquí.</p>')+'</section>'+
+  '<section class="panel"><h2>Bodegas con más interés</h2>'+(top.length?'<div class="filas">'+top.map(function(b){return'<div class="fila" data-bodega="'+esc(b.id)+'"><div class="info"><b>'+esc(b.nombre)+'</b><span>'+esc(b.zona)+'</span></div><div class="der"><span class="precio">'+clicsDe(b)+'</span><span class="clics">clics</span></div></div>'}).join("")+'</div>':'<p class="vacio">Aquí verás qué bodegas generan más clics a WhatsApp.</p>')+(act?'<p style="margin:14px 0 0;color:var(--gris)">'+act+' prospectos en seguimiento.</p>':"")+'</section></div>';
+  enlazar(v);
+}
+function enlazar(v){
+  $$("[data-ir2]",v).forEach(function(b){b.onclick=function(){vista=b.dataset.ir2;if(b.dataset.f)filtroLead=b.dataset.f;pinta();scrollTo(0,0)}});
+  $$("[data-nueva]",v).forEach(function(b){b.onclick=function(){editarBodega(null)}});
+  $$("[data-nuevo-lead]",v).forEach(function(b){b.onclick=function(){editarLead(null)}});
+  $$("[data-bodega]",v).forEach(function(f){f.onclick=function(e){if(e.target.closest("select,a,button.no"))return;editarBodega(D.bodegas.find(function(b){return b.id===f.dataset.bodega}))}});
+  $$("[data-lead]",v).forEach(function(f){f.onclick=function(e){if(e.target.closest("a"))return;editarLead(D.leads.find(function(l){return l.id===f.dataset.lead}))}});
+  $$("select[data-estado]",v).forEach(function(s){s.onchange=function(){var b=D.bodegas.find(function(x){return x.id===s.dataset.estado});var ant=b.estado;
+    api("PUT","/api/admin/bodega/"+b.id,{estado:s.value}).then(function(j){Object.assign(b,j.bodega);s.className="pill p-"+b.estado;aviso("Listo: "+b.nombre+" ahora está "+EST[b.estado].toLowerCase())}).catch(function(e){s.value=ant;aviso(e.message,true)})}});
+}
+
+/* ---------- Bodegas ---------- */
+function filaBodega(b){
+  var f=b.fotos&&b.fotos[0];
+  return'<div class="fila" data-bodega="'+esc(b.id)+'">'+(f?'<img class="mini" src="'+esc(f.url)+'" alt="" loading="lazy">':'<div class="mini vacia">Sin foto</div>')+
+  '<div class="info"><b>'+(b.destacada?'<span class="estrella" title="Destacada">★</span> ':"")+esc(b.nombre)+'</b><span>'+esc(b.folio)+' · '+esc(b.zona||"Sin zona")+' · '+(b.m2min?num(b.m2min)+(b.m2max>b.m2min?"–"+num(b.m2max):"")+" m²":"")+'</span><span class="clics">'+(b.fotos||[]).length+'/5 fotos · '+clicsDe(b)+' clics</span></div>'+
+  '<div class="der"><span class="precio">'+esc(precioTxt(b))+'</span><select class="pill p-'+esc(b.estado)+'" data-estado="'+esc(b.id)+'" aria-label="Estado de '+esc(b.nombre)+'" style="border:0;cursor:pointer;font-family:inherit">'+Object.keys(EST).map(function(k){return'<option value="'+k+'"'+(b.estado===k?" selected":"")+'>'+EST[k]+'</option>'}).join("")+'</select></div></div>';
+}
+function vBodegas(){
+  var v=$("#vista");
+  var lista=D.bodegas.filter(function(b){var t=textoB.toLowerCase();return!t||(b.nombre+" "+b.zona+" "+b.folio+" "+b.tipo).toLowerCase().indexOf(t)>=0});
+  var cnt={};D.bodegas.forEach(function(b){cnt[b.estado]=(cnt[b.estado]||0)+1});
+  v.innerHTML='<div class="cab"><div><h1>Bodegas</h1><p>'+D.bodegas.length+' en total · '+Object.keys(cnt).map(function(k){return cnt[k]+" "+EST[k].toLowerCase()+(cnt[k]>1&&k!=="oculta"?"s":k==="oculta"&&cnt[k]>1?"s":"")}).join(" · ")+'</p></div><button class="b lima" data-nueva>'+I.mas+'Agregar bodega</button></div>'+
+  '<div class="buscar"><input type="search" id="qB" placeholder="Buscar por nombre, zona o folio" value="'+esc(textoB)+'"></div>'+
+  '<p class="ayuda" style="margin:0 0 12px">Toca una bodega para editarla. Cambia el estado directo desde la lista (Disponible, Apartada, Rentada u Oculta).</p>'+
+  (lista.length?'<div class="filas">'+lista.map(filaBodega).join("")+'</div>':'<p class="vacio">No hay bodegas que coincidan.</p>');
+  var q=$("#qB");q.oninput=function(){textoB=q.value;var p=q.selectionStart;vBodegas();var n=$("#qB");n.focus();n.setSelectionRange(p,p)};
+  enlazar(v);
+}
+
+function comprimir(file){
+  return new Promise(function(res,rej){
+    var url=URL.createObjectURL(file),img=new Image();
+    img.onload=function(){var max=1600,w=img.naturalWidth,h=img.naturalHeight,k=Math.min(1,max/Math.max(w,h));
+      var cv=document.createElement("canvas");cv.width=Math.round(w*k);cv.height=Math.round(h*k);cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);URL.revokeObjectURL(url);
+      cv.toBlob(function(b){if(b&&b.type==="image/webp")res(b);else cv.toBlob(function(j){j?res(j):rej(new Error("No se pudo leer la foto"))},"image/jpeg",.84)},"image/webp",.82)};
+    img.onerror=function(){URL.revokeObjectURL(url);rej(new Error("Ese archivo no es una foto válida."))};
+    img.src=url;
+  });
+}
+
+function editarBodega(orig){
+  var b=JSON.parse(JSON.stringify(orig||{nombre:"",tipo:"Bodega industrial",operacion:"renta",estado:"disponible",precioTipo:"mes",acceso:"trailer",oficinas:false,trifasica:false,destacada:false,fotos:[],caracteristicas:[],tamanos:[],precision:"municipio",entidad:"CDMX"}));
+  var sucio=false,subiendo=0;
+  var zonas=[];D.bodegas.forEach(function(x){if(x.zona&&zonas.indexOf(x.zona)<0)zonas.push(x.zona)});
+  var h=document.createElement("div");h.className="hoja";
+  function seg(campo,ops,cls){return'<div class="seg '+(cls||"")+'" data-seg="'+campo+'">'+ops.map(function(o){return'<button type="button" data-v="'+o[0]+'" class="'+(String(b[campo]||"")===o[0]?"on":"")+'">'+o[1]+'</button>'}).join("")+'</div>'}
+  function sw(campo,t,s){return'<label class="sw"><span>'+t+(s?'<small>'+s+'</small>':"")+'</span><input type="checkbox" data-sw="'+campo+'"'+(b[campo]?" checked":"")+'><i></i></label>'}
+  function val(v){return v==null?"":esc(v)}
+  h.innerHTML='<div class="hoja-in" role="dialog" aria-modal="true" aria-label="Editar bodega"><div class="hoja-cab"><button class="b chico" data-cerrar aria-label="Cerrar">✕</button><h2>'+(orig?esc(b.nombre):"Nueva bodega")+'</h2>'+(orig&&b.estado!=="oculta"?'<a class="b chico" data-ver>'+I.ojo+'Ver</a>':"")+'</div>'+
+  '<form class="hoja-cuerpo" id="fB" autocomplete="off">'+
+  '<section class="bloque"><h3><i>1</i>Fotos <span class="cuenta-fotos" id="cf"></span></h3><p class="ayuda">Hasta 5 fotos. La primera es la portada: usa la flecha ← para mover la mejor al inicio. Se ajustan solas para que carguen rápido.</p><div class="fotos" id="fotos"></div></section>'+
+  '<section class="bloque"><h3><i>2</i>Lo básico</h3><div class="campos"><label class="c todo">Nombre de la bodega<input name="nombre" required value="'+val(b.nombre)+'" placeholder="Ej. Bodega Iztapalapa 550"></label>'+
+  '<label class="c">Tipo<select name="tipo">'+TIPOS.concat(TIPOS.indexOf(b.tipo)<0&&b.tipo?[b.tipo]:[]).map(function(t){return'<option'+(b.tipo===t?" selected":"")+'>'+esc(t)+'</option>'}).join("")+'</select></label>'+
+  '<div><span class="seg-et">Operación</span>'+seg("operacion",[["renta","Renta"],["venta","Venta"]])+'</div>'+
+  '<div class="todo"><span class="seg-et">Estado</span>'+seg("estado",[["disponible","Disponible"],["apartada","Apartada"],["rentada","Rentada"],["oculta","Oculta"]],"estado")+'<p class="ayuda" style="margin:6px 0 0">“Oculta” la quita de la página sin borrarla.</p></div>'+
+  '<div class="todo">'+sw("destacada","Destacada","Sale en la portada de tu página")+'</div></div></section>'+
+  '<section class="bloque"><h3><i>3</i>Precio</h3><div class="campos"><div class="todo"><span class="seg-et">¿Cómo se cobra?</span>'+seg("precioTipo",[["mes","Total al mes"],["m2","Por m² al mes"],["consultar","Solo por WhatsApp"]])+'</div>'+
+  '<label class="c pesos" id="campoPrecio">Precio<input name="precio" inputmode="decimal" value="'+val(b.precio)+'" placeholder="Ej. 61900"></label>'+
+  '<label class="c">Mantenimiento <small>(opcional)</small><input name="mantenimiento" value="'+val(b.mantenimiento)+'" placeholder="Ej. $15 por m² + IVA"></label></div><p class="ayuda" id="ayudaPrecio" style="margin:10px 0 0"></p></section>'+
+  '<section class="bloque"><h3><i>4</i>Tamaño y ficha técnica</h3><div class="campos"><label class="c">m² desde<input name="m2min" inputmode="numeric" value="'+val(b.m2min)+'" placeholder="Ej. 550"></label><label class="c">m² hasta <small>(si hay varios tamaños)</small><input name="m2max" inputmode="numeric" value="'+val(b.m2max&&b.m2max!==b.m2min?b.m2max:"")+'" placeholder="Opcional"></label>'+
+  '<label class="c todo">Texto de superficie <small>(opcional, ej. “800 m² + 50 m² de oficinas”)</small><input name="superficieTexto" value="'+val(b.superficieTexto)+'"></label>'+
+  '<label class="c todo">Tamaños disponibles <small>(separados por coma, opcional)</small><input name="tamanos" inputmode="numeric" value="'+val((b.tamanos||[]).join(", "))+'" placeholder="Ej. 1600, 1800, 2000"></label>'+
+  '<label class="c">Altura libre (m)<input name="altura" inputmode="decimal" value="'+val(b.altura)+'" placeholder="Ej. 12"></label><label class="c">Andenes<input name="andenes" inputmode="numeric" value="'+val(b.andenes)+'" placeholder="Ej. 2"></label>'+
+  '<div class="todo"><span class="seg-et">¿Qué vehículo entra?</span>'+seg("acceso",[["trailer","Tráiler"],["torton","Torton"],["camioneta","Camioneta"],["","No aplica"]])+'</div>'+
+  sw("oficinas","Tiene oficinas")+sw("trifasica","Luz trifásica")+'</div></section>'+
+  '<section class="bloque"><h3><i>5</i>Ubicación</h3><div class="campos"><label class="c">Zona / municipio<input name="zona" list="dlZonas" value="'+val(b.zona)+'" placeholder="Ej. Iztapalapa"><datalist id="dlZonas">'+zonas.map(function(z){return'<option value="'+esc(z)+'">'}).join("")+'</datalist></label>'+
+  '<label class="c">Estado<select name="entidad">'+["","CDMX","Edomex","Hidalgo","Querétaro","Puebla","Otro"].map(function(x){return'<option value="'+x+'"'+(b.entidad===x?" selected":"")+'>'+(x||"—")+'</option>'}).join("")+'</select></label>'+
+  '<label class="c todo">Colonia o referencia <small>(se muestra en la página)</small><input name="direccion" value="'+val(b.direccion)+'" placeholder="Ej. Santa María Aztahuacán, Iztapalapa"></label>'+
+  '<label class="c todo">Ubicación en el mapa <small>Abre Google Maps, busca la bodega, toca “Compartir” y pega aquí el enlace. También sirve escribir las coordenadas.</small><input id="gmaps" placeholder="Pega el enlace de Google Maps o: 19.35, -99.02" value="'+(b.lat?b.lat+", "+b.lng:"")+'"></label><p class="coord-ok todo" id="coordOk"></p>'+
+  '<div class="todo"><span class="seg-et">¿Qué tan exacto se muestra?</span>'+seg("precision",[["municipio","Zona (círculo grande)"],["colonia","Colonia"],["exacta","Punto exacto"]])+'</div></div></section>'+
+  '<section class="bloque"><h3><i>6</i>Descripción</h3><label class="c">Cuéntale al cliente lo mejor de la bodega<textarea name="descripcion" rows="5" maxlength="4000" placeholder="Ej. Bodega de 800 m² con doble altura, oficinas y acceso de tráiler. Lista para operar.">'+val(b.descripcion)+'</textarea></label><p class="ayuda" id="cuentaDesc" style="margin:6px 0 0"></p>'+
+  '<span class="seg-et" style="margin-top:14px">Características</span><div class="chips" id="chips"></div><div class="agrega-fila"><input class="in" id="nuevaCar" placeholder="Escribe una y toca Agregar"><button type="button" class="b" id="addCar">Agregar</button></div><div class="sugeridas" id="sug"></div></section>'+
+  '<section class="bloque"><h3><i>7</i>Solo para ti</h3><p class="ayuda">Esto no se muestra en la página.</p><div class="campos"><label class="c todo">Propietario o contacto<input name="propietario" value="'+val(b.propietario)+'" placeholder="Nombre y teléfono del dueño"></label><label class="c todo">Notas internas<textarea name="notasInternas" rows="3" placeholder="Comisión, llaves, condiciones…">'+val(b.notasInternas)+'</textarea></label></div></section>'+
+  (orig?'<section class="bloque peligro"><h3>Eliminar</h3><p class="ayuda">Si solo ya se rentó, mejor márcala como “Rentada” u “Oculta”.</p><button type="button" class="b rojo" data-borrar>Eliminar esta bodega</button></section>':"")+
+  '</form><div class="hoja-pie"><span class="sin-guardar" id="sg" hidden>Cambios sin guardar</span><button class="b lima" data-guardar>Guardar bodega</button></div></div>';
+  document.body.appendChild(h);document.body.style.overflow="hidden";
+  var f=$("#fB",h);
+  var marca=function(){sucio=true;$("#sg",h).hidden=false};
+  f.addEventListener("input",marca);f.addEventListener("change",marca);
+
+  $$("[data-seg]",h).forEach(function(s){s.addEventListener("click",function(e){var x=e.target.closest("button");if(!x)return;b[s.dataset.seg]=x.dataset.v;$$("button",s).forEach(function(y){y.classList.toggle("on",y===x)});marca();precioUI()})});
+  $$("[data-sw]",h).forEach(function(i){i.addEventListener("change",function(){b[i.dataset.sw]=i.checked})});
+  function precioUI(){var c=$("#campoPrecio",h),a=$("#ayudaPrecio",h);c.hidden=b.precioTipo==="consultar";
+    $("input",c).placeholder=b.precioTipo==="m2"?"Ej. 130":"Ej. 61900";
+    c.firstChild.textContent=b.precioTipo==="m2"?"Precio por m²":(b.operacion==="venta"?"Precio de venta":"Renta mensual");
+    var p=parseFloat(String(f.precio.value).replace(/[^0-9.]/g,"")),m=parseFloat(f.m2min.value);
+    a.textContent=b.precioTipo==="consultar"?"En la página dirá “Consultar” y el cliente te escribirá por WhatsApp.":p&&m?(b.precioTipo==="m2"?"En la página: desde "+fmt(p*m)+" al mes.":"En la página: ≈ "+fmt(p/m)+" por m²."):""}
+  f.precio.addEventListener("input",precioUI);f.m2min.addEventListener("input",precioUI);precioUI();
+  var cd=function(){$("#cuentaDesc",h).textContent=f.descripcion.value.length+" caracteres"+(f.descripcion.value.length<80?" · tip: 2 o 3 frases venden mejor":"")};f.descripcion.addEventListener("input",cd);cd();
+
+  // Ubicación
+  function leeCoords(t){t=String(t||"");var m=t.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)||t.match(/[?&](?:q|query|ll|destination)=(-?\d+\.\d+)(?:,|%2C)\s*(-?\d+\.\d+)/)||t.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/)||t.match(/^\s*(-?\d{1,2}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)\s*$/);return m?[parseFloat(m[1]),parseFloat(m[2])]:null}
+  var gm=$("#gmaps",h),ok=$("#coordOk",h);
+  function coordUI(){var c=leeCoords(gm.value);if(c){b.lat=c[0];b.lng=c[1];ok.style.color="";ok.innerHTML="✓ Ubicación lista: "+c[0].toFixed(4)+", "+c[1].toFixed(4)+' · <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+c[0]+","+c[1]+'">revisar</a>'}
+    else if(gm.value.trim()){if(/goo\.gl|maps\.app/.test(gm.value)){ok.style.color="#8A5A00";ok.textContent="Ese enlace corto no trae las coordenadas. Ábrelo, copia la dirección larga del navegador o mantén presionado el punto en el mapa y copia los números que aparecen (ej. 19.35, -99.02)."}else{ok.style.color="#C8442F";ok.textContent="No encontré coordenadas en ese texto."}}
+    else{b.lat=null;b.lng=null;ok.textContent="Sin ubicación: la bodega no saldrá en el mapa."}}
+  gm.addEventListener("input",coordUI);coordUI();
+
+  // Características
+  function pintaChips(){$("#chips",h).innerHTML=b.caracteristicas.map(function(c,i){return'<span>'+esc(c)+'<button type="button" data-q="'+i+'" aria-label="Quitar '+esc(c)+'">×</button></span>'}).join("")||'<p class="ayuda" style="margin:0">Aún no hay características.</p>';
+    $("#sug",h).innerHTML=SUGERIDAS.filter(function(s){return b.caracteristicas.indexOf(s)<0}).map(function(s){return'<button type="button" data-s="'+esc(s)+'">+ '+esc(s)+'</button>'}).join("")}
+  $("#chips",h).onclick=function(e){var x=e.target.closest("[data-q]");if(x){b.caracteristicas.splice(+x.dataset.q,1);pintaChips();marca()}};
+  $("#sug",h).onclick=function(e){var x=e.target.closest("[data-s]");if(x){b.caracteristicas.push(x.dataset.s);pintaChips();marca()}};
+  var addCar=function(){var i=$("#nuevaCar",h),t=i.value.trim();if(t){b.caracteristicas.push(t);i.value="";pintaChips();marca()}i.focus()};
+  $("#addCar",h).onclick=addCar;$("#nuevaCar",h).addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();addCar()}});
+  pintaChips();
+
+  // Fotos
+  function pintaFotos(){
+    var c=$("#fotos",h);
+    c.innerHTML=b.fotos.map(function(fo,i){return'<div class="foto'+(fo.subiendo?" subiendo":"")+'">'+(fo.url?'<img src="'+esc(fo.url)+'" alt="">':"")+(i===0?'<span class="portada">Portada</span>':"")+'<div class="ctl"><button type="button" data-izq="'+i+'" aria-label="Mover a la izquierda"'+(i===0?" disabled style=\"visibility:hidden\"":"")+'>←</button><button type="button" class="x" data-x="'+i+'" aria-label="Quitar foto">✕</button><button type="button" data-der="'+i+'" aria-label="Mover a la derecha"'+(i===b.fotos.length-1?" disabled style=\"visibility:hidden\"":"")+'>→</button></div></div>'}).join("")+
+    (b.fotos.length<MAX?'<label class="agregar" id="agregar">'+I.foto+'<span>'+(b.fotos.length?"Agregar más":"Toca para subir fotos")+'</span></label>':"");
+    $("#cf",h).textContent=b.fotos.length+" de "+MAX;
+    var ag=$("#agregar",h);
+    if(ag){ag.onclick=function(){var a=$("#archivo");a.value="";a.onchange=function(){subir(a.files)};a.click()};
+      ag.ondragover=function(e){e.preventDefault();ag.classList.add("arrastre")};ag.ondragleave=function(){ag.classList.remove("arrastre")};
+      ag.ondrop=function(e){e.preventDefault();ag.classList.remove("arrastre");subir(e.dataTransfer.files)}}
+  }
+  $("#fotos",h).onclick=function(e){var x=e.target.closest("button");if(!x)return;
+    if(x.dataset.x!=null){var i=+x.dataset.x;confirma("¿Quitar esta foto?","Se quitará al guardar la bodega.","Quitar").then(function(si){if(si){b.fotos.splice(i,1);pintaFotos();marca()}})}
+    if(x.dataset.izq!=null){var i=+x.dataset.izq;var t=b.fotos[i];b.fotos[i]=b.fotos[i-1];b.fotos[i-1]=t;pintaFotos();marca()}
+    if(x.dataset.der!=null){var i=+x.dataset.der;var t=b.fotos[i];b.fotos[i]=b.fotos[i+1];b.fotos[i+1]=t;pintaFotos();marca()}};
+  function subir(files){
+    files=Array.prototype.slice.call(files||[]).filter(function(x){return/^image\//.test(x.type)||/\.(heic|jpe?g|png|webp)$/i.test(x.name)});
+    var libres=MAX-b.fotos.length;
+    if(files.length>libres){aviso("Solo caben "+MAX+" fotos por bodega. Se subieron las primeras "+libres+".",true);files=files.slice(0,libres)}
+    files.forEach(function(file){
+      var ph={id:"",url:"",alt:"",subiendo:true};b.fotos.push(ph);subiendo++;pintaFotos();marca();
+      comprimir(file).then(function(blob){ph.url=URL.createObjectURL(blob);pintaFotos();return api("POST","/api/admin/foto",blob,blob.type)})
+      .then(function(j){ph.id=j.id;ph.url=j.url;ph.alt=(f.nombre.value||"Bodega")+" "+(b.fotos.indexOf(ph)+1);delete ph.subiendo})
+      .catch(function(e){b.fotos.splice(b.fotos.indexOf(ph),1);aviso(e.message,true)})
+      .then(function(){subiendo--;pintaFotos()});
+    });
+  }
+  pintaFotos();
+
+  function cerrar(){if(sucio){confirma("¿Salir sin guardar?","Perderás los cambios que hiciste en esta bodega.","Salir sin guardar").then(function(si){if(si){h.remove();document.body.style.overflow=""}})}else{h.remove();document.body.style.overflow=""}}
+  $("[data-cerrar]",h).onclick=cerrar;
+  h.addEventListener("click",function(e){if(e.target===h)cerrar()});
+  var ver=$("[data-ver]",h);if(ver){if(demo)ver.onclick=function(){demo.ir("/bodega/"+b.slug)};else{ver.href="/bodega/"+b.slug;ver.target="_blank"}}
+  var borrar=$("[data-borrar]",h);
+  if(borrar)borrar.onclick=function(){confirma("¿Eliminar "+b.nombre+"?","Se borra de la página y del panel junto con sus fotos. No se puede deshacer.","Eliminar").then(function(si){if(!si)return;
+    api("DELETE","/api/admin/bodega/"+b.id).then(function(){D.bodegas=D.bodegas.filter(function(x){return x.id!==b.id});h.remove();document.body.style.overflow="";aviso("Bodega eliminada");pinta()}).catch(function(e){aviso(e.message,true)})})};
+  $("[data-guardar]",h).onclick=function(){
+    if(subiendo){aviso("Espera a que terminen de subir las fotos.",true);return}
+    if(!f.nombre.value.trim()){f.nombre.focus();aviso("Ponle un nombre a la bodega.",true);return}
+    if(b.precioTipo!=="consultar"&&!f.precio.value.trim()){aviso("Escribe el precio o elige “Solo por WhatsApp”.",true);f.precio.focus();return}
+    var datos={};["nombre","tipo","precio","mantenimiento","m2min","m2max","superficieTexto","tamanos","altura","andenes","zona","entidad","direccion","descripcion","propietario","notasInternas"].forEach(function(k){datos[k]=f[k].value});
+    ["operacion","estado","precioTipo","acceso","precision","destacada","oficinas","trifasica","caracteristicas","lat","lng"].forEach(function(k){datos[k]=b[k]});
+    datos.fotos=b.fotos.map(function(x,i){return{id:x.id,url:x.url,alt:x.alt||(datos.nombre+" "+(i+1))}});
+    var bt=this;bt.disabled=true;bt.textContent="Guardando…";
+    (orig?api("PUT","/api/admin/bodega/"+orig.id,datos):api("POST","/api/admin/bodega",datos)).then(function(j){
+      if(orig)Object.assign(orig,j.bodega);else D.bodegas.unshift(j.bodega);
+      sucio=false;h.remove();document.body.style.overflow="";aviso(orig?"Cambios guardados. Ya se ven en tu página.":"Bodega agregada. Ya aparece en tu página.");vista="bodegas";pinta();
+    }).catch(function(e){aviso(e.message,true);bt.disabled=false;bt.textContent="Guardar bodega"});
+  };
+  if(!orig)setTimeout(function(){f.nombre.focus()},50);
+}
+
+/* ---------- Prospectos ---------- */
+function filaLead(l){
+  var b=l.bodega&&bodegaDe(l.bodega),t=telLimpio(l.telefono);
+  return'<div class="fila lead" data-lead="'+esc(l.id)+'"><div class="info"><b>'+esc(l.nombre)+(l.empresa?' <span style="display:inline;font-weight:500;color:var(--gris)">· '+esc(l.empresa)+'</span>':"")+'</b><span>'+esc(b?b.nombre:(l.m2?l.m2+" m² ":"")+(l.zona||""))+'</span><span class="clics">'+esc(l.origen||"")+' · '+hace(l.creado)+(l.proxima?' · <span class="fecha'+(l.proxima<hoyISO()?" venc":l.proxima===hoyISO()?" hoy":"")+'">'+fechaBonita(l.proxima)+'</span>':"")+'</span></div>'+
+  '<div class="der"><span class="pill p-'+esc(l.etapa)+'">'+ETQ[l.etapa]+'</span><div class="acciones">'+(t?'<a class="b chico icono wa" href="https://wa.me/'+t+'?text='+encodeURIComponent("Hola "+l.nombre.split(" ")[0]+", soy "+(D.config.asesora||"")+" de "+D.config.nombre+". "+(b?"Te escribo por "+b.nombre+".":"Te escribo por la bodega que buscas."))+'" target="_blank" rel="noopener" aria-label="WhatsApp">'+I.wa+'</a><a class="b chico icono" href="tel:+'+t+'" aria-label="Llamar">'+I.tel+'</a>':"")+'</div></div></div>';
+}
+function vProspectos(){
+  var v=$("#vista");
+  var cnt={activos:0};Object.keys(ETQ).forEach(function(k){cnt[k]=0});
+  D.leads.forEach(function(l){cnt[l.etapa]++;if(l.etapa!=="ganado"&&l.etapa!=="perdido")cnt.activos++});
+  var lista=D.leads.filter(function(l){
+    if(filtroLead==="activos"&&(l.etapa==="ganado"||l.etapa==="perdido"))return false;
+    if(filtroLead!=="activos"&&filtroLead!=="todos"&&l.etapa!==filtroLead)return false;
+    var t=textoL.toLowerCase();return!t||(l.nombre+" "+l.empresa+" "+l.telefono+" "+l.zona).toLowerCase().indexOf(t)>=0});
+  var fil=[["activos","En seguimiento"]].concat(Object.keys(ETQ).map(function(k){return[k,ETQ[k]]})).concat([["todos","Todos"]]);
+  v.innerHTML='<div class="cab"><div><h1>Prospectos</h1><p>Personas interesadas. Los formularios de tu página llegan aquí solos.</p></div><button class="b lima" data-nuevo-lead>'+I.mas+'Anotar prospecto</button></div>'+
+  '<div class="embudo">'+fil.map(function(x){return'<button data-fl="'+x[0]+'" class="'+(filtroLead===x[0]?"on":"")+'">'+x[1]+' <i>'+(x[0]==="todos"?D.leads.length:cnt[x[0]])+'</i></button>'}).join("")+'</div>'+
+  '<div class="buscar"><input type="search" id="qL" placeholder="Buscar por nombre, empresa o teléfono" value="'+esc(textoL)+'"></div>'+
+  (lista.length?'<div class="filas">'+lista.map(filaLead).join("")+'</div>':'<p class="vacio">No hay prospectos en esta lista.</p>');
+  $$("[data-fl]",v).forEach(function(b){b.onclick=function(){filtroLead=b.dataset.fl;vProspectos()}});
+  var q=$("#qL");q.oninput=function(){textoL=q.value;var p=q.selectionStart;vProspectos();var n=$("#qL");n.focus();n.setSelectionRange(p,p)};
+  enlazar(v);
+}
+function editarLead(orig){
+  var l=JSON.parse(JSON.stringify(orig||{nombre:"",telefono:"",empresa:"",etapa:"nuevo",origen:"Captura manual",notas:[],bodega:"",proxima:""}));
+  var sucio=false;
+  var h=document.createElement("div");h.className="hoja";
+  var t=telLimpio(l.telefono),b=l.bodega&&bodegaDe(l.bodega);
+  h.innerHTML='<div class="hoja-in" role="dialog" aria-modal="true" aria-label="Prospecto"><div class="hoja-cab"><button class="b chico" data-cerrar aria-label="Cerrar">✕</button><h2>'+(orig?esc(l.nombre):"Nuevo prospecto")+'</h2></div>'+
+  '<form class="hoja-cuerpo" id="fL" autocomplete="off">'+
+  (orig&&t?'<div class="contacto-r"><a class="b wa" href="https://wa.me/'+t+'" target="_blank" rel="noopener">'+I.wa+'WhatsApp</a><a class="b" href="tel:+'+t+'">'+I.tel+'Llamar</a></div>':"")+
+  (orig&&l.mensaje?'<section class="bloque"><h3>Su mensaje</h3><p style="margin:0;font-size:17px">“'+esc(l.mensaje)+'”</p><p class="ayuda" style="margin:8px 0 0">'+esc(l.origen||"")+' · '+new Date(l.creado).toLocaleString("es-MX",{dateStyle:"medium",timeStyle:"short"})+'</p></section>':"")+
+  '<section class="bloque"><h3>¿En qué va?</h3><div class="seg" data-seg="etapa">'+Object.keys(ETQ).map(function(k){return'<button type="button" data-v="'+k+'" class="'+(l.etapa===k?"on":"")+'">'+ETQ[k]+'</button>'}).join("")+'</div>'+
+  '<div class="campos" style="margin-top:14px"><label class="c">Próximo seguimiento o visita<input type="date" name="proxima" value="'+esc(l.proxima||"")+'"></label><label class="c">Bodega de interés<select name="bodega"><option value="">Ninguna en particular</option>'+D.bodegas.map(function(x){return'<option value="'+esc(x.slug)+'"'+(l.bodega===x.slug?" selected":"")+'>'+esc(x.folio+" · "+x.nombre)+'</option>'}).join("")+'</select></label></div></section>'+
+  '<section class="bloque"><h3>Datos</h3><div class="campos"><label class="c">Nombre<input name="nombre" required value="'+esc(l.nombre)+'"></label><label class="c">Teléfono<input name="telefono" type="tel" inputmode="tel" value="'+esc(l.telefono)+'"></label><label class="c">Empresa<input name="empresa" value="'+esc(l.empresa||"")+'"></label><label class="c">Correo<input name="correo" type="email" value="'+esc(l.correo||"")+'"></label><label class="c">m² que busca<input name="m2" value="'+esc(l.m2||"")+'"></label><label class="c">Zona<input name="zona" value="'+esc(l.zona||"")+'"></label><label class="c">Giro<input name="giro" value="'+esc(l.giro||"")+'" placeholder="Ej. Logística, alimentos"></label><label class="c">Presupuesto<input name="presupuesto" value="'+esc(l.presupuesto||"")+'"></label>'+(orig?"":'<label class="c todo">¿Cómo llegó?<select name="origen">'+["Captura manual","WhatsApp","Llamada","Recomendación","Inmuebles24","Facebook","Letrero"].map(function(o){return"<option>"+o+"</option>"}).join("")+'</select></label>')+'</div></section>'+
+  '<section class="bloque"><h3>Notas de seguimiento</h3><div class="agrega-fila"><input class="in" id="nNota" placeholder="Ej. Le mandé la ficha, quiere visitar el jueves"><button type="button" class="b" id="addNota">Anotar</button></div><div class="notas" id="notas"></div></section>'+
+  (orig?'<section class="bloque peligro"><h3>Eliminar</h3><button type="button" class="b rojo" data-borrar>Eliminar prospecto</button></section>':"")+
+  '</form><div class="hoja-pie"><span class="sin-guardar" id="sg" hidden>Cambios sin guardar</span><button class="b lima" data-guardar>Guardar</button></div></div>';
+  document.body.appendChild(h);document.body.style.overflow="hidden";
+  var f=$("#fL",h);var marca=function(){sucio=true;$("#sg",h).hidden=false};
+  f.addEventListener("input",marca);f.addEventListener("change",marca);
+  $("[data-seg]",h).addEventListener("click",function(e){var x=e.target.closest("button");if(!x)return;l.etapa=x.dataset.v;$$("[data-seg] button",h).forEach(function(y){y.classList.toggle("on",y===x)});marca()});
+  function pintaNotas(){$("#notas",h).innerHTML=l.notas.slice().reverse().map(function(n){return'<div class="nota"><time>'+new Date(n.t).toLocaleString("es-MX",{dateStyle:"medium",timeStyle:"short"})+'</time>'+esc(n.texto)+'</div>'}).join("")||'<p class="ayuda" style="margin:8px 0 0">Sin notas todavía.</p>'}
+  var addNota=function(){var i=$("#nNota",h),t=i.value.trim();if(!t)return;l.notas.push({t:new Date().toISOString(),texto:t});i.value="";pintaNotas();marca()};
+  $("#addNota",h).onclick=addNota;$("#nNota",h).addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();addNota()}});
+  pintaNotas();
+  function cerrar(){if(sucio){confirma("¿Salir sin guardar?","Perderás los cambios de este prospecto.","Salir sin guardar").then(function(si){if(si){h.remove();document.body.style.overflow=""}})}else{h.remove();document.body.style.overflow=""}}
+  $("[data-cerrar]",h).onclick=cerrar;h.addEventListener("click",function(e){if(e.target===h)cerrar()});
+  var borrar=$("[data-borrar]",h);
+  if(borrar)borrar.onclick=function(){confirma("¿Eliminar a "+l.nombre+"?","Se borra con todas sus notas.","Eliminar").then(function(si){if(!si)return;api("DELETE","/api/admin/lead/"+l.id).then(function(){D.leads=D.leads.filter(function(x){return x.id!==l.id});h.remove();document.body.style.overflow="";aviso("Prospecto eliminado");pinta()}).catch(function(e){aviso(e.message,true)})})};
+  $("[data-guardar]",h).onclick=function(){
+    var nn=$("#nNota",h);if(nn.value.trim())addNota();
+    if(!f.nombre.value.trim()){f.nombre.focus();aviso("Escribe el nombre.",true);return}
+    var datos={etapa:l.etapa,notas:l.notas};["nombre","telefono","empresa","correo","m2","zona","giro","presupuesto","proxima","bodega"].forEach(function(k){datos[k]=f[k].value});
+    if(f.origen)datos.origen=f.origen.value;
+    var bt=this;bt.disabled=true;bt.textContent="Guardando…";
+    (orig?api("PUT","/api/admin/lead/"+orig.id,datos):api("POST","/api/admin/lead",datos)).then(function(j){
+      if(orig)Object.assign(orig,j.lead);else D.leads.unshift(j.lead);
+      h.remove();document.body.style.overflow="";aviso("Prospecto guardado");pinta()}).catch(function(e){aviso(e.message,true);bt.disabled=false;bt.textContent="Guardar"});
+  };
+  if(!orig)setTimeout(function(){f.nombre.focus()},50);
+}
+
+/* ---------- Agenda ---------- */
+function vAgenda(){
+  var v=$("#vista"),hoy=hoyISO();
+  var sem=new Date();sem.setDate(sem.getDate()+7);var semISO=sem.toISOString().slice(0,10);
+  var act=D.leads.filter(function(l){return l.proxima&&l.etapa!=="ganado"&&l.etapa!=="perdido"}).sort(function(a,b){return a.proxima<b.proxima?-1:1});
+  var g=[["Vencidos","venc",act.filter(function(l){return l.proxima<hoy})],["Hoy","",act.filter(function(l){return l.proxima===hoy})],["Próximos 7 días","",act.filter(function(l){return l.proxima>hoy&&l.proxima<=semISO})],["Más adelante","",act.filter(function(l){return l.proxima>semISO})]];
+  v.innerHTML='<div class="cab"><div><h1>Agenda</h1><p>Visitas y seguimientos. Pon fecha en cada prospecto para que aparezca aquí.</p></div></div><div class="agenda">'+
+  (act.length?g.filter(function(x){return x[2].length}).map(function(x){return'<h3 class="'+x[1]+'">'+x[0]+' · '+x[2].length+'</h3><div class="filas">'+x[2].map(filaLead).join("")+'</div>'}).join(""):'<p class="vacio">No tienes seguimientos agendados. Abre un prospecto y ponle “Próximo seguimiento o visita”.</p>')+'</div>';
+  enlazar(v);
+}
+
+/* ---------- Ajustes ---------- */
+function vAjustes(){
+  var v=$("#vista"),c=JSON.parse(JSON.stringify(D.config));
+  var faq=(c.faq&&c.faq.length?c.faq:FAQ_BASE).map(function(x){return x.slice()});
+  function campo(k,t,ph,tipo){return'<label class="c">'+t+'<input name="'+k+'" '+(tipo?'type="'+tipo+'" ':"")+'value="'+esc(c[k]||"")+'" placeholder="'+esc(ph||"")+'"></label>'}
+  v.innerHTML='<div class="cab"><div><h1>Ajustes</h1><p>Datos que aparecen en tu página.</p></div></div><form id="fC" class="hoja-cuerpo" style="padding:0">'+
+  '<section class="bloque"><h3>Tu negocio</h3><div class="campos">'+campo("nombre","Nombre del negocio")+campo("asesora","Quién atiende","Lic. Rosy Luna")+campo("telefono","Teléfono que se muestra","55 6201 6449","tel")+campo("whatsapp","WhatsApp (10 dígitos)","5562016449","tel")+campo("correo","Correo","","email")+campo("horario","Horario","Lunes a sábado, 9:00 a 19:00")+'<label class="c todo">Dirección de oficina<input name="oficina" value="'+esc(c.oficina||"")+'"></label></div></section>'+
+  '<section class="bloque"><h3>Imágenes</h3><div class="campos"><div class="foto-conf"><img id="imLogo" src="'+esc(c.logo||"")+'" alt=""><div><b>Logo</b><br><button type="button" class="b chico" data-img="logo">Cambiar logo</button></div></div><div class="foto-conf"><img id="imAse" src="'+esc(c.fotoAsesora||"")+'" alt=""><div><b>Tu foto</b><br><button type="button" class="b chico" data-img="fotoAsesora">Cambiar foto</button></div></div></div></section>'+
+  '<section class="bloque"><h3>Portada de la página</h3><div class="campos">'+campo("frase","Frase pequeña de arriba")+'<label class="c todo">Título grande<input name="titular" value="'+esc(c.titular||"")+'" maxlength="70"></label><label class="c todo">Texto debajo del título<textarea name="subtitular" rows="3" maxlength="400">'+esc(c.subtitular||"")+'</textarea></label></div></section>'+
+  '<section class="bloque"><h3>Preguntas frecuentes</h3><div class="faq-ed" id="faq"></div><button type="button" class="b chico" id="addFaq" style="margin-top:12px">'+I.mas+'Agregar pregunta</button></section>'+
+  '<button type="button" class="b lima" id="guardarC" style="min-height:54px">Guardar ajustes</button>'+
+  '<section class="bloque"><h3>Contraseña</h3><div class="campos"><label class="c">Contraseña actual<input type="password" id="pA" autocomplete="current-password"></label><label class="c">Nueva contraseña<input type="password" id="pN" autocomplete="new-password" placeholder="Mínimo 6 caracteres"></label></div><button type="button" class="b" id="cambiaP" style="margin-top:12px">Cambiar contraseña</button></section>'+
+  '<section class="bloque"><h3>Acceso a este panel</h3><p style="margin:0">Este panel no aparece en tu página. Guarda esta dirección en tus favoritos:</p><p style="font:600 15px var(--m);background:#F3F2EE;padding:10px 12px;border-radius:10px;word-break:break-all;margin:10px 0">'+(demo?"(la dirección secreta del panel)":esc(location.origin+location.pathname))+'</p><button type="button" class="b chico" data-salir2>'+I.salir+'Cerrar sesión</button></section></form>';
+  var f=$("#fC");
+  function pintaFaq(){$("#faq").innerHTML=faq.map(function(x,i){return'<div class="item"><input class="in" data-fq="'+i+'" value="'+esc(x[0])+'" placeholder="Pregunta"><textarea class="in" data-fa="'+i+'" rows="3" placeholder="Respuesta">'+esc(x[1])+'</textarea><button type="button" class="b chico rojo" data-fx="'+i+'" style="align-self:flex-start">Quitar</button></div>'}).join("")}
+  pintaFaq();
+  $("#faq").addEventListener("input",function(e){var t=e.target;if(t.dataset.fq!=null)faq[+t.dataset.fq][0]=t.value;if(t.dataset.fa!=null)faq[+t.dataset.fa][1]=t.value});
+  $("#faq").addEventListener("click",function(e){var x=e.target.closest("[data-fx]");if(x){faq.splice(+x.dataset.fx,1);pintaFaq()}});
+  $("#addFaq").onclick=function(){faq.push(["",""]);pintaFaq();var q=$$("#faq [data-fq]");q[q.length-1].focus()};
+  $$("[data-img]",v).forEach(function(bt){bt.onclick=function(){var a=$("#archivo");a.value="";a.removeAttribute("multiple");a.onchange=function(){a.setAttribute("multiple","");var file=a.files[0];if(!file)return;bt.disabled=true;
+    comprimir(file).then(function(bl){return api("POST","/api/admin/foto",bl,bl.type)}).then(function(j){c[bt.dataset.img]=j.url;(bt.dataset.img==="logo"?$("#imLogo"):$("#imAse")).src=j.url;aviso("Imagen lista. Toca “Guardar ajustes”.")}).catch(function(e){aviso(e.message,true)}).then(function(){bt.disabled=false})};a.click()}});
+  $("#guardarC").onclick=function(){var d={faq:faq.filter(function(x){return x[0].trim()&&x[1].trim()}),logo:c.logo,fotoAsesora:c.fotoAsesora};["nombre","asesora","telefono","whatsapp","correo","horario","oficina","frase","titular","subtitular"].forEach(function(k){d[k]=f[k].value});
+    if(String(d.whatsapp).replace(/\D/g,"").length<10){aviso("El WhatsApp debe tener 10 dígitos.",true);return}
+    var bt=this;bt.disabled=true;api("PUT","/api/admin/config",d).then(function(j){D.config=j.config;aviso("Ajustes guardados");pinta()}).catch(function(e){aviso(e.message,true);bt.disabled=false})};
+  $("#cambiaP").onclick=function(){api("POST","/api/admin/password",{actual:$("#pA").value,nueva:$("#pN").value}).then(function(){$("#pA").value=$("#pN").value="";aviso("Contraseña cambiada")}).catch(function(e){aviso(e.message,true)})};
+  $("[data-salir2]",v).onclick=salir;
+}
+
+addEventListener("beforeunload",function(e){if($(".hoja #sg:not([hidden])")){e.preventDefault();e.returnValue=""}});
+cargar();
+})();
+</script>
+</body>
+</html>

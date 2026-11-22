@@ -1,0 +1,52 @@
+// Prueba de humo del CRM contra un servidor corriendo (wrangler dev).
+const B = process.argv[2] || "http://localhost:8787";
+let cookie = "";
+const r = async (m, p, body, tipo) => {
+  const h = { cookie };
+  let b = body;
+  if (body && !(body instanceof Uint8Array)) { b = JSON.stringify(body); h["content-type"] = "application/json"; }
+  if (tipo) h["content-type"] = tipo;
+  const res = await fetch(B + p, { method: m, headers: h, body: b });
+  const sc = res.headers.get("set-cookie"); if (sc) cookie = sc.split(";")[0];
+  const j = await res.json().catch(() => ({}));
+  return { s: res.status, j };
+};
+const ok = (c, t) => { if (!c) { console.error("FALLA:", t); process.exitCode = 1; } else console.log("ok -", t); };
+
+ok((await r("GET", "/api/admin/todo")).s === 401, "sin sesión no entra");
+ok((await r("POST", "/api/admin/entrar", { password: "mala" })).s === 401, "contraseña mala rechazada");
+ok((await r("POST", "/api/admin/entrar", { password: "prueba123" })).s === 200, "entra con contraseña");
+let t = await r("GET", "/api/admin/todo");
+ok(t.j.bodegas.length === 12, "12 bodegas cargadas: " + t.j.bodegas.length);
+const png = Uint8Array.from(Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==", "base64"));
+const f = await r("POST", "/api/admin/foto", png, "image/png");
+ok(f.s === 200 && f.j.url, "sube foto " + f.j.url);
+const img = await fetch(B + f.j.url); ok(img.status === 200 && img.headers.get("content-type") === "image/png", "foto se sirve");
+const fotos = Array.from({ length: 7 }, (_, i) => ({ id: f.j.id, url: f.j.url, alt: "x" + i }));
+const nb = await r("POST", "/api/admin/bodega", { nombre: "Bodega Prueba Ñuñoa", precioTipo: "m2", precio: "150", m2min: "500", m2max: "", zona: "Ecatepec", fotos, caracteristicas: ["A", "B"], lat: 19.6, lng: -99.05 });
+ok(nb.s === 200 && nb.j.bodega.fotos.length === 5, "máximo 5 fotos: " + nb.j.bodega?.fotos?.length);
+ok(nb.j.bodega.slug === "bodega-prueba-nunoa" && nb.j.bodega.folio === "RL-13", "slug y folio: " + nb.j.bodega.slug + " " + nb.j.bodega.folio);
+let pg = await fetch(B + "/bodega/bodega-prueba-nunoa"); ok(pg.status === 200, "ficha pública nueva visible");
+const pu = await r("PUT", "/api/admin/bodega/" + nb.j.bodega.id, { estado: "oculta" });
+ok(pu.j.bodega.estado === "oculta", "se oculta");
+pg = await fetch(B + "/bodega/bodega-prueba-nunoa"); ok(pg.status === 404, "oculta no se ve en la página");
+const home = await (await fetch(B + "/")).text(); ok(!home.includes("Bodega Prueba"), "oculta no sale en portada");
+ok((await r("POST", "/api/lead", { nombre: "Cliente", telefono: "55 1234 5678", bodega: "xhala-park", origen: "Ficha de bodega" })).s === 200, "lead público");
+ok((await r("POST", "/api/lead", { nombre: "", telefono: "1" })).s === 400, "lead incompleto rechazado");
+await r("POST", "/api/evento", { tipo: "wa", bodega: "xhala-park" });
+t = await r("GET", "/api/admin/todo");
+ok(t.j.leads[0].nombre === "Cliente" && t.j.eventos["xhala-park:wa"] >= 1, "lead y clic registrados");
+const lu = await r("PUT", "/api/admin/lead/" + t.j.leads[0].id, { etapa: "visita", proxima: "2026-11-25", notas: [{ texto: "Llamar" }] });
+ok(lu.j.lead.etapa === "visita" && lu.j.lead.notas.length === 1, "lead actualizado");
+ok((await r("PUT", "/api/admin/config", { whatsapp: "5511112222", titular: "Bodegas industriales en renta" })).j.config.whatsapp === "525511112222", "config whatsapp normalizado");
+ok((await r("DELETE", "/api/admin/bodega/" + nb.j.bodega.id)).s === 200, "bodega eliminada");
+ok((await r("DELETE", "/api/admin/lead/" + t.j.leads[0].id)).s === 200, "lead eliminado");
+ok((await r("POST", "/api/admin/password", { actual: "prueba123", nueva: "nueva456" })).s === 200, "cambia contraseña");
+await r("POST", "/api/admin/salir");
+ok((await r("GET", "/api/admin/todo")).s === 401, "salir cierra sesión");
+ok((await r("POST", "/api/admin/entrar", { password: "prueba123" })).s === 401, "contraseña vieja ya no sirve");
+ok((await r("POST", "/api/admin/entrar", { password: "nueva456" })).s === 200, "contraseña nueva sirve");
+await r("POST", "/api/admin/password", { actual: "nueva456", nueva: "prueba123" });
+await r("PUT", "/api/admin/config", { whatsapp: "5562016449" });
+const sm = await (await fetch(B + "/sitemap.xml")).text(); ok(sm.includes("/bodega/xhala-park"), "sitemap");
+const rb = await (await fetch(B + "/robots.txt")).text(); ok(!rb.includes("panel-rl"), "robots no revela el panel");
